@@ -3,6 +3,7 @@
 work in progress.....
 
 - konsole
+- python
 - tmux
 - vim
 - zsh
