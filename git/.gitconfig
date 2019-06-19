@@ -1,0 +1,11 @@
+[user]
+	email = kanibalv@gmail.com
+	name = kanibalv
+[core]
+	editor = vim
+[alias]
+	stats = shortlog -ssn --all --no-merges
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
