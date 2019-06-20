@@ -11,10 +11,11 @@
 	st = status
 [color]
   ui = auto
+  pager = true
 [color "branch"]
   current = yellow reverse
   local = yellow
-  remote = green
+  remote = green bold
 [color "diff"]
   meta = yellow bold
   frag = magenta bold
@@ -22,5 +23,5 @@
   new = green bold
 [color "status"]
   added = yellow
-  changed = green
-  untracked = cyan
+  changed = red
+  untracked = red bold
