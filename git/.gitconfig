@@ -8,7 +8,9 @@
 	co = checkout
 	br = branch
 	ci = commit
+    cm = commit -a
 	st = status
+    graph = log --graph --oneline --decorate=short --branches='*'
 [color]
   ui = auto
   pager = true
