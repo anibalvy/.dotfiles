@@ -22,6 +22,8 @@
   old = red bold
   new = green bold
 [color "status"]
+  header = white
+  branch = yellow bold
   added = yellow
   changed = red
   untracked = red bold
