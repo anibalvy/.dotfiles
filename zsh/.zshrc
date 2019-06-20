@@ -2,7 +2,7 @@
 export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/home/kanibal/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -116,13 +116,13 @@ fi
 neofetch
 
 ## NODE VERSION MANAGER Selection
-export NVM_DIR="/home/kanibal/.nvm"
+export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 ##nvm use latest
-nvm use --lts=dubnium
+nvm use --lts=Dubnium
 
 ## GOLANG VERSION MANAGER Selection
-[[ -s "/home/kanibal/.gvm/scripts/gvm" ]] && source "/home/kanibal/.gvm/scripts/gvm"
+[[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
 
 ## GOLANG setup version
 gvm use go1.9.4
@@ -137,3 +137,5 @@ export PYTHONSTARTUP="$HOME/.pythonrc"
 #added by Anaconda3 installer
 #export PATH="/opt/anaconda/anaconda3/bin:$PATH"
 
+# fix touchscreen only to the screen
+~/.dotfiles/touchscreen/.touchscreen.sh
