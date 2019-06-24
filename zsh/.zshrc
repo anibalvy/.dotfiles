@@ -139,3 +139,13 @@ export PYTHONSTARTUP="$HOME/.pythonrc"
 
 # fix touchscreen only to the screen
 ~/.dotfiles/touchscreen/.touchscreen.sh
+
+
+echo "Tmux sessions\n"
+tmux list-sessions
+
+tmux choose-session
+
+tmux a
+
+tmux
