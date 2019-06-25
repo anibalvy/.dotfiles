@@ -136,6 +136,14 @@ colorscheme molokai
 " Overwrite color background to transparent
 highlight Normal guibg=NONE ctermbg=NONE
 
+"A light and configurable statusline/tabline plugin for Vim
+Plugin 'itchyny/lightline.vim'
+set laststatus=2
+set noshowmode "get rid of original mode indicator.
+"Color mode for lightline
+let g:lightline = { 'colorscheme': 'wombat', }
+"
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
