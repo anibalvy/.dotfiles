@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$PATH
+export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -98,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias s="sudo"
 alias sduo="sudo"
+alias suod="sudo"
 alias ll="ls -la"
 alias isntall="install"
 alias info='pinfo'
@@ -116,16 +117,23 @@ fi
 neofetch
 
 ## NODE VERSION MANAGER Selection
-export NVM_DIR="~/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+#export NVM_DIR="~/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm ///old - deprecated
+# install with:
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm // updated 20190823
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 ##nvm use latest
-nvm use --lts=Dubnium
+nvm use --lts=dubnium
 
 ## GOLANG VERSION MANAGER Selection
+# bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 [[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
 
 ## GOLANG setup version
-gvm use go1.9.4
+gvm use go1.12.9
 
 ## Colour to less command
 export LESS='-R'
@@ -138,7 +146,12 @@ export PYTHONSTARTUP="$HOME/.pythonrc"
 #export PATH="/opt/anaconda/anaconda3/bin:$PATH"
 
 # fix touchscreen only to the screen
-~/.dotfiles/touchscreen/.touchscreen.sh
+#~/.dotfiles/touchscreen/.touchscreen.sh
+
+#CHEAT
+export CHEAT_PATH="$CHEAT_PATH:$HOME/.cheat"
+export CHEAT_COLORS=true
+export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 
 
 echo "Tmux sessions\n"
