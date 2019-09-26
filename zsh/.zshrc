@@ -142,6 +142,13 @@ export LESSOPEN='|~/.lessfilter %s'
 ## Pythonrc
 export PYTHONSTARTUP="$HOME/.pythonrc"
 
+# Python PyENV
+export PATH="${HOME}/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+
+
 #added by Anaconda3 installer
 #export PATH="/opt/anaconda/anaconda3/bin:$PATH"
 
@@ -161,4 +168,4 @@ tmux choose-session
 
 tmux a
 
-tmux
+tmux new-session -t gns3
