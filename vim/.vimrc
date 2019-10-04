@@ -375,7 +375,7 @@ set nrformats+=hex,alpha
 " cit - delete inside tag and enter insert mode
 "
 " dw - delete characters if a word from cursor forward
-" diw - delete all word
+" diw - delete in word (the word I'm in)
 " db - delete charaters if a word from cursor backwards
 " 
 " d0 - delete to the beginning of the line

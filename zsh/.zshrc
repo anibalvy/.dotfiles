@@ -54,7 +54,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gvm colored-man-pages colorize kate nvm node vundle jsontoolsI lol react-native python virtualenv)
+plugins=(git colored-man-pages colorize kate nvm node vundle jsontools lol react-native python pyenv pipenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -109,6 +109,11 @@ else
 	echo 'pinfo not installed, please install.'
 fi
 
+# use VIM mode
+bindkey -v
+# use emacs mode
+#bindkey -e
+
 
 #export PAGER="/usr/bin/most -s"
 #source .mancolors
@@ -130,7 +135,8 @@ nvm use --lts=dubnium
 
 ## GOLANG VERSION MANAGER Selection
 # bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-[[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
+
+[[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
 ## GOLANG setup version
 gvm use go1.12.9
@@ -143,11 +149,34 @@ export LESSOPEN='|~/.lessfilter %s'
 export PYTHONSTARTUP="$HOME/.pythonrc"
 
 # Python PyENV
-export PATH="${HOME}/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
-
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+echo "PyENV Global version:$(python -V)"
+# I commented pyenv virtualenv because is 100% better to manage them with pipenv.
+#eval "$(pyenv virtualenv-init -)"
+# Commands
+# pyenv install --list 
+# pyenv install 2.7.8
+# pyenv global 3.6.8
+# pyenv local 2.7.15
+# pyenv uninstall 2.7.15
+# pyenv versions
+# pyenv commands
+# pyenv shims --help
+# pyenv which pip
+# Create Virtual Env:
+# pyenv virtualenv <python_version> <environment_name>
+# pyenv virtualenv 3.6.8 myproject
+# Activate Virtual Env:
+# pyenv local myproject
+# manually activate/deactivate your Python versions:
+# pyenv activate <environment_name>
+# pyenv deactivate
+#
+#pip completion --zsh 
+# pip install flask
+# pip freeze > requirements.txt
 
 #added by Anaconda3 installer
 #export PATH="/opt/anaconda/anaconda3/bin:$PATH"
@@ -160,12 +189,15 @@ export CHEAT_PATH="$CHEAT_PATH:$HOME/.cheat"
 export CHEAT_COLORS=true
 export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 
+# Tmux must be disable if we are running inside a pipenv VirtualENV (pipenv shell)
+if [ -z "$PIPENV_ACTIVE" ] ; then
+    echo "Tmux sessions loading....\n"
+	tmux list-sessions
+	tmux choose-session
+	tmux a
+	tmux new-session -t gns3
+else
+    echo 'Loading a Python Virtual enviroment'
+fi
 
-echo "Tmux sessions\n"
-tmux list-sessions
 
-tmux choose-session
-
-tmux a
-
-tmux new-session -t gns3
