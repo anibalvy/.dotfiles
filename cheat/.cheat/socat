@@ -7,6 +7,9 @@ socat openssl:butzel.info:443 -
 # tcp-listener (port 3180), output as hexdump (-x) and fork for new connetions
 socat -x tcp-listen:3180,fork -
 
+# One of the clients connects one one port, the other on the other port, and then data is exchanged in both directions
+socat TCP4-LISTEN:12345 TCP4-LISTEN:54321
+
 # practical examples:
 
 # complete real working http-example:  

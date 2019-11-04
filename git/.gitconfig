@@ -29,3 +29,9 @@
   added = yellow
   changed = red
   untracked = red bold
+[sendemail]
+    smtpserver  = smtp.gmail.com
+    smtpserverport = 587
+    smtpencryption  = tls
+    smtpuser = 
+    smtppass = 

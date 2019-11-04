@@ -42,6 +42,8 @@ Plugin 'mattn/emmet-vim'
 
 Plugin 'amiorin/vim-fenced-code-blocks' 
 
+Plugin 'valloric/youcompleteme'
+
 " Markdown Syntax - Begin
 " https://github.com/plasticboy/vim-markdown
 "Plugin 'godlygeek/tabular'
@@ -214,7 +216,10 @@ set history=10000
 """
 """ TABs 
 " dimension:
-set tabstop=4 "set to 4 spaces.
+set tabstop=8 "set to 8 spaces.
+set softtabstop=8
+set shiftwidth=8
+set noexpandtab
 ":set  tabstop=4
 " TAB dimesion for a particular file type like CSS here.
 "autocmd Filetype css setlocal tabstop=4
@@ -230,8 +235,8 @@ autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
 "turn off expandtab for editing makefiles
 autocmd FileType make setlocal noexpandtab
 
-
-""" set clipboard=unnamedplus
+" Use clipboard as default register
+set clipboard=unnamed
 set clipboard=unnamedplus
 
 

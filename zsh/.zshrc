@@ -8,7 +8,11 @@ export ZSH=~/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="honukai"
+#ZSH_THEME="honukai"
+##kanibal- Install powerlevel10k
+#https://github.com/romkatv/powerlevel10k
+ZSH_THEME=powerlevel10k/powerlevel10k
+##K
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -151,10 +155,12 @@ export PYTHONSTARTUP="$HOME/.pythonrc"
 # Python PyENV
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
-echo "PyENV Global version:$(python -V)"
-# I commented pyenv virtualenv because is 100% better to manage them with pipenv.
+eval "$(pyenv init - )"
+echo "PyENV Global version:"
+echo "$(python -V)"
+# I commented pyenv virtualenv because is 100% better to manage them with ****pipenv****.
 #eval "$(pyenv virtualenv-init -)"
+# *** use pipenv for virtualenv
 # Commands
 # pyenv install --list 
 # pyenv install 2.7.8
