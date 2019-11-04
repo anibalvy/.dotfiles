@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
+
 # If you come from bash you might have to change your $PATH.
 export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
 
@@ -11,7 +18,13 @@ export ZSH=~/.oh-my-zsh
 #ZSH_THEME="honukai"
 ##kanibal- Install powerlevel10k
 #https://github.com/romkatv/powerlevel10k
-ZSH_THEME=powerlevel10k/powerlevel10k
+if [ $USER = 'root' ]; then 
+	ZSH_THEME="honukai"
+        echo "Theme: Honukai"
+else
+	ZSH_THEME="powerline10k/powerline10k"
+        echo "Theme: PowerLine 10K"
+fi
 ##K
 
 # Uncomment the following line to use case-sensitive completion.
@@ -113,7 +126,7 @@ else
 	echo 'pinfo not installed, please install.'
 fi
 
-# use VIM mode
+# use vim mode
 bindkey -v
 # use emacs mode
 #bindkey -e
@@ -148,6 +161,9 @@ gvm use go1.12.9
 ## Colour to less command
 export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 ## Pythonrc
 export PYTHONSTARTUP="$HOME/.pythonrc"
@@ -197,13 +213,18 @@ export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 
 # Tmux must be disable if we are running inside a pipenv VirtualENV (pipenv shell)
 if [ -z "$PIPENV_ACTIVE" ] ; then
-    echo "Tmux sessions loading....\n"
+    if [ $USER != 'root' ]; then
+        echo "Tmux sessions loading....\n"
 	tmux list-sessions
 	tmux choose-session
 	tmux a
 	tmux new-session -t gns3
+    else
+	echo "WARNIGN: logged as user root!!!"
+	echo "     - No autmatic Tmux session to avoid nested sessions"
+	echo "     - be carefull!!"
+    fi
 else
     echo 'Loading a Python Virtual enviroment'
 fi
-
 
