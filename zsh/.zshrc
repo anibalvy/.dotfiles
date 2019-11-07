@@ -22,8 +22,8 @@ if [ $USER = 'root' ]; then
 	ZSH_THEME="honukai"
         echo "Theme: Honukai"
 else
-	ZSH_THEME="powerline10k/powerline10k"
-        echo "Theme: PowerLine 10K"
+	ZSH_THEME="powerlevel10k/powerlevel10k"
+        echo "Theme: PowerLevel 10K"
 fi
 ##K
 
