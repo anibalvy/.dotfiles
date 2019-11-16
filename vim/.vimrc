@@ -5,7 +5,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 set encoding=utf-8
 set number relativenumber    "So I can see the queantity of lines of yank, delete, etc.
-set splitbelow splitright    "by default split vertical
+"set splitbelow splitright    "by default split vertical
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -236,7 +236,7 @@ autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
 autocmd FileType make setlocal noexpandtab
 
 " Use clipboard as default register
-set clipboard=unnamed
+"set clipboard=unnamed
 set clipboard=unnamedplus
 
 
