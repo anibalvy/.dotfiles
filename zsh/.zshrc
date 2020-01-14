@@ -211,6 +211,9 @@ export CHEAT_PATH="$CHEAT_PATH:$HOME/.cheat"
 export CHEAT_COLORS=true
 export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 
+#CLING
+export PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
+
 # Tmux must be disable if we are running inside a pipenv VirtualENV (pipenv shell)
 if [ -z "$PIPENV_ACTIVE" ] ; then
     if [ $USER != 'root' ]; then
@@ -228,3 +231,11 @@ else
     echo 'Loading a Python Virtual enviroment'
 fi
 
+
+### vi mode
+#
+# How to do history search (basically /<filter>  and qirh "n" find the needed...
+#"/" vi-history-search-backward
+#"?" vi-history-search-forward
+#"n" vi-repeat-search
+#"N" vi-rev-repeat-search
