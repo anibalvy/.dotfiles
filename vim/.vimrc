@@ -42,6 +42,11 @@ Plugin 'mattn/emmet-vim'
 
 Plugin 'amiorin/vim-fenced-code-blocks' 
 
+" CSS Colors
+Plugin 'ap/vim-css-color'
+"g:cssColorVimDoNotMessMyUpdatetime "is used when updatetime value set by plugin (100ms) is interfering with your configuration.
+"let g:cssColorVimDoNotMessMyUpdatetime = 1
+
 Plugin 'valloric/youcompleteme'
 
 " Markdown Syntax - Begin
@@ -139,7 +144,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 "At start
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Show hidden files
 "let NERDTreeShowHidden=1
 
@@ -170,6 +175,24 @@ Plugin 'nsf/gocode'
 "Fuzzy search files
 Plugin 'ctrlp.vim'
 
+" Python Black - Syntax check
+" Commands and shortcuts:
+"   :Black to format the entire file (ranges not supported);
+"   :BlackUpgrade to upgrade Black inside the virtualenv;
+"  :BlackVersion to get the current version of Black inside the virtualenv.
+
+" Configuration:
+"  g:black_fast (defaults to 0)
+"   g:black_linelength (defaults to 88)
+"   g:black_skip_string_normalization (defaults to 0)
+"   g:black_virtualenv (defaults to ~/.vim/black or ~/.local/share/nvim/black)
+
+Plugin 'psf/black'
+
+"Jinja syntax
+Plugin 'glench/vim-jinja2-syntax'
+
+
 "Colorscheme
 " Se debe corregir el path para que se aplique al inicio.
 " → ln -s ~/vim/bundle/vim-colorschemes/colors colors
@@ -186,7 +209,8 @@ Plugin 'itchyny/lightline.vim'
 set laststatus=2
 set noshowmode "get rid of original mode indicator.
 "Color mode for lightline
-let g:lightline = { 'colorscheme': 'wombat', }
+"let g:lightline = { 'colorscheme': 'wombat', }
+let g:lightline = { 'colorscheme': 'OldHope', }
 "
 
 " All of your Plugins must be added before the following line
@@ -239,6 +263,20 @@ autocmd FileType make setlocal noexpandtab
 "set clipboard=unnamed
 set clipboard=unnamedplus
 
+" Sessions
+" save always the current files to a ~/.vim/sessions/current.session
+" (first close NERDTree because it fails)
+autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose
+"autocmd VimLeave * mksession! ~/.vim/sessions/current.session
+"Restore Session at start
+"autocmd VimEnter * source ~/.vim/sessions/current.session
+"autocmd VimEnter * NERDTree
 
 
 " # HELP commands

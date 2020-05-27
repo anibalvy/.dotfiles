@@ -1,0 +1,8 @@
+
+
+to see the content... 
+
+❯ hexdump -C Downloads/sid.jpg | head
+00000000  ff d8 ff e2 02 1c 49 43  43 5f 50 52 4f 46 49 4c  |......ICC_PROFIL|
+00000010  45 00 01 01 00 00 02 0c  6c 63 6d 73 02 10 00 00  |E.......lcms....|
+
