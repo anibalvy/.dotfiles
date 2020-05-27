@@ -197,9 +197,15 @@ Plugin 'glench/vim-jinja2-syntax'
 " Se debe corregir el path para que se aplique al inicio.
 " → ln -s ~/vim/bundle/vim-colorschemes/colors colors
 Plugin 'flazz/vim-colorschemes'
-colorscheme molokai
+colorscheme mango
 ""o en vim
 ":colorscheme molokai
+
+"Set Colort for change themes
+" F8      : to use next color scheme
+" Shift-F8: to use previous 
+" Alt - F8: to use a random
+Plugin 'felixhummel/setcolors.vim'
 
 " Overwrite color background to transparent
 highlight Normal guibg=NONE ctermbg=NONE

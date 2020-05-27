@@ -23,6 +23,7 @@ if [ $USER = 'root' ]; then
         echo "Theme: Honukai"
 else
 	ZSH_THEME="powerlevel10k/powerlevel10k"
+        POWERLEVEL9K_MODE="nerdfont-complete"
         echo "Theme: PowerLevel 10K"
 fi
 ##K
@@ -71,7 +72,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colored-man-pages colorize kate nvm node vundle jsontools lol react-native python pyenv pipenv)
+plugins=(git colored-man-pages colorize kate nvm node vundle jsontools lol react-native python pyenv pipenv zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -116,7 +117,11 @@ source $ZSH/oh-my-zsh.sh
 alias s="sudo"
 alias sduo="sudo"
 alias suod="sudo"
+# PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
+# Fonts: also is needed a NERDFont.
+alias ls="lsd"  # PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
 alias ll="ls -la"
+alias lt="ls -tree"
 alias isntall="install"
 alias info='pinfo'
 alias rm='rm -i'
@@ -239,3 +244,7 @@ fi
 #"?" vi-history-search-forward
 #"n" vi-repeat-search
 #"N" vi-rev-repeat-search
+
+# Using FZF, check https://www.youtube.com/watch?v=qgG5Jhi_Els
+
+
