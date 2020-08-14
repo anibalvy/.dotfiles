@@ -9,3 +9,56 @@ seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR,
 
 # Specify output separator character
 printf '1 2 3' | awk 'BEGIN {OFS=":"}; {print $1,$2,$3}'
+
+# Regex by (gcc)
+locate gcc | awk '/gcc/ {print $0}'
+# or starting by g (^g)
+locate gcc | awk '/^g/ {print $0}'
+
+# in print you can use $0 $1... $NF (last value)
+
+# use the OFS (output field separator) variable to put a separator between fields in the output
+date | awk 'OFS="/" {print$2,$3,$6}'
+May/4/2020
+
+date | awk 'OFS="-" {print$2,$3,$6}'
+May-4-2020
+
+# A BEGIN rule is executed once before any text processing starts. In fact, it’s executed before awk even reads any text. An END rule is executed after all processing has completed. 
+awk 'BEGIN {print "printed first"} {print $0}' dennis_ritchie.txt
+
+# Input Field Separators:  the -F (separator string) 
+awk -F: '{print $1,$6}' /etc/passwd
+
+# A pattern with our print action to filter out all other entries 
+awk -F: '$3 >= 1000 {print $1,$6}' /etc/passwd
+# it can use logical operators (&&, ||)
+awk -F: '/^g/ && $3 >= 1000 {print $1,$6}' /etc/passwd
+
+# Built-in Functions
+awk 'BEGIN { print sqrt(625)}'
+
+# external script examble
+
+#!/usr/bin/awk -f
+BEGIN {
+  # set the input and output field separators
+  FS=":"
+  OFS=":"
+  # zero the accounts counter
+  accounts=0
+}
+{
+  # set field 2 to nothing
+  $2=""
+  # print the entire line
+  print $0
+  # count another account
+  accounts++
+}
+END {
+  # print the results
+  print accounts " accounts.\n"
+}
+
+script.awk /etc/passwd

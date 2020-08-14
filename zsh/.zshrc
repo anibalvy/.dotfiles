@@ -91,7 +91,9 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
+
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -220,17 +222,22 @@ export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 export PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
 
 # Tmux must be disable if we are running inside a pipenv VirtualENV (pipenv shell)
-if [ -z "$PIPENV_ACTIVE" ] ; then
+alias tmux='tmux -2'
+if [  -z "$PIPENV_ACTIVE" ] ; then
     if [ $USER != 'root' ]; then
-        echo "Tmux sessions loading....\n"
-	tmux list-sessions
-	tmux choose-session
-	tmux a
-	tmux new-session -t gns3
+        if [ -n "$TMUX" ]; then 
+            echo "Tmux sessions attaching....\n"
+            #tmux list-sessions
+            tmux choose-session
+            #tmux a
+        else
+            echo "tmux new session"
+            tmux new-session -t gns3
+        fi
     else
-	echo "WARNIGN: logged as user root!!!"
-	echo "     - No autmatic Tmux session to avoid nested sessions"
-	echo "     - be carefull!!"
+        echo "WARNIGN: logged as user root!!!"
+        echo "     - No autmatic Tmux session to avoid nested sessions"
+        echo "     - be carefull!!"
     fi
 else
     echo 'Loading a Python Virtual enviroment'
@@ -248,3 +255,4 @@ fi
 # Using FZF, check https://www.youtube.com/watch?v=qgG5Jhi_Els
 
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

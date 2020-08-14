@@ -15,3 +15,41 @@ rsync -auv /src/foo/ /dest/foo
 
 # Copy file from local to remote over ssh with non standard port 1234 to destination folder in remoteuser's home directory
 rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/
+
+-a option (short for --archive) to preserve the most important attributes of the source files
+-v option to make the command more verbose 
+--delete option to make so that files deleted from source are also deleted on destination
+
+# Incremental Backup (https://linuxconfig.org/how-to-create-incremental-backups-using-rsync-on-linux)
+#The content of the source directory will be compared to that of the directory passed to the --link-dest option. 
+#New and modified files existing in the source directory will be copied to the destination directory as always 
+#(and files deleted in the source will also not appear in the backup if the --delete option is used); 
+#unchanged files will also appear in the backup directory, but they will just be hard links pointing to inodes created in the previously made backups.
+#script:
+
+#!/bin/bash
+
+# A script to perform incremental backups using rsync
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+readonly SOURCE_DIR="${HOME}"
+readonly BACKUP_DIR="/mnt/data/backups"
+readonly DATETIME="$(date '+%Y-%m-%d_%H:%M:%S')"
+readonly BACKUP_PATH="${BACKUP_DIR}/${DATETIME}"
+readonly LATEST_LINK="${BACKUP_DIR}/latest"
+
+mkdir -p "${BACKUP_DIR}"
+
+rsync -av --delete \
+  "${SOURCE_DIR}/" \
+  --link-dest "${LATEST_LINK}" \
+  --exclude=".cache" \
+  "${BACKUP_PATH}"
+
+rm -rf "${LATEST_LINK}"
+ln -s "${BACKUP_PATH}" "${LATEST_LINK}"
+
+

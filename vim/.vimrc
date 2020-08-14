@@ -1,11 +1,46 @@
-
-"let mapleader =" "
-" edit on .dotfiles/.vimrc 
-set nocompatible              " be iMproved, required
+"let mapleader =" " " edit on .dotfiles/.vimrc set nocompatible              " be iMproved, required
 filetype off                  " required
-set encoding=utf-8
+set encoding=UTF-8
 set number relativenumber    "So I can see the queantity of lines of yank, delete, etc.
 "set splitbelow splitright    "by default split vertical
+
+""" History settings
+" to check parameter type
+" :verbose set history
+"  history=50
+"          Last set from ~/.vimrc 
+"
+" so, it's need to be set
+set history=10000
+"""
+""" TABs 
+" dimension:
+set tabstop=4 
+set softtabstop=4
+" Number of space characters inserted for indentation
+set shiftwidth=4
+" TAB dimesion for a particular file type like CSS here.
+"autocmd Filetype css setlocal tabstop=4
+
+" Insert space characters whenever the tab key is pressed
+set expandtab
+
+set smartindent
+set smartcase
+
+"to continue the cursor in the line at the end of the screen...
+set nowrap
+
+"to use after get use to UNDO
+" set noswapfile
+" set nobackup
+
+"UNDO
+set undodir=~/.vim/undodir
+set undofile
+"incrementa search 
+set incsearch
+
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -18,8 +53,12 @@ Plugin 'VundleVim/Vundle.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
+" plugin for Git repo
 Plugin 'tpope/vim-fugitive'
+" Commands:
+" :Git or :G
+" :Git + {commit, rebase -i, diff, log, blame... etc} 
+ 
 " plugin from http://vim-scripts.org/vim/scripts.html
 "Plugin 'L9'
 " Git plugin not hosted on GitHub
@@ -28,10 +67,10 @@ Plugin 'git://git.wincent.com/command-t.git'
 "Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
-Plugin 'ascenator/L9', {'name': 'newL9'}
+"Plugin 'ascenator/L9', {'name': 'newL9'}
 
 "KANIBAL"
 " Instalar EMMET
@@ -47,6 +86,7 @@ Plugin 'ap/vim-css-color'
 "g:cssColorVimDoNotMessMyUpdatetime "is used when updatetime value set by plugin (100ms) is interfering with your configuration.
 "let g:cssColorVimDoNotMessMyUpdatetime = 1
 
+"Code completion
 Plugin 'valloric/youcompleteme'
 
 " Markdown Syntax - Begin
@@ -91,13 +131,10 @@ Plugin 'shime/vim-livedown'
 " should markdown preview get shown automatically upon opening markdown
 " buffer
 let g:livedown_autorun = 0
-"
 " should the browser window pop-up upon previewing
 let g:livedown_open = 1 
-"
 " the port on which Livedown server will run
 let g:livedown_port = 1337
-"
 " the browser to use
 let g:livedown_browser = "firefox"
 
@@ -142,6 +179,9 @@ Plugin 'junegunn/goyo.vim'
 "NERTTree
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+
+Plugin 'ryanoasis/vim-devicons'
+
 "At start
 autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -187,7 +227,7 @@ Plugin 'ctrlp.vim'
 "   g:black_skip_string_normalization (defaults to 0)
 "   g:black_virtualenv (defaults to ~/.vim/black or ~/.local/share/nvim/black)
 
-Plugin 'psf/black'
+"Plugin 'psf/black'
 
 "Jinja syntax
 Plugin 'glench/vim-jinja2-syntax'
@@ -197,9 +237,21 @@ Plugin 'glench/vim-jinja2-syntax'
 " Se debe corregir el path para que se aplique al inicio.
 " → ln -s ~/vim/bundle/vim-colorschemes/colors colors
 Plugin 'flazz/vim-colorschemes'
-colorscheme mango
+colorscheme gruvbox
 ""o en vim
 ":colorscheme molokai
+
+"Visual delimiter line
+set colorcolumn=80
+"highlight ColorColumn ctermbg=0 guibg=lightgrey
+set background=dark
+
+" Enable true color
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 
 "Set Colort for change themes
 " F8      : to use next color scheme
@@ -208,7 +260,7 @@ colorscheme mango
 Plugin 'felixhummel/setcolors.vim'
 
 " Overwrite color background to transparent
-highlight Normal guibg=NONE ctermbg=NONE
+"highlight Normal guibg=NONE ctermbg=NONE
 
 "A light and configurable statusline/tabline plugin for Vim
 Plugin 'itchyny/lightline.vim'
@@ -235,29 +287,6 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 
-""" History settings
-" to check parameter type
-" :verbose set history
-"  history=50
-"          Last set from ~/.vimrc 
-"
-" so, it's need to be set
-set history=10000
-"""
-""" TABs 
-" dimension:
-set tabstop=8 "set to 8 spaces.
-set softtabstop=8
-set shiftwidth=8
-set noexpandtab
-":set  tabstop=4
-" TAB dimesion for a particular file type like CSS here.
-"autocmd Filetype css setlocal tabstop=4
-
-" Insert space characters whenever the tab key is pressed
-:set expandtab
-" Number of space characters inserted for indentation
-:set shiftwidth=4
 " For Python
 "autocmd FileType * set tabstop=2|set shiftwidth=2|set noexpandtab
 autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
