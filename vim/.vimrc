@@ -237,7 +237,7 @@ Plugin 'glench/vim-jinja2-syntax'
 " Se debe corregir el path para que se aplique al inicio.
 " → ln -s ~/vim/bundle/vim-colorschemes/colors colors
 Plugin 'flazz/vim-colorschemes'
-colorscheme gruvbox
+colorscheme ayu
 ""o en vim
 ":colorscheme molokai
 

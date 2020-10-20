@@ -252,7 +252,12 @@ fi
 #"n" vi-repeat-search
 #"N" vi-rev-repeat-search
 
+### colorize man pages with BAT (sudo pkcon install bat)
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+
 # Using FZF, check https://www.youtube.com/watch?v=qgG5Jhi_Els
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+combine-pdf() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_`date +'%F_%Hh%M'`.pdf -f "$@" ;}

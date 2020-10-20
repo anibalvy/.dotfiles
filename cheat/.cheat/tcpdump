@@ -11,6 +11,9 @@ tcpdump host 173.194.40.120
 # Intercepts all packets on all interfaces from / to 173.194.40.120 port 80
 # -nn => Disables name resolution for IP addresses and port numbers.
 tcpdump -nn -i any host 173.194.40.120 and port 80
+# -nnvv => increase verbosity.
+# -nnvvX => X display data of the package
+tcpdump -i eth0 -nnvvX tcp port 23 # check data for telnet
 
 # Make a grep on tcpdump (ASCII)
 # -A  => Show only ASCII in packets.
@@ -61,3 +64,6 @@ tcpdump -X
 # - not dst host 8.8.8.8
 # - src net 67.207.148.0 mask 255.255.255.0
 # - src net 67.207.148.0/24
+
+# it useful to use Wireshark, tshark and also ethercap
+

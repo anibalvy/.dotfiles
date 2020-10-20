@@ -1,0 +1,17 @@
+# status
+ufw status
+
+# 
+ufw show
+ufw show REPORT
+ufw app list
+ufw app list
+ufw app info
+ufw app info PROFILE
+ufw allow synergy
+ufw status
+ufw app list
+ufw app info Apache
+vim /etc/ufw/applications.d/openssh-server
+vim /etc/ufw/applications.d/apache2-utils.ufw.profile
+

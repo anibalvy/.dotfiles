@@ -20,7 +20,8 @@ docker inspect --format {{.State.Pid}} <container_name_or_ID>
 docker inspect --format='{{json .Volumes}}' <container_id> | python -mjson.tool
 
 # Copy files/folders between a container and your host
-docker cp foo.txt mycontainer:/foo.txt
+docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH|-
+docker cp [OPTIONS] SRC_PATH|- CONTAINER:DEST_PATH
 
 # list currently running containers
 docker ps
@@ -30,3 +31,15 @@ docker ps -a
 
 # list all images
 docker images
+
+# export File System as tar
+docker export <container_name> > <container_name_FileSystem.tar
+
+# list File System (from the tar output)
+docker export < container_name> | tar t
+
+# copy a file from a container that is not running
+docker cp <container-name>:<path/inside/container> <path/on/host/>
+
+
+

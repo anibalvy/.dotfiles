@@ -7,6 +7,11 @@ nmap -iL [list.txt]
 # iPv6:
 nmap -6 [target]
 
+# -sV : attemps to determine version of service running.
+# -Pn : Disable host discovery and just scan for open ports.
+# -sC : scan with default nmap scripts
+# -sS : TCP SYN port scan
+
 # OS detection:
 nmap -O --osscan_guess [target]
 

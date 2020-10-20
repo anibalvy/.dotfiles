@@ -46,8 +46,25 @@ Ctrl-b [0-9]
 or
 Ctrl-b Arrows
 
-# Split windows horizontally:
+
+# Pane management
+# ===============
+
+# Split horizontally:
 Ctrl-b %
 
-# Split windows vertically:
+# Split vertically:
 Ctrl-b "
+
+# rearrange pane
+Ctrl-b Space
+Ctrl-b Ctrl+o
+
+# resize
+Ctrl-b : resize-pane -R 10
+Ctrl-b : resize-pane -L 10
+Ctrl-b : resize-pane -U 10
+Ctrl-b : resize-pane -D 10
+
+
+
