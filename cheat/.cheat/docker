@@ -44,5 +44,36 @@ docker export < container_name> | tar t
 # copy a file from a container that is not running
 docker cp <container-name>:<path/inside/container> <path/on/host/>
 
+## Create an image and run it with docker-compose
+# Folder structure:
 
+.
+├── docker-compose.yml
+└── Dockerfile
+
+# Content of Dockerfile:
+
+FROM alpine
+CMD ["echo", "i am groot"]
+
+# Build and tag image:
+
+docker build -t groot .
+docker tag groot:latest groot:staging
+
+# docker-compose.yml:
+
+version: '3.1'
+services:
+  groot:
+    image: groot:staging
+
+# and start docker-compose:
+
+$ docker-compose up
+Creating groot_groot ... 
+Creating groot_groot_1 ... done
+Attaching to groot_groot_1
+groot_1  | i am groot
+groot_groot_1 exited with code 0
 
