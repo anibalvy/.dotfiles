@@ -1,0 +1,13 @@
+# add new user
+useradd <new_user>
+
+# change password
+passwd <new_user>
+
+# add a secondary group
+usermod -G wheel <new_user>
+
+# check 
+who
+id <new_user>
+

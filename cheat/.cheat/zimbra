@@ -1,0 +1,304 @@
+1.- Comandos de servicio
+
+```sh
+$> su - zimbra
+```
+verificar el estado de todos los  servicios en zimbra
+```sh
+$> zmcontrol status
+```
+detener todos los servicios
+```sh
+$> zmcontrol stop
+```
+iniciar todos los servicios
+```sh
+$> zmcontrol start
+```
+reiniciar todos los servicios
+```sh
+$> zmcontrol restart
+```
+ver la versión de zimbra
+```sh
+$> zmcontrol -v
+```
+
+2.- Comandos individuales de servicio (start, stop, restart, status)
+
+Ej: detenemos todos los servicios e iniciaremos uno a uno
+```sh
+$> zmcontrol stop
+
+$> zmcontrol status
+```
+Iniciar LDAP server
+```sh
+$> ldap start
+
+$> zmcontrol status
+```
+Iniciar MySQL Server
+```sh
+$> mysql.server start
+```
+Iniciar zmconfigd
+```sh
+$> zmconfigdctl start
+```
+Iniciar MTA (postfix, saslauthd)
+```sh
+$> zmmtactl start
+```
+Iniciar Amavis, Antivirus y AntiSpam (amavis, spamassassin, clamav)
+```sh
+$> zmamavisdctl start
+
+$> zmcontrol status
+```
+Iniciar Mailbox (webmail, panel de administracion, servidores imap y pop3, servidores de filtros)
+```sh
+$> zmmailboxdctl start
+```
+Iniciar spell (servidor de ortografía)
+```sh
+$> zmapachectl start
+```
+Iniciar monitoreo
+```sh
+$> zmswatchctl start
+```
+Iniciar estadísticas
+```sh
+$> zmstatctl start
+```
+Iniciar Logger (logs del sistema)
+```sh
+$> zmlogswatchctl start
+```
+Reiniciar solo el antivirus
+```sh
+$> zmantivirusctl restart
+```
+Reiniciar solo el antispam
+```sh
+$> zmantispamctl restart
+```
+
+3.- zmprov: comando de administración de zimbra
+
+Loguearse primero como usuario zimbra
+```sh
+$> su - zimbra
+```
+Lista la ayuda general de zmprov
+```sh
+$> zmprov help
+```
+Listar la ayuda para gestionar las cuentas
+```sh
+$> zmprov help acount
+```
+Consola Interactiva
+```sh
+$> zmprov
+prov>
+```
+Ver ayuda de cuentas
+```sh
+prov> help account
+```
+Salir de la consola interactiva
+```sh
+prov> quit
+```
+4.- Cuentas
+
+Obtener listado de todas las cuentas del servidor (todos los dominios)
+```sh
+$> zmprov -l gaa
+```
+Obtener todas las cuentas de administración
+```sh
+$> zmprov -l gaaa
+```
+Obtener información de una sola cuenta
+```sh
+$> zmprov -l ga tuxito@dominio.com
+```
+Cuentas de un dominio específico
+```sh
+$> zmprov -l gaa dominio.com
+```
+Detalle de cuentas de un dominio especifico
+```sh
+$> zmprov -l gaa -v dominio.com
+```
+Detalle de cuentas de un dominio especifico con Cuenta, Nombre y Quota
+```sh
+$> zmprov -l gaa -v dominio0.com | grep -e zimbraMailDeliveryAddress -e displayName -e zimbraMailQuota |sed -e "s/zimbraMailDeliveryAddress/Cuenta/" -e "s/displayName/Nombre/" -e "s/zimbraMailQuota/Quota/"
+```
+Crear una cuenta, con cos default
+```sh
+$> zmprov ca pepito@dominio.com pepitopass displayName "Pepito Pérez"
+```
+Crear un usuario con un cos específico ej: gerente
+```sh
+$> cos=`zmprov gc gerente | grep zimbraId:|cut -d ' ' -f2`
+$> zmprov ca juanito@dominio.com juanitopass displayName "Juanito Martinez" zimbraCOSId $cos
+```
+Crear una cuenta con detalle
+```sh
+$> zmprov ca windozero@dominio.com passwinbugs cn 'Nombre(s) ApMaterno ApPaterno' displayName 'Nombre(s) ApMaterno ApPaterno' givenName 'Nombre(s)' zimbraCOSId $cos
+```
+5.- Modificar opciones de una cuenta
+
+Cambiar de password de una cuenta
+```sh
+$> zmprov sp usuario1@dominio.com passnuevo
+```
+Modificar un atributo de una cuenta
+```sh
+$> zmprov ma usuario1@dominio.com displayName "Luser Noob 1"
+```
+Nota: se puede modificar cualquier atributo del usuario
+para la lista de atributos ejecutar
+```sh
+$> zmprov -l ga usuario1@dominio.com
+```
+6.- Busqueda de cuentas
+
+* Búsqueda por atributos
+Se puede buscar las cuentas por un atributo en común
+```sh
+$> zmprov sa parametro=cadena
+```
+Buscar todas las cuentas activas
+```sh
+$> zmprov sa zimbraAccountStatus=active
+```
+Buscar todas las cuentas bloqueadas
+```sh
+$> zmprov sa zimbraAccountStatus=locked
+```
+Buscar en cuales listas se encuentra una cuenta
+```sh
+$> zmprov gam cuenta@dominio.com
+```
+9.- Listas de correo
+
+Buscar todas las listas, y por dominio
+```sh
+$> zmprov gadl
+
+$> zmprov gadl dominio.com
+```
+Crear una lista
+```sh
+$> zmprov cdl lista@dominio.com
+```
+Ver una lista específica
+```sh
+$> zmprov gdl lista@dominio.com
+```
+Encontrar todas las listas de un dominio y sus miembros
+```sh
+$> for i in $( zmprov gadl dominio.com | grep -v abuse | grep -v postmaster | sort ) ; do echo
+ `zmprov gdl $i | grep -e 'mail: ' -e 'zimbraMailForwardingAddress: ' | sed 's/mail/Lista/' | sed
+
+'s/zimbraMailForwardingAddress: //'` ; done ;
+```
+
+agregar un miembro a la lista
+```sh
+$> zmprov adlm lista@dominio.com cuenta@dominio.com
+```
+Remover un miembro de la lista
+```sh
+$> zmprov rdlm lista@dominio.com cuenta@dominio.com
+```
+Borrar una lista
+```sh
+$ zmprov ddl lista@dominio.com
+```
+10.- Buzones (zmmailbox)
+
+Entrar a la consola interactiva
+```sh
+$> zmmailbox
+mbox>
+```
+Ver ayuda general del comando
+```sh
+$> zmmailbox help
+```
+Ver ayuda de las cuentas
+```sh
+$> zmmailbox help account
+```
+Ver ayuda de los mensajes
+```sh
+$> zmmailbox help message
+```
+
+* Tamaño de un buzón
+Ver tamaño ocupado del buzón
+```sh
+$> zmmailbox -z -m cuenta@dominio.com gms
+```
+Ver el tamaño de las quotas asignadas y ocupadas de todos los buzones
+```sh
+$> zmprov gqu `zmhostname`|awk {'print " "$3" "$2" "$1'}
+```
+Revisar mensajes por carpetas en el buzón
+```sh
+$> zmmailbox -z -m cuenta@dominio.com gaf
+```
+Borrar una carpeta completa de un buzón
+```sh
+$> zmmailbox -z -m cuenta@dominio.com emptyFolder Junk
+```
+Importar mensajes de una carpeta Maildir existente en el INBOX
+```sh
+$> echo addMessage /INBOX /path/to/Maildir/cur | /opt/zimbra/bin/zmmailbox -z -m cuenta@dominio.com
+```
+Buscar un mensaje
+```sh
+$> zmmailbox -z -m cuenta@dominio.com search -t message "prueba"
+```
+Buscar un mensaje en todas las cuentas
+```sh
+$> zmprov -l gaa |awk '{print "zmmailbox -z -m "$1" search \"linux\" "}' |sh -v
+```
+linux es la palabra de búsqueda
+
+Buscar correos anteriores a una fecha: (formato mes/dia/año)
+```sh
+$> zmmailbox -z -m cuenta@dominio.com search -t message "in:INBOX (before: 12/19/13)"
+```
+Obtener contenido de un correo, donde 21940 es el ID del mensaje
+```sh
+$> zmmailbox -z -m cuenta@dominio.com  gm  21940
+```
+
+Ver contactos:
+```sh
+$> zmmailbox -z -m cuenta@dominio.com gact | less
+```
+Vaciar casilla usuario:
+```sh
+$> zmmailbox -z -m accoun@domain.com ef "/Inbox"
+```
+Ver correos de una carpeta
+```sh
+$> zmmailbox -z -m cuenta@dominio.com search -l 100 "in:Inbox"
+```
+Ver metadata de un correo:
+```sh
+$> zmmetadump -m cuenta@dominio.com -i 26747
+```
+Borrar un mensaje
+```sh
+$> zmmailbox -z -m cuenta@dominio.com dm 4543
+```
+4543 es el id del mensaje

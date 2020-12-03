@@ -7,6 +7,35 @@ dnf search <string>
 # To find which package provides a binary
 dnf provides <path to binary>
 
+# This lists all or specific packages
+dnf list <package-name>
+dnf list --recent <package-name>
+dnf list --recent 
+dnf list --extras
+dnf list --upgrades
+dnf list --obsoletes
+
+# View updates in the system.
+dnf check-update 
+# or 
+dnf check-update <package-name>
+
+# Downloads and lists all enabled repositories in the system.
+dnf repolist all
+
+# List all the advisories available in the system; including the sec option will list all advisories labeled "security fix."
+dnf updateinfo list available 
+# or
+dnf updateinfo list available sec
+
+# lists all the security advisories in the system marked "critical."
+dnf updateinfo list available sec --sec-severity Critical
+
+# This applies all the security advisories available in the system. With the --sec-severity option, you can include the packages with severity marked either Critical, Important, Moderate, or Low.
+dnf upgrade --security 
+# or  
+dnf upgrade --sec-severity Critical
+
 # The following are available after installing "dnf-plugins-core"
 
 # Download a package

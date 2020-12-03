@@ -1,0 +1,63 @@
+# HELM for K8s
+
+## concepts
+- A Chart is a Helm package.
+- A Repository is the place where charts can be collected and shared. 
+- A Release is an instance of a chart running in a Kubernetes cluster. 
+
+## Initialize a Helm Chart Repository
+$ helm repo add stable https://charts.helm.sh/stable
+
+## search in repo that you have added to your local helm client 
+$ helm search repo postgres
+
+## search in hub, https://artifacthub.io, which lists helm charts from dozens of different repositories.
+$ helm search hub postgres
+
+
+## update repo
+$ helm repo update
+
+## install chart
+$ helm install <my_name_for_the_release> stable/mariadb
+
+## Install A local chart archive 
+$ helm install foo foo-0.1.1.tgz
+
+## Install an unpacked chart directory 
+$ helm install foo path/to/foo
+
+## Install using a full URL 
+$ helm install foo https://example.com/charts/foo-1.2.3.tgz
+
+## install not specifying a name
+$ helm install stable/mysql --generate-name
+Released smiling-penguin
+
+## list installed with
+$ helm ls
+NAME             VERSION   UPDATED                   STATUS    CHART
+smiling-penguin  1         Wed Sep 28 12:59:46 2016  DEPLOYED  mysql-0.1.0
+
+$ helm list
+
+## uninstall a release
+$ helm uninstall smiling-penguin
+Removed smiling-penguin
+
+
+## status
+$ helm status smiling-penguin
+Status: UNINSTALLED
+...
+
+## To see what options are configurable on a chart
+$ helm show values stable/mariadb
+
+## You can then override any of these settings in a YAML formatted file, and then pass that file during installation.
+$ echo '{mariadbUser: user0, mariadbDatabase: user0db}' > config.yaml
+$ helm install -f config.yaml stable/mariadb --generate-name
+
+## 
+
+

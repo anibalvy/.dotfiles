@@ -66,5 +66,8 @@ Ctrl-b : resize-pane -L 10
 Ctrl-b : resize-pane -U 10
 Ctrl-b : resize-pane -D 10
 
+# Sync panes
+Ctrl-b : set synchronize-panes [on|off]
+
 
 

@@ -1,0 +1,2 @@
+# add a secondary group
+usermod -G wheel <user>

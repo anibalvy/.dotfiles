@@ -1,0 +1,54 @@
+# cpu affinity or CPU pinning
+# first check numa nodes
+numactl --hardware
+available: 1 nodes (0)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+node 0 size: 32058 MB
+node 0 free: 6592 MB
+node distances:
+node   0
+  0:  10
+
+# multiple nodes, like a server
+numactl --hardware
+ available: 4 nodes (0-3)
+ node 0 cpus: 0 4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108
+ node 0 size: 80445 MB
+ node 0 free: 56246 MB
+ node 1 cpus: 1 5 9 13 17 21 25 29 33 37 41 45 49 53 57 61 65 69 73 77 81 85 89 93 97 101 105 109
+ node 1 size: 80633 MB
+ node 1 free: 5841 MB
+ node 2 cpus: 2 6 10 14 18 22 26 30 34 38 42 46 50 54 58 62 66 70 74 78 82 86 90 94 98 102 106 110
+ node 2 size: 80633 MB
+ node 2 free: 23713 MB
+ node 3 cpus: 3 7 11 15 19 23 27 31 35 39 43 47 51 55 59 63 67 71 75 79 83 87 91 95 99 103 107 111
+ node 3 size: 80632 MB
+ node 3 free: 25011 MB
+ node distances:
+ node   0   1   2   3
+   0:  10  21  31  21
+   1:  21  10  21  31
+   2:  31  21  10  21
+   3:  21  31  21  10
+
+# In this scenario, we would like to pin 8 CPU cores to this VM. 
+# As a prerequisite, we need to first know the exact CPU core IDs that we are going to assign to the “test” VM. Recall that numactl can help us to know the NUMA nodes and the cores IDs of each one. 
+# As an example, let’s pin the test VM to the following core IDs of our server machine: 0,4,8,12,16,20,24,28
+# These cores reside on NUMA0 which could be a perfect fit for allocate the test VM. All you need to do is to follow these instructions:
+
+# 1. Modify the VM configuration file located in /etc/libvirt/qemu/test.xml 
+
+vi /etc/libvirt/qemu/test.xml
+
+# 2. Find the line starting with “vcpu”:
+
+<vcpu placement='static'>8</vcpu>
+
+# 3. Change it to look like the following line:
+
+ <vcpu placement='static' cpuset='0,4,8,12,16,20,24,28'>8</vcpu> 
+
+# 4. Now just restart libvirtd
+
+systemctl restart libvirtd
+

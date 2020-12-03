@@ -1,4 +1,8 @@
 # Desc: Apparmor will protect the system by confining programs to a limited set of resources.
+#
+#To chech if is runnin
+❯ aa-enabled
+Yes
 
 # To activate a profile:
 sudo aa-enforce usr.bin.firefox

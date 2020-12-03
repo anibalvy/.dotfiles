@@ -253,6 +253,10 @@ if exists('+termguicolors')
   set termguicolors
 endif
 
+"make background transparent
+hi Normal guibg=NONE ctermbg=NONE
+
+
 "Set Colort for change themes
 " F8      : to use next color scheme
 " Shift-F8: to use previous 
@@ -268,7 +272,19 @@ set laststatus=2
 set noshowmode "get rid of original mode indicator.
 "Color mode for lightline
 "let g:lightline = { 'colorscheme': 'wombat', }
-let g:lightline = { 'colorscheme': 'OldHope', }
+"set g:lightline = { 'colorscheme': 'OldHope', 
+"            \ 'inactive': {
+"            \         'left': [ [ 'filename', 'modified' ] ],
+"            \         'right': [ [ 'lineinfo' ], [ 'percent' ] ]
+"            \   },
+"            \  }
+let g:lightline = { 
+            \ 'colorscheme': 'OldHope', 
+            \ 'inactive': { 
+            \   'left': [ [ 'filename', 'modified' ] ], 
+            \   'right': [ [ 'lineinfo' ], [ 'percent' ] ] 
+            \ }, 
+            \ } 
 "
 
 " All of your Plugins must be added before the following line
@@ -494,3 +510,7 @@ set nrformats+=hex,alpha
 " set numbers
 "     :set number
 "
+
+"set highlight to bright yellow
+hi Visual ctermfg=11 ctermbg=11 guifg=#0F1419 guibg=#FFEE99
+

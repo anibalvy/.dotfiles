@@ -1,0 +1,13 @@
+# steps  
+1) /etc/init.d/mysql stop
+
+2) mysqld_safe --skip-grant-tables &
+
+3) mysql -u root
+
+4) Setup new MySQL root user password use mysql; update user set password=PASSWORD("NEW-ROOT-PASSWORD") where User='root'; flush privileges; quit
+
+5) Stop MySQL Server: /etc/init.d/mysql stop
+
+6) Start MySQL server and test it: mysql -u root -p
+

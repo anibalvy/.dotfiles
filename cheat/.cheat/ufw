@@ -1,12 +1,11 @@
 # status
 ufw status
 
-# 
+# common commands
 ufw show
 ufw show REPORT
 ufw app list
 ufw app list
-ufw app info
 ufw app info PROFILE
 ufw allow synergy
 ufw status
@@ -15,3 +14,41 @@ ufw app info Apache
 vim /etc/ufw/applications.d/openssh-server
 vim /etc/ufw/applications.d/apache2-utils.ufw.profile
 
+# allow port
+ufw allow 5433/tcp
+
+# allow App
+ufw allow <App name>
+
+# CREATE AN APPLICATION
+# create a file like this /etc/ufw/applications.d/kdeconnect
+# ports=> are comma separated and protocols must be separated by '|'. range by ':'
+# by ex.: port=34,45,65:75/udp|41,23,45:99,100/tcp 
+[Kdeconnect]
+title=kdeconnect application ports
+description=This allow to connect to rest of machines.
+ports=1714:1764/udp|1712:1764/tcp
+
+
+# allow local port range, check: /proc/sys/net/ipv4/ip_local_port_range
+ufw allow proto udp from 192.168.1.0/24 to any port 32768:61000
+
+
+# DELETE A RULE
+# list rules by number
+
+ufw status numbered
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 1714:1764/udp              ALLOW IN    Anywhere
+[ 2] 1714:1764/tcp              ALLOW IN    Anywhere
+[ 3] 22/tcp                     ALLOW IN    Anywhere
+[ 4] Synergy                    ALLOW IN    Anywhere
+[ 5] 5432/tcp                   ALLOW IN    Anywhere
+[ 6] 32768/tcp                  ALLOW IN    Anywhere
+[ 7] Kdeconnect                 ALLOW IN    Anywhere
+
+# Delete rule by number
+ufw delete NUM

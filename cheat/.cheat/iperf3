@@ -1,0 +1,8 @@
+# [in machine1]
+# run iperf in remote in machine1
+❯ iperf3 -s
+
+# [in machine2]
+# run the client to the remote machine
+❯ iperf3 -c <ip_of_machine1>
+
