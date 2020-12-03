@@ -13,7 +13,7 @@ $ helm search repo postgres
 
 ## search in hub, https://artifacthub.io, which lists helm charts from dozens of different repositories.
 $ helm search hub postgres
-
+NOTE: use this first.
 
 ## update repo
 $ helm repo update
