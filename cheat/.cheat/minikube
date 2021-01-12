@@ -1,6 +1,9 @@
 # start minikube with custom driver docker, kvm2, virtualbox,  
 minikube start --driver=<driver_name>
 
+# To make kvm2 the default driver:
+minikube config set driver kvm2
+
 # start with a custom profile (a cluster defined by <name>)
 minikube start -p <name> # (*) 
 

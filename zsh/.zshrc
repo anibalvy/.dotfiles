@@ -72,7 +72,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colored-man-pages colorize kate nvm node vundle jsontools lol react-native python pyenv pipenv zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(aws git colored-man-pages colorize kate nvm node vundle jsontools lol react-native python pyenv pipenv zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -255,9 +255,15 @@ fi
 ### colorize man pages with BAT (sudo pkcon install bat)
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
+## aws cli auto completer -- installed manually from the zip
+complete -C aws_completer aws
+
 # Using FZF, check https://www.youtube.com/watch?v=qgG5Jhi_Els
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 combine-pdf() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_`date +'%F_%Hh%M'`.pdf -f "$@" ;}
+
+# To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
+[[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh

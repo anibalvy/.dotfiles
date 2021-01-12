@@ -44,9 +44,32 @@ docker export < container_name> | tar t
 # copy a file from a container that is not running
 docker cp <container-name>:<path/inside/container> <path/on/host/>
 
+# create a Node app
+server.js
+```js
+var http = require('http');
+var handleRequest = function(request, response) {
+      console.log('Received request for URL: ' + request.url);
+        response.writeHead(200);
+          response.end('Hello World!');
+};
+var www = http.createServer(handleRequest);
+www.listen(8080);
+```
+Dockerfile
+```
+FROM node:6.14.2
+EXPOSE 8080
+COPY server.js .
+CMD [ "node", "server.js" ]
+```
+and building it on the same folder:
+```sh
+docker build .
+```
+
 ## Create an image and run it with docker-compose
 # Folder structure:
-
 .
 ├── docker-compose.yml
 └── Dockerfile

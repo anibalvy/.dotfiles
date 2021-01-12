@@ -514,3 +514,6 @@ set nrformats+=hex,alpha
 "set highlight to bright yellow
 hi Visual ctermfg=11 ctermbg=11 guifg=#0F1419 guibg=#FFEE99
 
+" Macros
+"ilet @y='i```^M```^[ka^[<80><fd>a'
+
