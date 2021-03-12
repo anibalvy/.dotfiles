@@ -17,16 +17,15 @@ set history=10000
 " dimension:
 set tabstop=4 
 set softtabstop=4
-" Number of space characters inserted for indentation
-set shiftwidth=4
+set shiftwidth=4   " Number of space characters inserted for indentation (>>)
+set expandtab " Insert space characters whenever the tab key is pressed
+set smartindent "do clever autoindenting
+"set smartcase "Override the 'ignorecase' option if the search pattern contains upper case characters.
+"
 " TAB dimesion for a particular file type like CSS here.
 "autocmd Filetype css setlocal tabstop=4
-
-" Insert space characters whenever the tab key is pressed
-set expandtab
-
-set smartindent
-set smartcase
+"
+set scrolloff=10 " when scrolling down, not wait to end to show new lines.
 
 "to continue the cursor in the line at the end of the screen...
 set nowrap
@@ -237,12 +236,16 @@ Plugin 'glench/vim-jinja2-syntax'
 " Se debe corregir el path para que se aplique al inicio.
 " → ln -s ~/vim/bundle/vim-colorschemes/colors colors
 Plugin 'flazz/vim-colorschemes'
-colorscheme ayu
+colorscheme gruvbox
 ""o en vim
 ":colorscheme molokai
+"set highlight to bright yellow
+hi Visual ctermfg=11 ctermbg=11 guifg=#0F1419 guibg=#FFEE99
 
 "Visual delimiter line
 set colorcolumn=80
+" Extra left column for linting
+set signcolumn=yes
 "highlight ColorColumn ctermbg=0 guibg=lightgrey
 set background=dark
 
@@ -286,6 +289,11 @@ let g:lightline = {
             \ }, 
             \ } 
 "
+
+" Add maktaba and bazel to the runtimepath.
+" (The latter must be installed before it can be used.)
+Plugin 'google/vim-maktaba'
+Plugin 'bazelbuild/vim-bazel'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -482,8 +490,6 @@ set nrformats+=hex,alpha
 " :r [filename] - Insert the file [filename] below the cursor.
 " :r ![command] - Execute [command] and insert the output below the cursor.
 "
-"
-"
 " . - Repetition
 "
 " Record a Macro
@@ -498,9 +504,8 @@ set nrformats+=hex,alpha
 " Show Registers
 "    :registers
 "
-" 
-" "{reister}p  - Paste a Register after current line
-" "{reister}P  - Paste a Register before current line
+" "{register}p  - Paste a Register after current line
+" "{register}P  - Paste a Register before current line
 " 
 "  Marks - Bookmarks
 " m{mark} - create a mark
@@ -511,9 +516,9 @@ set nrformats+=hex,alpha
 "     :set number
 "
 
-"set highlight to bright yellow
-hi Visual ctermfg=11 ctermbg=11 guifg=#0F1419 guibg=#FFEE99
 
 " Macros
 "ilet @y='i```^M```^[ka^[<80><fd>a'
 
+
+set exrc " Whenever you have an .vimrc on the folder, and open with "vim ." it will excecute it.

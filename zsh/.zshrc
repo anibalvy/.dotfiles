@@ -91,8 +91,9 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-export LANG=en_US.UTF-8
-export LC_TIME=en_US.UTF-8
+#export LC_ALL=C
+#export LANG=en_US.UTF-8
+#export LC_TIME=en_US.UTF-8
 
 
 # Preferred editor for local and remote sessions
@@ -225,14 +226,16 @@ export PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
 alias tmux='tmux -2'
 if [  -z "$PIPENV_ACTIVE" ] ; then
     if [ $USER != 'root' ]; then
-        if [ -n "$TMUX" ]; then 
-            echo "Tmux sessions attaching....\n"
-            #tmux list-sessions
-            tmux choose-session
-            #tmux a
-        else
-            echo "tmux new session"
-            tmux new-session -t gns3
+        if read -q "load_tmux?Do you want to load TMUX [Y/n]"; then
+            if [ -n "$TMUX" ]; then 
+                echo "\nTmux sessions attaching....\n"
+                #tmux list-sessions
+                #tmux choose-session
+                #tmux a
+            else
+                    echo "\nTmux new session"
+                    tmux new-session -t gns3
+            fi
         fi
     else
         echo "WARNIGN: logged as user root!!!"
@@ -242,7 +245,6 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
 else
     echo 'Loading a Python Virtual enviroment'
 fi
-
 
 ### vi mode
 #
@@ -259,11 +261,9 @@ export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 complete -C aws_completer aws
 
 # Using FZF, check https://www.youtube.com/watch?v=qgG5Jhi_Els
-
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-combine-pdf() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_`date +'%F_%Hh%M'`.pdf -f "$@" ;}
-
+pdf-combine() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_`date +'%F_%Hh%M'`.pdf -f "$@" ;}
+alias combine-pdf='pdf-combine'
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh

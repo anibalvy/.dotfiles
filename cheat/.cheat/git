@@ -15,18 +15,30 @@ git init
 git clone ssh://git@<repository-server.com>/[username]/[repository-name].git
 
 # To sync a fork with the master repo:
-git remote add upstream git@github.com:name/repo.git    # Set a new repo
-git remote -v                                           # Confirm new remote repo
-git fetch upstream                                      # Get branches
-git branch -va                                          # List local - remote branches
-git checkout master                                     # Checkout local master branch
-git checkout -b new_branch                              # Create and checkout a new branch
-git merge upstream/master                               # Merge remote into local repo
-git show 83fb499                                        # Show what a commit did.
-git show 83fb499:path/fo/file.ext                       # Shows the file as it appeared at 83fb499.
-git diff branch_1 branch_2                              # Check difference between branches
-git log                                                 # Show all the commits
-git status                                              # Show the changes from last commit
+# Set a new repo
+git remote add upstream git@github.com:name/repo.git    
+# Confirm new remote repo
+git remote -v                                           
+# Get branches
+git fetch upstream                                      
+# List local - remote branches
+git branch -va                                          
+# Checkout local master branch
+git checkout master                                     
+# Create and checkout a new branch
+git checkout -b new_branch                              
+# Merge remote into local repo
+git merge upstream/master                               
+# Show what a commit did.
+git show 83fb499                                        
+# Shows the file as it appeared at 83fb499.
+git show 83fb499:path/fo/file.ext                       
+# Check difference between branches
+git diff branch_1 branch_2                              
+# Show all the commits
+git log                                                 
+# Show the changes from last commit
+git status                                              
 
 # To stage all changes for commit:
 git add --all
