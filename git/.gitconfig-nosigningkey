@@ -1,0 +1,55 @@
+[user]
+    email = kanibalv@gmail.com
+    name = kanibalv
+[core]
+    editor = vim
+[alias]
+    stats = shortlog -ssn --all --no-merges
+    co = checkout
+    br = branch
+    ci = commit
+    cm = commit -a
+    st = status
+    cp    = cherry-pick
+    cl    = clone
+    type  = cat-file -t
+    dump  = cat-file -p
+    d     = diff
+    pl    = pull
+    pu    = push
+    a     = add
+    ap    = add -p
+    ac    = !git add . && git commit -m
+    graph = log --graph --oneline --decorate=short --branches='*'
+    hist  = log --pretty=format:\"%h %af | %s%d [%an]\" --graph --date=short
+[color]
+    ui = auto
+    pager = true
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green bold
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "status"]
+    header = white
+    branch = yellow bold
+    added = yellow
+    changed = red
+    untracked = red bold
+[sendemail]
+    smtpserver  = smtp.gmail.com
+    smtpserverport = 587
+    smtpencryption  = tls
+    smtpuser = 
+    smtppass = 
