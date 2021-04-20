@@ -1,6 +1,9 @@
 # Start tmux:
 tmux
 
+# Start new named session
+tmux new -s [session_name]
+
 # Detach from tmux:
 Ctrl-b d
 

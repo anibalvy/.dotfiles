@@ -3,6 +3,8 @@ filetype off                  " required
 set encoding=UTF-8
 set number relativenumber    "So I can see the queantity of lines of yank, delete, etc.
 "set splitbelow splitright    "by default split vertical
+set guifont=Hack\ Nerd\ Font\ Mono\ 11
+
 
 """ History settings
 " to check parameter type
@@ -186,6 +188,15 @@ autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Show hidden files
 "let NERDTreeShowHidden=1
+" color to icons
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Highlight full name 
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+" Highlight folders using exact match
+let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
 
 "Syntastic
 "https://github.com/vim-syntastic/syntastic
@@ -283,12 +294,20 @@ set noshowmode "get rid of original mode indicator.
 "            \  }
 let g:lightline = { 
             \ 'colorscheme': 'OldHope', 
+            \ 'active': { 
+            \   'left': [[ 'mode', 'paste' ], [ 'modified', 'filename' ] ], 
+            \   'right': [ [ 'lineinfo' ], [ 'percent' ],
+            \              [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ]] 
+            \ },  
             \ 'inactive': { 
-            \   'left': [ [ 'filename', 'modified' ] ], 
-            \   'right': [ [ 'lineinfo' ], [ 'percent' ] ] 
-            \ }, 
+            \   'left': [ [ 'modified', 'filename' ] ], 
+            \   'right': [ [ 'lineinfo' ], [ 'percent' ],
+            \              [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ]] 
+            \ },  
+            \ 'component': { 
+            \   'charvaluehex': '0x%B' 
+            \ },
             \ } 
-"
 
 " Add maktaba and bazel to the runtimepath.
 " (The latter must be installed before it can be used.)

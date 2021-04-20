@@ -63,3 +63,17 @@ d{motion}       delete text that {motion} moves over
 2dw         deletes 2 words
 5yy         copies 5 lines
 42G         go to line 42
+
+# Options
+:set option=<value>
+:set option? # display the value
+:set option! # invert the option, like paste to nopaste, or autoindent to noautoindent
+:set option? # set to default
+:verbose set option? # to show where this value was last set.
+:set # show options not as default
+:set all # show all
+:set all& # set all at default
+:help option # open manual
+
+
+

@@ -6,7 +6,7 @@
 #fi
 
 # If you come from bash you might have to change your $PATH.
-export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
+export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:/opt/amdgpu-pro/bin/:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -92,7 +92,8 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 #export LC_ALL=C
-#export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 #export LC_TIME=en_US.UTF-8
 
 
@@ -226,15 +227,22 @@ export PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
 alias tmux='tmux -2'
 if [  -z "$PIPENV_ACTIVE" ] ; then
     if [ $USER != 'root' ]; then
-        if read -q "load_tmux?Do you want to load TMUX [Y/n]"; then
-            if [ -n "$TMUX" ]; then 
-                echo "\nTmux sessions attaching....\n"
-                #tmux list-sessions
-                #tmux choose-session
-                #tmux a
-            else
-                    echo "\nTmux new session"
+        #env | grep TMUX
+        if [ -n "$TMUX" ]; then 
+            #echo "\nTmux pane $TMUX_PANE....\n"
+            #tmux list-sessions
+            #tmux choose-session
+            #tmux a
+        else
+            echo 'sessions'
+            tmux ls
+            if read -q "load_tmux?Do you want to load TMUX [Y/n]"; then
+                echo '\n'
+                if read -q "new_session?Tmux new session [Y/n]"; then
                     tmux new-session -t gns3
+                else
+                    tmux a
+                fi 
             fi
         fi
     else
