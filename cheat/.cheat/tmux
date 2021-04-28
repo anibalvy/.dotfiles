@@ -1,76 +1,75 @@
-# Start tmux:
-tmux
+# TMUX
 
-# Start new named session
-tmux new -s [session_name]
+## Hotkey
+<prefix> keys are by default Ctrl-b (I change it to Ctrl-a, as screen)
 
-# Detach from tmux:
-Ctrl-b d
-
-# Restore tmux session:
-tmux attach
-
-# Detach an already attached session (great if you are moving devices with different screen resolutions)
-tmux attach -d 
-
-# Display session:
-tmux ls
-
-# Rename session:
-Ctrl-b $
-
-# Switch session:
-Ctrl-b s
-
-# Start a shared session:
+## CLI
+```sh
+tmux # Start tmux
+tmux new -s [session_name] # Start new named session
+<prefix> d # Detach from tmux
+tmux attach # Restore tmux session
+tmux attach -d  # Detach an already attached session (great if you are moving devices with different screen resolutions)
+tmux ls # Display session
+### Start a shared session
 tmux -S /tmp/your_shared_session
 chmod 777 /tmp/your_shared_session
+```
 
-# Help screen (Q to quit):
-Ctrl-b ?
+## Sessions
+```sh
+<prefix> $ # Rename session
+<prefix> s # Switch session
+<prefix> ? # Help screen (Q to quit)
+<prefix> PageUp/PageDown # Scroll in window
+<prefix> : source-file /path/to/file # Reload configuation file
+```
 
-# Scroll in window:
-Ctrl-b PageUp/PageDown
+## Window management
+```sh
+<prefix> c # Create window
+<prefix> & # Destroy window
+<prefix> f # find a window
+<prefix> w # list all window
+<prefix> , # rename a window
+<prefix> n # move to next 
+<prefix> p # move to previous 
+<prefix> [0-9] # Switch between windows
+```
 
-# Reload configuation file
-Ctrl-b : source-file /path/to/file
+## Pane management
+```sh
+<prefix> % # Split horizontally
+<prefix> " # Split vertically
+<prefix> x # destroy pane
+<prefix> q # show pane number
+<prefix> ; # go to last active pane
+<prefix> o # go to next clockwise
+<prefix> : set synchronize-panes [on|off] # Sync panes
+<prefix> Arrows # move to ...
+<prefix> {h,j,k,l} # move to left,down,up,right
+```
 
-# Window management
-# =================
+- rearrange pane
+```sh
+<prefix> Space # change layout
+<prefix> Ctrl+o # swap them anti-clockwise
+<prefix> { # move pane to the left
+<prefix> } # move pane to the right
+```
 
-# Create window:
-Ctrl-b c
-
-# Destroy window:
-Ctrl-b x
-
-# Switch between windows:
-Ctrl-b [0-9]
-or
-Ctrl-b Arrows
+- resize
+```sh
+<prefix> : resize-pane -R 10
+<prefix> : resize-pane -L 10
+<prefix> : resize-pane -U 10
+<prefix> : resize-pane -D 10
+```
 
 
-# Pane management
-# ===============
-
-# Split horizontally:
-Ctrl-b %
-
-# Split vertically:
-Ctrl-b "
-
-# rearrange pane
-Ctrl-b Space
-Ctrl-b Ctrl+o
-
-# resize
-Ctrl-b : resize-pane -R 10
-Ctrl-b : resize-pane -L 10
-Ctrl-b : resize-pane -U 10
-Ctrl-b : resize-pane -D 10
-
-# Sync panes
-Ctrl-b : set synchronize-panes [on|off]
-
+# h1 in the markdown
+## h2 in the markdown
+### h3 in the markdown
+#### h4 in the markdown
 
 

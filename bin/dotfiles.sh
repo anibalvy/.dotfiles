@@ -113,13 +113,12 @@ else
         esac
 done
 fi
-
+# Using stow to manage installation of config files
+# if a file named ".nostow" is present, that folder 
+# will not be installed
 echo "\n\nInstalling dotfiles."
-
 cd ~/.dotfiles/
-
-for i in $(ls | egrep -v "bin|readme|LICENSE"); 
-do
+for i in $(ls | egrep -v "bin|readme|LICENSE"); do
     # find if folder not needed to be processed
     FILE=~/.dotfiles/$i/.nostow
     if [ ! -f "$FILE" ] ; 

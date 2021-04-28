@@ -239,7 +239,7 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
             if read -q "load_tmux?Do you want to load TMUX [Y/n]"; then
                 echo '\n'
                 if read -q "new_session?Tmux new session [Y/n]"; then
-                    tmux new-session -t gns3
+                    tmux new-session 
                 else
                     tmux a
                 fi 
