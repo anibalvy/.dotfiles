@@ -1,5 +1,13 @@
-# To create a symlink:
-ln -s path/to/the/target/directory name-of-symlink
+- To create a symbolic link:
+```sh
+ln -s path/original_element path/name-of-the-symlink
+```
 
-# Symlink, while overwriting existing destination files
-ln -sf /some/dir/exec /usr/bin/exec
+- Symlink, while overwriting existing destination files
+```sh
+ln -sf path/original_element path/name-of-the-symlink
+```
+
+> To create a hard link drop the "-s" option 
+
+> hard link must be on the same physical partition

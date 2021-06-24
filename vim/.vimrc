@@ -74,6 +74,9 @@ Plugin 'git://git.wincent.com/command-t.git'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 "KANIBAL"
+" Give diff option on file swap present
+Plugin 'chrisbra/recover.vim'
+
 " Instalar EMMET
 Plugin 'mattn/emmet-vim'
 "Redefine trigger key - remap the default <C-Y> leader:
@@ -313,6 +316,11 @@ let g:lightline = {
 " (The latter must be installed before it can be used.)
 Plugin 'google/vim-maktaba'
 Plugin 'bazelbuild/vim-bazel'
+" editorconfig.org
+Plugin 'editorconfig/editorconfig-vim'
+" Peekaboo will show you the contents of the registers on the sidebar
+" when you hit " or @ in normal mode or <CTRL-R> in insert mode. 
+Plugin 'junegunn/vim-peekaboo'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

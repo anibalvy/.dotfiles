@@ -1,8 +1,10 @@
+🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳
 # Start docker daemon
 docker -d
 
 # start a container with an interactive shell
 docker run -ti <image_name> /bin/bash
+docker run -ti --entrypoint=bash <image_name>  # change entrypoint for debug
 
 # "shell" into a running container (docker-1.3+)
 docker exec -ti <container_name> bash
@@ -35,6 +37,15 @@ docker ps -a
 # list all images
 docker images
 
+# See stats of containers
+docker stats
+
+# see logs of a container
+docker logs --tail=10 -t <container_id>  # -t: agrega timestamp
+
+# remove not used resources
+docker system prune
+
 # export File System as tar
 docker export <container_name> > <container_name_FileSystem.tar
 
@@ -60,9 +71,24 @@ Dockerfile
 ```
 FROM node:6.14.2
 EXPOSE 8080
+WORKDIR /APP
 COPY server.js .
 CMD [ "node", "server.js" ]
 ```
+# PARAMETERS
+FROM <image>:<TAG>
+RUN # for commands on container initialization
+CMD ["node", "app.js"] 
+# for commands that will run by default, but can be replaced by adding an argument at run
+#like, if the container is being run with bash, it will not run the CMD
+	docker run -ti <image_name> /bin/bash
+
+ENTRYPOINT ["python"]
+# for command that can call arguments, if I add another argument to the image,
+# the extra argument will be added to the commands in ENTRYPOINT, like, if I add
+# "bash" after the <image> name, it will execute "pyhton bash" at runtime.
+# Useful if I have a script that I want to run by cli, like "server.py" 
+
 and building it on the same folder:
 ```sh
 docker build .
@@ -85,11 +111,11 @@ docker build -t groot .
 docker tag groot:latest groot:staging
 
 # docker-compose.yml:
-
 version: '3.1'
 services:
   groot:
     image: groot:staging
+    restart: always # or it ca be "unless-stopped", "on-failure:10"
 
 # and start docker-compose:
 

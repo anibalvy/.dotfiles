@@ -6,3 +6,8 @@ ping -c 15 -i .5 www.example.com
 
 # test if a packet size of 1500 bytes is supported (to check the MTU for example)
 ping -s 1500 -c 10 -M do www.example.com
+
+# Show route
+ping -c 1 <address> -R
+
+

@@ -1,0 +1,5 @@
+# Encrypt
+echo 'Hello World' | base64
+
+# Decrypt
+echo 'SGVsbG8gd29ybGQK' | base64 -d

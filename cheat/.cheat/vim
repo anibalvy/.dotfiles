@@ -1,14 +1,18 @@
-# File management
+# VIM
 
+- File management
+```sh
 :e              reload file
 :q              quit
 :q!             quit without saving changes
 :w              write file
 :w {file}       write new file
 :x              write file and exit
+```
 
-# Movement
+- Movement
 
+```sh
     k
   h   l         basic motion
     j
@@ -25,11 +29,13 @@ gg              go to first line in file
 G               go to end of file
 gk		move down one displayed line
 gj		move up one displayed line
+```
 
-# Insertion
-#   To exit from insert mode use Esc or Ctrl-C
-#   Enter insertion mode and:
+- Insertion
+   To exit from insert mode use Esc or Ctrl-C
+   Enter insertion mode and:
 
+```sh
 a               append after the cursor
 A               append at the end of the line
 i               insert before the cursor
@@ -38,9 +44,10 @@ o               create a new line under the cursor
 O               create a new line above the cursor
 R               enter insert mode but replace instead of inserting chars
 :r {file}       insert from file
+```
 
-# Editing
-
+- Editing
+```sh
 u               undo
 yy              yank (copy) a line
 y{motion}       yank text that {motion} moves over
@@ -49,22 +56,28 @@ P               paste before cursor
 <Del> or x      delete a character
 dd              delete a line
 d{motion}       delete text that {motion} moves over
+```
 
-# Search and replace with the `:substitute` (aka `:s`) command
+- Search and replace with the `:substitute` (aka `:s`) command
 
+```sh
 :s/foo/bar/	replace the first match of 'foo' with 'bar' on the current line only
 :s/foo/bar/g	replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
 :%s/foo/bar/g	replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
 :%s/foo/bar/gc	ask to manually confirm (`c` flag) each replacement 
+```
 
-# Preceding a motion or edition with a number repeats it 'n' times
-# Examples:
+- Preceding a motion or edition with a number repeats it 'n' times
+ Examples:
+```sh
 50k         moves 50 lines up
 2dw         deletes 2 words
 5yy         copies 5 lines
 42G         go to line 42
+```
 
-# Options
+- Options
+```sh
 :set option=<value>
 :set option? # display the value
 :set option! # invert the option, like paste to nopaste, or autoindent to noautoindent
@@ -74,6 +87,5 @@ d{motion}       delete text that {motion} moves over
 :set all # show all
 :set all& # set all at default
 :help option # open manual
-
-
+```
 

@@ -1,16 +1,33 @@
-# find all file name ending with .pdf and remove them
+# Xargs 
+
+- find all file name ending with .pdf and remove them
+```sh
 find -name *.pdf | xargs rm -rf
+```
 
-# if file name contains spaces you should use this instead
+- if file name contains spaces you should use this instead
+```sh
 find -name *.pdf | xargs -I{} rm -rf '{}'
+```
 
-# Will show every .pdf like:
-#	&toto.pdf=
-#	&titi.pdf=
-# -n1 => One file by one file. ( -n2 => 2 files by 2 files )
+ Will show every .pdf like:
+```sh
+	&toto.pdf=
+	&titi.pdf=
+ -n1 => One file by one file. ( -n2 => 2 files by 2 files )
+```
 
+```sh
 find -name *.pdf | xargs -I{} -n1 echo '&{}='
+```
 
-# If find returns no result, do not run rm
-# This option is a GNU extension.
+- If find returns no result, do not run rm
+ This option is a GNU extension.
+```sh
 find -name "*.pdf" | xargs --no-run-if-empty rm
+```
+
+- check what Xargs is doing
+```sh
+cat file.txt | xargs -t
+```

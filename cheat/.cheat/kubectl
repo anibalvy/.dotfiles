@@ -1,0 +1,159 @@
+# Kubernetes, kubectl and minikube
+
+## Minikube
+
+- start minikube with custom driver docker, kvm2, virtualbox,  
+```sh
+minikube start --driver=<driver_name>
+```
+
+- To make kvm2 the default driver:
+```sh
+minikube config set driver kvm2
+```
+- Increase the default memory limit (requires a restart):
+```sh
+minikube config set memory 16384
+```
+
+- start with a custom profile (a cluster defined by <name>)
+```sh
+minikube start -p <name> # (*) 
+```
+ (*): if defined, all command in the cluster must start with -p <name>
+
+- kvm2 also accept extra flags
+```sh
+ --gpu # Enable experimental NVIDIA GPU support in minikube
+ --hidden  # Hide the hypervisor signature from the guest in minikube
+ --kvm-network  # The KVM network name
+ --kvm-qemu-uri  # The KVM qemu uri, defaults to qemu:///system
+```
+
+- virtualbox also accept extra flags
+```sh
+  --host-only-cidr  # The CIDR to be used for the minikube VM (default “192.168.99.1/24”)
+  --no-vtx-check    # Disable checking for the availability of hardware virtualization
+```
+none, This VM must also meet the kubeadm requirements
+
+- podman is recommended with cri-o
+```sh
+minikube start --driver=podman --container-runtime=cri-o
+```
+
+- specify Kubernetes version
+```
+minikube start --kubernetes-version v1.19.0
+```
+
+- set driver
+```
+minikube config set driver <driver_name>
+```
+
+- status of the cluster
+```
+minikube status
+```
+
+- delete cluster and also clean state
+```
+minikube delete
+minikube delete --all
+```
+
+- stop a Cluster
+```
+minikube stop
+```
+
+- Create a Deployment, expose Service, delete them
+
+    **** from here after, minikube command is optional according kubectl current-context *****
+
+- create a Kubernetes Deployment using an existing image named echoserver
+
+which is a simple HTTP server and expose it on port 8080 using --port.
+```
+minikube kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+```
+
+- expose service
+```
+kubectl expose deployment hello-minikube --type=NodePort --port=8080
+```
+
+- Get the URL of the exposed Service to view the Service details:
+```
+minikube service hello-minikube --url
+```
+this result can be accesed outside k8s cluster.
+ 
+- get pods
+```
+kubectl get pods
+```
+
+- delete service
+```
+kubectl delete services hello-minikube
+```
+
+- delete deployment
+```
+kubectl delete deployment hello-minikube
+```
+
+- info
+```
+kubectl cluster-info
+kubectl cluster-info dump
+```
+
+- check config (cluster, context...)
+```
+kubectl config view
+kubectl config current-context
+```
+
+- If we need to set minikube context, we can do as the following:
+```
+kubectl config use-context minikube
+```
+
+- conecting with a config file
+```sh
+kubectl --kubeconfig=<kubeconfig>.yml <cmd>
+kubectl --kubeconfig=kubeconfig.yml get nodes
+```
+
+- use containerd
+```
+minikube start \
+    --network-plugin=cni \
+    --enable-default-cni \
+    --extra-config=kubelet.container-runtime=remote \
+    --extra-config=kubelet.container-runtime-endpoint=unix:///run/containerd/containerd.sock \
+    --extra-config=kubelet.image-service-endpoint=unix:///run/containerd/containerd.sock \
+    --bootstrapper=kubeadm
+```
+
+- use CRI-O
+```
+minikube start \
+    --network-plugin=cni \
+    --enable-default-cni \
+    --extra-config=kubelet.container-runtime=remote \
+    --extra-config=kubelet.container-runtime-endpoint=/var/run/crio.sock \
+    --extra-config=kubelet.image-service-endpoint=/var/run/crio.sock \
+    --bootstrapper=kubeadm
+```
+
+
+- Addons
+```
+minikube addons list
+minikube addons enable registry
+```
+

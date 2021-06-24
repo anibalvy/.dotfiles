@@ -1,0 +1,3 @@
+# get gui app info
+xprop WM_CLASS
+# (get property of mouse clicked window)

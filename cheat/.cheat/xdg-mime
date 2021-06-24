@@ -1,0 +1,7 @@
+# use to manage default applications
+
+# check
+xdg-mime query default application/pdf
+
+# set 
+xdg-mime default zathura.desktop application/pdf

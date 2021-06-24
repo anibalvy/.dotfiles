@@ -1,0 +1,4 @@
+# t threads
+# 
+
+wfuzz -c --hc=404 -t 100 -w wordlist/dirbuster/directory-list-2.3-medium.txt http://<address>

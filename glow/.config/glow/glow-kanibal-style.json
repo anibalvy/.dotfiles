@@ -6,8 +6,9 @@
     "margin": 1
   },
   "block_quote": {
-    "indent": 3,
-    "indent_token": "│ "
+    "indent": 1,
+    "indent_token": "🗒 ",
+    "background_color": "234"
   },
   "paragraph": {},
   "list": {

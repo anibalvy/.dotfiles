@@ -1,0 +1,41 @@
+# install 
+apt install latex-full
+apt install latexmk rubber # zathura (optional)
+
+# config
+mkdir .config/latexmk
+echo "\$pdf_previewer = 'okular';" > .config/latexmk/latexmkrc
+
+# create a file
+mkdir latexdoc
+cd !$
+
+# Edit
+vim my_document.tex
+
+# content
+\documentclass[a4paper]{article} % template to use
+
+\userpackage[utf8]{inputenc}
+\userpackage[spanish]{babel}
+
+\begin{document}
+
+
+Hello World!!!!
+
+
+\end{document}
+
+
+# generate document
+latexmk -pdf my_document.tex
+
+# generate document on Save
+latexmk -pdf -pvc my_document.tex
+
+# clean temp documents
+rubber --clean my_document.tex
+
+
+

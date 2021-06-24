@@ -1,3 +1,98 @@
+# PV - physical volume (disc); eg. /dev/sda
+# VG - volume group; eg. vg0
+# LV - logical volume; eg. root
+
+# Create PV
+pvcreate /dev/sda
+
+# Display info about PV
+pvdisplay /dev/sda
+
+# Create VG
+vgcreate vg0 /dev/sda
+
+# Display info about VG
+vgdispay vg0
+
+# Add PV to VG, PV must be created before
+vgextend vg0 /dev/sdb
+
+# Remove PV from VG
+pvmove /dev/sdb         # Move data from PV
+vgreduce data /dev/sdb
+
+# Deactivate VG, do this when you want to physically remove device
+vgchange --activate n vg0
+
+# Create LV
+lvcreate --name root --size 8G vg0
+
+# Extend LV size
+lvextend --size 16G vg0/root
+
+# Reduce LV size, FS must be resized first!
+lvreduce --size 8G vg0/root
+
+# Remove LV
+lvremove vg0/root
+
+# Create mirrored LV (RAID1)
+lvcreate --name root --size 8G --mirrors 1 data vg0
+# Mirror logs are stored on third device by default - if you don't have 3 or
+# more devices in VG add '--mirrorlog core' to store logs in memory
+
+# Enable mirroring on existing LV
+lvconvert --mirrors 1 vg0/root
+
+# Create stripped LV (RAID0)
+lvcreate --name root --size 8G --stripes 2 --stripesize 4 vg0
+# VG - volume group; eg. vg0
+# LV - logical volume; eg. root
+
+# Create PV
+pvcreate /dev/sda
+
+# Display info about PV
+pvdisplay /dev/sda
+
+# Create VG
+vgcreate vg0 /dev/sda
+
+# Display info about VG
+vgdispay vg0
+
+# Add PV to VG, PV must be created before
+vgextend vg0 /dev/sdb
+
+# Remove PV from VG
+pvmove /dev/sdb         # Move data from PV
+vgreduce data /dev/sdb
+
+# Deactivate VG, do this when you want to physically remove device
+vgchange --activate n vg0
+
+# Create LV
+lvcreate --name root --size 8G vg0
+
+# Extend LV size
+lvextend --size 16G vg0/root
+
+# Reduce LV size, FS must be resized first!
+lvreduce --size 8G vg0/root
+
+# Remove LV
+lvremove vg0/root
+
+# Create mirrored LV (RAID1)
+lvcreate --name root --size 8G --mirrors 1 data vg0
+# Mirror logs are stored on third device by default - if you don't have 3 or
+# more devices in VG add '--mirrorlog core' to store logs in memory
+
+# Enable mirroring on existing LV
+lvconvert --mirrors 1 vg0/root
+
+# Create stripped LV (RAID0)
+lvcreate --name root --size 8G --stripes 2 --stripesize 4 vg0
 #Exclusive Activation of a Volume Group in a Cluster 
 #Link --> https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/High_Availability_Add-On_Administration/s1-exclusiveactive-HAAA.html 
 1> vgs --noheadings -o vg_name
@@ -5,3 +100,479 @@
 3> dracut -H -f /boot/initramfs-$(uname -r).img $(uname -r)
 4> Reboot the node
 5> uname -r to verify the correct initrd image
+
+# LVM - extend LVM after reized in VMware
+
+## Resumen
+
+Turn off machine and the in VCenter increase size of the disk:
+
+    VMware Machine -> EditSetting -> Disk - New size
+
+Make a new partition:
+
+```sh
+  fdisk n
+      partition 3
+      t
+    change label to "8e" --> Linux LVM
+```
+
+Make system to acknoledge the new size:
+
+Option 1:
+```sh
+   echo "- - -" > /sys/class/scsi_host/host[0]/scan
+```
+
+Option 2: 
+```sh
+echo 1 > /sys/class/scsi_disk/0:0:0:0/device/rescan 
+```
+or
+```sh
+echo 1 > /sys/class/scsi_disk/0\:0\:0\:0/device/rescan 
+```
+
+Option 3:
+
+    reboot to acknoledge the new partition
+
+Extend LVM
+```sh
+  pvcreate /dev/sda3
+
+  vgextends NomVol=4030 /dev/sda3
+
+  lvextends -l {take original size of PE and add the new LE to add} /dev/VolumenG/Vol
+
+  resize2fs  /dev/VolumenG/Vol
+```
+
+## Steps
+
+```sh
+[root@server ~]# uname -a
+Linux server.mydomain.com 2.6.18-348.el5 #1 SMP Tue Jan 8 17:53:53 EST 2013 x86_64 x86_64 x86_64 GNU/Linux
+
+[root@server ~]# more /etc/redhat-release 
+CentOS release 5.9 (Final)
+
+[root@server ~]# df -h
+Filesystem          Size Used  Avail Use% Mounted on
+/dev/mapper/VolGroup00-LogVol00
+                       18G  1,7G   16G  11% /
+/dev/mapper/VolGroup00-LogVol01
+                       95G   88G  2,3G  98% /opt
+/dev/sda1              99M   13M   81M  14% /boot
+tmpfs                 2,0G     0  2,0G   0% /dev/shm
+[root@server ~]# fdisk -l
+
+Disco /dev/sda: 128.8 GB, 128849018880 bytes
+255 heads, 63 sectors/track, 15665 cylinders
+Unidades = cilindros de 16065 * 512 = 8225280 bytes
+
+Availosit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sda1   *           1          13      104391   83  Linux
+/dev/sda2              14       15155   121628115   8e  Linux LVM
+/dev/sda3           15156       15665     4096575   82  Linux swap / Solaris
+
+[root@server ~]# pvdisplay 
+  /dev/cdrom: open failed: no medium found
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               VolGroup00
+  PV Size               115,99 GB / not usable 25,46 MB
+  Allocatable           yes (but full)
+  PE Size (KByte)       32768
+  Total PE              3711
+  Free PE               0
+  Allocated PE          3711
+  PV UUID               SCXs5L-Dx50-bFfb-t9sn-njfd-XfVr-jzkMSC
+   
+
+[root@server ~]# lvdisplay 
+  /dev/cdrom: open failed: no medium found
+  --- Logical volume ---
+  LV Name                /dev/VolGroup00/LogVol00
+  VG Name                VolGroup00
+  LV UUID                pLv7qQ-b1FC-fIy2-0y0u-TJTD-bhg1-um9RFI
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                18,31 GB
+  Current LE             586
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Name                /dev/VolGroup00/LogVol01
+  VG Name                VolGroup00
+  LV UUID                pcvO6E-Ld6A-6Tg9-J2hv-gUiI-k3It-KhyH5D
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                97,66 GB
+  Current LE             3125
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:1
+
+   
+[root@server ~]# vgdisplay 
+  /dev/cdrom: open failed: no medium found
+  --- Volume group ---
+  VG Name               VolGroup00
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               115,97 GB
+  PE Size               32,00 MB
+  Total PE              3711
+  Alloc PE / Size       3711 / 115,97 GB
+  Free  PE / Size       0 / 0   
+  VG UUID               6OlaLh-Wziw-91K5-1jaO-dUnw-bb21-mhVQKy
+   
+
+[root@server ~]# echo "- - -" > /sys/class/scsi_host/host[0]/scan
+[root@server ~]# echo '- - -' > /sys/class/scsi_host/host[0]/scan
+[root@server ~]# echo 1 > /sys/class/scsi_disk/0:0:0:0/device/rescan
+[root@server ~]# echo 1 > /sys/class/scsi_disk/0\:0\:0\:0/device/rescan
+
+[root@server ~]# tail -f /var/log/messages
+Jan 23 12:50:59 server kernel: sda: assuming drive cache: write through
+Jan 23 12:50:59 server kernel: sda: detected capacity change from 128849018880 to 139586437120
+Jan 23 12:55:07 server kernel: SCSI device sda: 272629760 512-byte hdwr sectors (139586 MB)
+Jan 23 12:55:07 server kernel: sda: Write Protect is off
+Jan 23 12:55:07 server kernel: sda: cache data unavailable
+Jan 23 12:55:07 server kernel: sda: assuming drive cache: write through
+Jan 23 12:55:10 server kernel: SCSI device sda: 272629760 512-byte hdwr sectors (139586 MB)
+Jan 23 12:55:10 server kernel: sda: Write Protect is off
+Jan 23 12:55:10 server kernel: sda: cache data unavailable
+Jan 23 12:55:10 server kernel: sda: assuming drive cache: write through
+
+
+
+[root@server ~]# fdisk -l
+
+Disco /dev/sda: 139.5 GB, 139586437120 bytes
+255 heads, 63 sectors/track, 16970 cylinders
+Unidades = cilindros de 16065 * 512 = 8225280 bytes
+
+Availosit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sda1   *           1          13      104391   83  Linux
+/dev/sda2              14       15155   121628115   8e  Linux LVM
+/dev/sda3           15156       15665     4096575   82  Linux swap / Solaris
+
+
+[root@server ~]# df -h
+Filesystem          Size Used  Avail Use% Mounted on
+/dev/mapper/VolGroup00-LogVol00
+                       18G  1,7G   16G  11% /
+/dev/mapper/VolGroup00-LogVol01
+                       95G   88G  2,4G  98% /opt
+/dev/sda1              99M   13M   81M  14% /boot
+tmpfs                 2,0G     0  2,0G   0% /dev/shm
+
+[root@server ~]# fdisk 
+
+Use: fdisk [-l] [-b SSZ] [-u] dispositivo
+Ej.:  fdisk /dev/hda  (para el primer disco IDE)
+  o:  fdisk /dev/sdc  (para el tercer disco SCSI)
+  o:  fdisk /dev/eda  (para la primera unidad PS/2 ESDI)
+  o:  fdisk /dev/rd/c0d0  o fdisk /dev/ida/c0d0  (para dispositivos RAID)
+  ...
+[root@server ~]# fdisk /dev/sda
+
+El nÃºmero de cilindros para este disco estÃ¡ establecido en 16970.
+No hay nada malo en ello, pero es mayor que 1024, y en algunos casos
+podrÃ­a causar problemas con:
+1) software que funciona en el inicio (p.ej. versiones antiguas de LILO)
+2) software de arranque o particionamiento de otros sistemas operativos
+   (p.ej. FDISK de DOS, FDISK de OS/2)
+
+Orden (m para obtener ayuda): p
+
+Disco /dev/sda: 139.5 GB, 139586437120 bytes
+255 heads, 63 sectors/track, 16970 cylinders
+Unidades = cilindros de 16065 * 512 = 8225280 bytes
+
+Availosit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sda1   *           1          13      104391   83  Linux
+/dev/sda2              14       15155   121628115   8e  Linux LVM
+/dev/sda3           15156       15665     4096575   82  Linux swap / Solaris
+
+Orden (m para obtener ayuda): n
+AcciÃ³n de la orden
+e   ParticiÃ³n extendida
+   p   ParticiÃ³n primaria (1-4)
+p
+Se ha seleccionado la particiÃ³n 4
+Primer cilindro (15666-16970, valor predeterminado 15666): 
+Se estÃ¡ utilizando el valor predeterminado 15666
+Ãltimo cilindro o +tamaÃ±o o +tamaÃ±oM o +tamaÃ±oK (15666-16970, valor predeterminado 16970): 
+Se estÃ¡ utilizando el valor predeterminado 16970
+
+Orden (m para obtener ayuda): p
+
+Disco /dev/sda: 139.5 GB, 139586437120 bytes
+255 heads, 63 sectors/track, 16970 cylinders
+Unidades = cilindros de 16065 * 512 = 8225280 bytes
+
+Availosit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sda1   *           1          13      104391   83  Linux
+/dev/sda2              14       15155   121628115   8e  Linux LVM
+/dev/sda3           15156       15665     4096575   82  Linux swap / Solaris
+/dev/sda4           15666       16970    10482412+  83  Linux
+
+Orden (m para obtener ayuda): t
+NÃºmero de particiÃ³n (1-4): 4
+CÃ³digo hexadecimal (escriba L para ver los cÃ³digos): 8e
+Se ha cambiado el tipo de sistema de la particiÃ³n 4 por 8e (Linux LVM)
+
+Orden (m para obtener ayuda): p
+
+Disco /dev/sda: 139.5 GB, 139586437120 bytes
+255 heads, 63 sectors/track, 16970 cylinders
+Unidades = cilindros de 16065 * 512 = 8225280 bytes
+
+Availosit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sda1   *           1          13      104391   83  Linux
+/dev/sda2              14       15155   121628115   8e  Linux LVM
+/dev/sda3           15156       15665     4096575   82  Linux swap / Solaris
+/dev/sda4           15666       16970    10482412+  8e  Linux LVM
+
+Orden (m para obtener ayuda): w
+¡Se ha modificado la tabla de particiones!
+
+Llamando a ioctl() para volver a leer la tabla de particiones.
+
+ATENCIÃN: La relectura de la tabla de particiones fallÃ³ con el
+error 16: Availositivo o recurso ocupado.
+El núleo todavÃ­a usa la tabla antigua.
+La nueva tabla se usará en el próximo reinicio.
+Se están sincronizando los discos.
+
+
+[root@server ~]# fdisk -l
+
+Disco /dev/sda: 139.5 GB, 139586437120 bytes
+255 heads, 63 sectors/track, 16970 cylinders
+Unidades = cilindros de 16065 * 512 = 8225280 bytes
+
+Availosit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sda1   *           1          13      104391   83  Linux
+/dev/sda2              14       15155   121628115   8e  Linux LVM
+/dev/sda3           15156       15665     4096575   82  Linux swap / Solaris
+/dev/sda4           15666       16970    10482412+  8e  Linux LVM
+```
+
+# Extend LVM
+
+```sh
+[root@server ~]# pvcreate /dev/sda4
+  Writing physical volume data to disk "/dev/sda4"
+  Physical volume "/dev/sda4" successfully created
+[root@server ~]# pvdisplay 
+  /dev/cdrom: open failed: no medium found
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               VolGroup00
+  PV Size               115,99 GB / not usable 25,46 MB
+  Allocatable           yes (but full)
+  PE Size (KByte)       32768
+  Total PE              3711
+  Free PE               0
+  Allocated PE          3711
+  PV UUID               SCXs5L-Dx50-bFfb-t9sn-njfd-XfVr-jzkMSC
+   
+  "/dev/sda4" is a new physical volume of "10,00 GB"
+  --- NEW Physical volume ---
+  PV Name               /dev/sda4
+  VG Name               
+  PV Size               10,00 GB
+  Allocatable           NO
+  PE Size (KByte)       0
+  Total PE              0
+  Free PE               0
+  Allocated PE          0
+  PV UUID               nt0KCj-wZ4y-S6PK-RNcp-dgnL-oYe4-f8glw7
+   
+[root@server ~]# vgdisplay 
+  --- Volume group ---
+  VG Name               VolGroup00
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               115,97 GB
+  PE Size               32,00 MB
+  Total PE              3711
+  Alloc PE / Size       3711 / 115,97 GB
+  Free  PE / Size       0 / 0   
+  VG UUID               6OlaLh-Wziw-91K5-1jaO-dUnw-bb21-mhVQKy
+   
+
+[root@server ~]# ll /dev/VolGroup00/
+total 0
+lrwxrwxrwx 1 root root 31 ene 23 15:51 LogVol00 -> /dev/mapper/VolGroup00-LogVol00
+lrwxrwxrwx 1 root root 31 ene 23 15:51 LogVol01 -> /dev/mapper/VolGroup00-LogVol01
+
+
+  
+[root@server ~]# vgextend VolGroup00 /dev/sda4
+  Volume group "VolGroup00" successfully extended
+
+
+[root@server ~]# vgdisplay 
+  --- Volume group ---
+  VG Name               VolGroup00
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  4
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               125,94 GB
+  PE Size               32,00 MB
+  Total PE              4030
+  Alloc PE / Size       3711 / 115,97 GB
+  Free  PE / Size       319 / 9,97 GB
+  VG UUID               6OlaLh-Wziw-91K5-1jaO-dUnw-bb21-mhVQKy
+
+
+[root@server ~]# lvdisplay 
+  --- Logical volume ---
+  LV Name                /dev/VolGroup00/LogVol00
+  VG Name                VolGroup00
+  LV UUID                pLv7qQ-b1FC-fIy2-0y0u-TJTD-bhg1-um9RFI
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                18,31 GB
+  Current LE             586
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Name                /dev/VolGroup00/LogVol01
+  VG Name                VolGroup00
+  LV UUID                pcvO6E-Ld6A-6Tg9-J2hv-gUiI-k3It-KhyH5D
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                97,66 GB
+  Current LE             3125
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:1
+
+```
+
+# Size Calculation
+
+Must be added from:
+
+    pgdisplay --> Free  PE / Size       319 / 9,97 GB
+    +
+    LVdisplay --> Current LE             3125
+    ------------------------------------------
+    Total     319+3125 = 3444 LE
+
+```sh
+   
+[root@server ~]# lvextend -l 3444 /dev/VolGroup00/LogVol01
+  Extending logical volume LogVol01 to 107,62 GB
+  Logical volume LogVol01 successfully resized
+
+[root@server ~]# lvdisplay 
+  --- Logical volume ---
+  LV Name                /dev/VolGroup00/LogVol00
+  VG Name                VolGroup00
+  LV UUID                pLv7qQ-b1FC-fIy2-0y0u-TJTD-bhg1-um9RFI
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                18,31 GB
+  Current LE             586
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Name                /dev/VolGroup00/LogVol01
+  VG Name                VolGroup00
+  LV UUID                pcvO6E-Ld6A-6Tg9-J2hv-gUiI-k3It-KhyH5D
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                107,62 GB
+  Current LE             3444
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:1
+
+```
+
+# Extend FS
+
+```sh
+   
+[root@server ~]# resize2fs /dev/VolGroup00/LogVol01 
+resize2fs 1.39 (29-May-2006)
+Filesystem at /dev/VolGroup00/LogVol01 is mounted on /opt; on-line resizing required
+Performing an on-line resize of /dev/VolGroup00/LogVol01 to 28213248 (4k) blocks.
+The filesystem on /dev/VolGroup00/LogVol01 is now 28213248 blocks long.
+```
+
+
+# Final size must be showed:
+
+```sh
+[root@server ~]# df -h
+Filesystem          Size Used  Avail Use% Mounted on
+/dev/mapper/VolGroup00-LogVol00
+                       18G  1,7G   16G  10% /
+/dev/mapper/VolGroup00-LogVol01
+                      105G   88G   12G  89% /opt
+/dev/sda1              99M   13M   81M  14% /boot
+tmpfs                 2,0G     0  2,0G   0% /dev/shm
+[root@server ~]# 
+```

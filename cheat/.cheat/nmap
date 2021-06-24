@@ -50,6 +50,7 @@ nmap -sP 192.168.0.0/24
 
 # Use some script:
 nmap --script default,safe
+nmap --script http-enum -p80,8080 <address> -oN webScan
 
 # Loads the script in the default category, the banner script, and all .nse files in the directory /home/user/customscripts.
 nmap --script default,banner,/home/user/customscripts

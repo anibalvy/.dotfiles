@@ -1,0 +1,14 @@
+# display all versions installed
+pyenv versions
+
+# check local version
+
+# show available installable versions
+pyenv install --list
+
+# create file to indicate local to a file
+pyenv local <version>
+
+# indicate version for python at S.O. level
+pyenv global <version>
+

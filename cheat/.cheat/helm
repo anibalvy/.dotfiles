@@ -70,12 +70,15 @@ $ helm show values stable/mariadb
 $ echo '{mariadbUser: user0, mariadbDatabase: user0db}' > config.yaml
 $ helm install -f config.yaml stable/mariadb --generate-name
 
-# CHARTs
+# CREATE A CHARTs
 ##  create a Chart
 $ helm create <name_of_the_chart>
 
 ## As you edit your chart, you can validate that it is well-formed by running 
 $ helm lint
+
+## Check what will be generated (from inside the folder)
+$ helm install --dry-run debug .
 
 ## package the chart up for distribution
 $ helm package <name_of_the_chart>

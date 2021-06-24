@@ -12,6 +12,7 @@ lsof -Pnl +M -i4
 
 # Find which program is using the port 80
 lsof -i TCP:80
+lsof -i:80
 
 # List all connections to a specific host
 lsof -i@192.168.1.5

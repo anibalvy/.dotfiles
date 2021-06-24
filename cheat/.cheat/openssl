@@ -25,3 +25,9 @@ openssl x509 -noout -enddate
 
 # Generate Diffie-Hellman parameters:
 openssl dhparam -outform PEM -out dhparams.pem 2048
+
+# Generate passwd
+openssl passwd -1
+ Password:
+ Verifying - Password:
+ $1$eJJb58ou$oiUuCWYX4EAH9AMwUZuL/1

@@ -121,8 +121,7 @@ cd ~/.dotfiles/
 for i in $(ls | egrep -v "bin|readme|LICENSE"); do
     # find if folder not needed to be processed
     FILE=~/.dotfiles/$i/.nostow
-    if [ ! -f "$FILE" ] ; 
-    then
+    if [ ! -f "$FILE" ] ; then
         echo "   - dotfiles of $i to be deployed.... \n"
         stow $i
     else

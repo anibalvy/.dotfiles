@@ -72,7 +72,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws git colored-man-pages colorize kate nvm node vundle jsontools lol react-native python pyenv pipenv zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(adb aws git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -123,12 +123,13 @@ alias sduo="sudo"
 alias suod="sudo"
 # PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
 # Fonts: also is needed a NERDFont.
-alias ls="lsd"  # PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
-alias ll="ls -la"
-alias lt="ls -tree"
+alias ls="lsd  "  # PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
+alias ll="lsd -lh --group-dirs=first"
+alias la="lsd -lah --group-dirs=first"
 alias isntall="install"
 alias info='pinfo'
 alias rm='rm -i'
+alias cat='bat'
 if command -v pinfo > /dev/null 2>&1  ; then
 	alias info='pinfo'
 else 
@@ -275,3 +276,4 @@ pdf-combine() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_
 alias combine-pdf='pdf-combine'
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh
+if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi

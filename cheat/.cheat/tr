@@ -20,3 +20,9 @@ echo $PATH|tr -cs "[:alpha:]" "\n"
 
 #ordered list to unordered list
 echo "1. /usr/bin\n2. /bin" |tr -cs " /[:alpha:]\n" "+"
+
+# ROT13
+tr 'A-Za-z' 'N-ZA-Mn-za-m' <<< "The Quick Brown Fox Jumps Over The Lazy Dog"
+
+#ROT17
+echo "The Quick Brown Fox Jumps Over The Lazy Dog" | tr '\!-~' 'P-~\!-O'

@@ -66,10 +66,3 @@ chmod 777 /tmp/your_shared_session
 <prefix> : resize-pane -D 10
 ```
 
-
-# h1 in the markdown
-## h2 in the markdown
-### h3 in the markdown
-#### h4 in the markdown
-
-

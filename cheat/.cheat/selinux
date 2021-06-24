@@ -1,4 +1,102 @@
-# selinux
+# SELINUX
+# REF: http://people.redhat.com/rsawhill/selinux/
 
-# SEMANAGE FCONTEXT
+# Commands to check status:
+sestatus   # Show current & config-file status
+getenforce   # Show current status
+grep ^SELINUX= /etc/selinux/config   # Show config-file (permanent) status
+grep -e enforcing= -e selinux= /etc/default/grub /etc/grub2.cfg   # Check for kernel args
+
+# PERMISSIVE DOMAINS: Instead of using setenforce 0 on the whole system when you 
+# suspect a problem, switch a particular process domain into permissive mode.
+# Immediately & permanently switch a process domain into permissive mode
+semanage permissive --add logrotate_t
+semanage permissive -a httpd_t
+
+# Immediately & permanently switch a process domain into permissive mode
+semanage permissive --add logrotate_t
+semanage permissive -a httpd_t
+
+# Immediately disable all permissive domains (i.e., switch them back to enforcing)
+semodule -d permissivedomains
+
+# Immediately enable any previously-set permissive domains (i.e., switch them back to permissive)
+semodule -e permissivedomains
+
+# FILE LABELS: Every file gets a label. Policy determines what a process domain can do to files of each label.
+# Set a file type on a directory
+semanage fcontext --add samba_share_t "/path/to/dir(/.*)?" && restorecon -RF /path/to/dir
+semanage fcontext -a httpd_sys_content_t "/path(/.*)?" && restorecon -RF /path
+
+# Create an alternate location (equivalency rule) based on an existing directory (which is useful because it recursively includes rules)
+semanage fcontext -a -e /var/www /web && restorecon -RF /web
+semanage fcontext -a -e /home /our/home && restorecon -RF /our/home
+
+# Check what a particular [source] process domain can do to a particular [target] file type
+sesearch -CA -s httpd_t -t var_log_t
+
+# NETWORK PORT LABELS: Policy must explicitly allow confined services specific access to 
+# certain network port labels; however, the labels can be changed just as easily as file labels.
+# Check for port labels for a particular domain/service
+semanage port -l | grep http   # Look for http-labeled ports
+semanage port -l | grep ssh   # Look for ssh-labeled ports
+semanage port -l | grep 3333   # Look for a specific port
+man httpd_selinux
+man sshd_selinux
+sesearch -CA -s httpd_t -c tcp_socket -p name_bind   # Look for tcp port types that a particular domain is allowed to bind to
+
+# Permanently set labels on network ports
+semanage port -a -t http_port_t -p tcp 3333   # Permanently add a label to a specific port
+semanage port -a -t ssh_port_t -p tcp 2222
+
+# BOOLEAN ON/OFF SWITCHES: There are many commonly-used configurations that 
+# require opening up the default SELinux policy a little, e.g.: allowing webservers to send email or read content from NFS. This can always be done by flipping simple toggles.
+# Check for booleans for a particular domain
+semanage boolean -l | grep httpd
+man httpd_selinux
+
+# Set booleans
+setsebool httpd_can_sendmail on   # Immediate & temporary
+setsebool -P httpd_use_nfs on   # Permanent & takes a minute to rebuild policy
+setsebool -P httpd_builtin_scripting=off httpd_tmp_exec=1   # "on" and "1", "off" and "0" all work; equals sign optional unless trying to do multiple booleans at once
+
+# Inspect audit AVC records: All SELinux AVC denials get logged by the kernel to audit (assuming auditd is 
+# running) and thus show up in /var/log/audit/audit.log by default. These can be inspected directly or with 
+# ausearch & aureport. 
+# Use aureport to get a broad overview
+aureport -a   # Get a report of all AVC denial events
+aureport -i -a | awk 'NR==4 || NR>5' | column -t   # Interpret syscall numbers to names; show in columnized list
+
+# Use ausearch to drill down
+ausearch -i -m avc   # Show all from standard audit.log files
+ausearch -i -m avc -ts recent   # Show last 10 minutes
+ausearch -i -m avc -ts today -c httpd   # Show particular command since midnight
+ausearch -i -m avc -ts 16:05 -su httpd_t   # Show particular source (subject) SELinux context since 16:05 PM
+
+# CONFINING USERS: In the standard targeted policy, all users are unconfined; however, you can 
+# easily change that. You can start simple with preset users but of course you can get as granular as you want.
+# Create a new user that is mapped to guest_u (i.e., no internet, no sudo/su or most other setuid/setgid apps, no X)
+useradd -Z guest_u newuserbob
+
+# Make it so guest_u & xguest_u won't be allowed to execute anything in /tmp or $HOME
+~]# setsebool -P guest_exec_content=off xguest_exec_content=off
+~]# semanage boolean -l | grep exec_content
+auditadm_exec_content          (on   ,   on)  Allow auditadm to exec content
+guest_exec_content             (off  ,  off)  Allow guest to exec content
+dbadm_exec_content             (on   ,   on)  Allow dbadm to exec content
+xguest_exec_content            (off  ,  off)  Allow xguest to exec content
+secadm_exec_content            (on   ,   on)  Allow secadm to exec content
+logadm_exec_content            (on   ,   on)  Allow logadm to exec content
+user_exec_content              (on   ,   on)  Allow user to exec content
+staff_exec_content             (on   ,   on)  Allow staff to exec content
+sysadm_exec_content            (on   ,   on)  Allow sysadm to exec content
+
+# Confine an existing user, mapping to user_u (i.e., no su/sudo or most other setuid/setgid apps)
+semanage login -a -s user_u existinguseralice
+
+# FIX SELINUX DENIALS BY ALLOWING REQUESTED ACCESS: This should be a last resort ... done 
+# sparingly & with care. The vast majority of problems can be solved by setting proper file labels or tweaking booleans or figuring out that the application/admin is doing something wrong. 
+# Example:
+ausearch -i -m avc | grep xxxx | audit2allow
+
 

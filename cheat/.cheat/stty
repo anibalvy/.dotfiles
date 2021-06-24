@@ -1,0 +1,13 @@
+# show settings
+stty -a
+
+# To disable Ctrl+C
+stty intr ''
+
+# To disable Ctrl+Z
+stty susp ''
+
+# To reset all settings to the default:
+stty sane
+
+

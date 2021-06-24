@@ -3,6 +3,8 @@ sed 's/day/night/g' file.txt
 
 # To replace all occurrences of "day" with "night" within file.txt:
 sed -i 's/day/night/g' file.txt
+## if not '-i' given, it will print to stdout
+## -i: will modify the file
 
 # To replace all occurrences of "day" with "night" on stdin:
 echo 'It is daytime' | sed 's/day/night/g'
@@ -10,8 +12,20 @@ echo 'It is daytime' | sed 's/day/night/g'
 # To remove leading spaces
 sed -i -r 's/^\s+//g' file.txt
 
+# To delete lines by Patterns
+sed '/REGEX/d' file.txt
+
 # To remove empty lines and print results to stdout:
 sed '/^$/d' file.txt
+
+# delete the 4th line
+sed -i '4d' file.txt
+
+# delete from 2 to 5:
+sed -i '2,5d' file.txt
+
+# delete last line
+sed '$d' file.txt
 
 # To replace newlines in multiple lines
 sed ':a;N;$!ba;s/\n//g'  file.txt

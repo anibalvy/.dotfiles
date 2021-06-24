@@ -1,0 +1,66 @@
+## Django 
+
+# create forlder and enter
+mkdir my_django_project && cd mydjango_project
+
+# declare pyhton version with pyenv
+pyenv versions
+pyenv local 3.8.8
+
+# declare project dependencies and version of python in pipenv
+pipenv install -e .
+pipenv --pyhton  3.8.8
+pipenv install django
+
+# Check django version
+python -m django --version
+pip show django
+
+# Create Django Project
+django-admin startproject <poject_name>
+
+# Enter folder of project and run it
+cd <project_name>
+python manage.py runserver <port(optional)>
+
+# Open a browser with the site indicated.
+python manage.py startapp <app_name>
+
+this will create a new folder named <app_name>
+
+# now the files can be edited.
+# view.py
+```py
+from django.shortcuts import render
+from django.http import HttpResponse
+
+# Create your views here.
+ def index(response):
+     return HttpResponse("<h1>Index Kanibal</h1>")
+
+def parameter(response, id):
+    return HttpResponse(f"<h1>a parameter {id}</h1>")
+```
+
+# create urls.py file with in app folder
+```py
+from django.urls import path
+from . import views
+
+urlpatterns = [ 
+        path("", views.index, name="index"),
+        path("<int:id>", views.parameter, name="parameter"),
+            ]
+```
+
+# edit urls.py file in <project_name> folder as:
+```py
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+        path('', include("main.urls")),
+        ]
+```
+

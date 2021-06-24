@@ -1,207 +1,255 @@
-1.- Comandos de servicio
+# ZIMBRA 
 
+## Service cmd
+
+- change to user of the service
 ```sh
 $> su - zimbra
 ```
-verificar el estado de todos los  servicios en zimbra
+
+- verificar el estado de todos los  servicios en zimbra
 ```sh
 $> zmcontrol status
 ```
-detener todos los servicios
+
+- detener todos los servicios
 ```sh
 $> zmcontrol stop
 ```
-iniciar todos los servicios
+
+- iniciar todos los servicios
 ```sh
 $> zmcontrol start
 ```
-reiniciar todos los servicios
+
+- reiniciar todos los servicios
 ```sh
 $> zmcontrol restart
 ```
-ver la versión de zimbra
+
+- ver la versión de zimbra
 ```sh
 $> zmcontrol -v
 ```
 
-2.- Comandos individuales de servicio (start, stop, restart, status)
+## Individual commands 
 
-Ej: detenemos todos los servicios e iniciaremos uno a uno
+- example, stop services and start them by one
 ```sh
 $> zmcontrol stop
 
 $> zmcontrol status
 ```
-Iniciar LDAP server
+
+- Start LDAP server
 ```sh
 $> ldap start
 
 $> zmcontrol status
 ```
-Iniciar MySQL Server
+
+- Start MySQL Server
 ```sh
 $> mysql.server start
 ```
-Iniciar zmconfigd
+
+- Start zmconfigd
 ```sh
 $> zmconfigdctl start
 ```
-Iniciar MTA (postfix, saslauthd)
+
+- Start MTA (postfix, saslauthd)
 ```sh
 $> zmmtactl start
 ```
-Iniciar Amavis, Antivirus y AntiSpam (amavis, spamassassin, clamav)
+
+- Start Amavis, Antivirus y AntiSpam (amavis, spamassassin, clamav)
 ```sh
 $> zmamavisdctl start
 
 $> zmcontrol status
 ```
-Iniciar Mailbox (webmail, panel de administracion, servidores imap y pop3, servidores de filtros)
+
+- Start Mailbox (webmail, panel de administracion, servidores imap y pop3, servidores de filtros)
 ```sh
 $> zmmailboxdctl start
 ```
-Iniciar spell (servidor de ortografía)
+
+- Start spell (servidor de ortografía)
 ```sh
 $> zmapachectl start
 ```
-Iniciar monitoreo
+
+- Start monitoreo
 ```sh
 $> zmswatchctl start
 ```
-Iniciar estadísticas
+
+- Start estadísticas
 ```sh
 $> zmstatctl start
 ```
-Iniciar Logger (logs del sistema)
+
+- Start Logger (system logs )
 ```sh
 $> zmlogswatchctl start
 ```
-Reiniciar solo el antivirus
+
+- Restart antivirus only
 ```sh
 $> zmantivirusctl restart
 ```
-Reiniciar solo el antispam
+
+- Restart antispam only
 ```sh
 $> zmantispamctl restart
 ```
 
-3.- zmprov: comando de administración de zimbra
+## zmprov: zimbra admin commands
 
-Loguearse primero como usuario zimbra
+- Log to the service user
 ```sh
 $> su - zimbra
 ```
-Lista la ayuda general de zmprov
+
+- zmprov general help
 ```sh
 $> zmprov help
 ```
-Listar la ayuda para gestionar las cuentas
+
+- List account management help
 ```sh
 $> zmprov help acount
 ```
-Consola Interactiva
+
+- Interactive console
 ```sh
 $> zmprov
 prov>
 ```
-Ver ayuda de cuentas
+
+- List account help
 ```sh
 prov> help account
 ```
-Salir de la consola interactiva
+
+- Quit interactive console
 ```sh
 prov> quit
 ```
-4.- Cuentas
 
-Obtener listado de todas las cuentas del servidor (todos los dominios)
+## Accounts
+
+- Get list of all account in the server (all domains)
 ```sh
 $> zmprov -l gaa
 ```
-Obtener todas las cuentas de administración
+
+- Get list of all admin accounts
 ```sh
 $> zmprov -l gaaa
 ```
-Obtener información de una sola cuenta
+
+- Get single account info
 ```sh
 $> zmprov -l ga tuxito@dominio.com
 ```
-Cuentas de un dominio específico
+
+- Get accounts of a single domain
 ```sh
 $> zmprov -l gaa dominio.com
 ```
-Detalle de cuentas de un dominio especifico
+
+- Get detailed account info of a single domain
 ```sh
 $> zmprov -l gaa -v dominio.com
 ```
-Detalle de cuentas de un dominio especifico con Cuenta, Nombre y Quota
+
+- Get detailed account of a single domain with account, name and quota.
 ```sh
 $> zmprov -l gaa -v dominio0.com | grep -e zimbraMailDeliveryAddress -e displayName -e zimbraMailQuota |sed -e "s/zimbraMailDeliveryAddress/Cuenta/" -e "s/displayName/Nombre/" -e "s/zimbraMailQuota/Quota/"
 ```
-Crear una cuenta, con cos default
+
+- Create an account with default cos
 ```sh
 $> zmprov ca pepito@dominio.com pepitopass displayName "Pepito Pérez"
 ```
-Crear un usuario con un cos específico ej: gerente
+
+- Create user with a specific cos, ex: manager
 ```sh
 $> cos=`zmprov gc gerente | grep zimbraId:|cut -d ' ' -f2`
 $> zmprov ca juanito@dominio.com juanitopass displayName "Juanito Martinez" zimbraCOSId $cos
 ```
-Crear una cuenta con detalle
+
+- Create account with details
 ```sh
 $> zmprov ca windozero@dominio.com passwinbugs cn 'Nombre(s) ApMaterno ApPaterno' displayName 'Nombre(s) ApMaterno ApPaterno' givenName 'Nombre(s)' zimbraCOSId $cos
 ```
-5.- Modificar opciones de una cuenta
 
-Cambiar de password de una cuenta
+## Change options of an account
+
+- Change password of an account
 ```sh
 $> zmprov sp usuario1@dominio.com passnuevo
 ```
-Modificar un atributo de una cuenta
+
+- Change an attribute of an account
 ```sh
 $> zmprov ma usuario1@dominio.com displayName "Luser Noob 1"
 ```
-Nota: se puede modificar cualquier atributo del usuario
-para la lista de atributos ejecutar
+
+>Nota:  se puede modificar cualquier atributo del usuario
+ para la lista de atributos ejecutar
+
+> Note: Any user attribute can be changed
+
+-  To check the list of attributes
 ```sh
 $> zmprov -l ga usuario1@dominio.com
 ```
-6.- Busqueda de cuentas
 
-* Búsqueda por atributos
-Se puede buscar las cuentas por un atributo en común
+## Account search by attribute
+
+- Search by a attribute
 ```sh
-$> zmprov sa parametro=cadena
+$> zmprov sa parameter=strint
 ```
-Buscar todas las cuentas activas
+
+- Search by active account
 ```sh
 $> zmprov sa zimbraAccountStatus=active
 ```
-Buscar todas las cuentas bloqueadas
+
+- Search by blocked account
 ```sh
 $> zmprov sa zimbraAccountStatus=locked
 ```
-Buscar en cuales listas se encuentra una cuenta
+
+- Search to find the list of a single account
 ```sh
 $> zmprov gam cuenta@dominio.com
 ```
-9.- Listas de correo
 
-Buscar todas las listas, y por dominio
+## Email distribution lists
+
+- Search in all list and by domain
 ```sh
 $> zmprov gadl
 
 $> zmprov gadl dominio.com
 ```
-Crear una lista
+
+- Create a list
 ```sh
 $> zmprov cdl lista@dominio.com
 ```
-Ver una lista específica
+
+- get info of a specific list
 ```sh
-$> zmprov gdl lista@dominio.com
+$> zmprov gdl list@dominio.com
 ```
-Encontrar todas las listas de un dominio y sus miembros
+
+- Find all list and members of a domain
 ```sh
 $> for i in $( zmprov gadl dominio.com | grep -v abuse | grep -v postmaster | sort ) ; do echo
  `zmprov gdl $i | grep -e 'mail: ' -e 'zimbraMailForwardingAddress: ' | sed 's/mail/Lista/' | sed
@@ -209,96 +257,112 @@ $> for i in $( zmprov gadl dominio.com | grep -v abuse | grep -v postmaster | so
 's/zimbraMailForwardingAddress: //'` ; done ;
 ```
 
-agregar un miembro a la lista
+- add a member to a distribution list
 ```sh
 $> zmprov adlm lista@dominio.com cuenta@dominio.com
 ```
-Remover un miembro de la lista
+
+- remove a member of a list 
 ```sh
 $> zmprov rdlm lista@dominio.com cuenta@dominio.com
 ```
-Borrar una lista
+
+- Delete a list 
 ```sh
 $ zmprov ddl lista@dominio.com
 ```
-10.- Buzones (zmmailbox)
 
-Entrar a la consola interactiva
+## Mailboxes (zmmailbox)
+
+- Enter interactive console
 ```sh
 $> zmmailbox
 mbox>
 ```
-Ver ayuda general del comando
+
+- help command
 ```sh
 $> zmmailbox help
 ```
-Ver ayuda de las cuentas
+
+- Get accunt help
 ```sh
 $> zmmailbox help account
 ```
-Ver ayuda de los mensajes
+
+- Get messages help
 ```sh
 $> zmmailbox help message
 ```
 
-* Tamaño de un buzón
-Ver tamaño ocupado del buzón
+- Get mailbox used size
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com gms
 ```
-Ver el tamaño de las quotas asignadas y ocupadas de todos los buzones
+
+- get quotas assigned and used size of all mailboxes
 ```sh
 $> zmprov gqu `zmhostname`|awk {'print " "$3" "$2" "$1'}
 ```
-Revisar mensajes por carpetas en el buzón
+
+- Check message by mailbox folder
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com gaf
 ```
-Borrar una carpeta completa de un buzón
+
+- Delete a Folder of a mailbox
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com emptyFolder Junk
 ```
-Importar mensajes de una carpeta Maildir existente en el INBOX
+
+- Import message from a folder Maildir from the INBOX
 ```sh
 $> echo addMessage /INBOX /path/to/Maildir/cur | /opt/zimbra/bin/zmmailbox -z -m cuenta@dominio.com
 ```
-Buscar un mensaje
+
+- Search a message
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com search -t message "prueba"
 ```
-Buscar un mensaje en todas las cuentas
+
+- Search a message in all folders
 ```sh
 $> zmprov -l gaa |awk '{print "zmmailbox -z -m "$1" search \"linux\" "}' |sh -v
 ```
-linux es la palabra de búsqueda
+here, "linux" is the search keyword
 
-Buscar correos anteriores a una fecha: (formato mes/dia/año)
+- search in email before a given date, format month/day/year:
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com search -t message "in:INBOX (before: 12/19/13)"
 ```
-Obtener contenido de un correo, donde 21940 es el ID del mensaje
+
+- Get contenct of a email, where 21940 is the message ID:
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com  gm  21940
 ```
 
-Ver contactos:
+- List contacts:
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com gact | less
 ```
-Vaciar casilla usuario:
+
+- Empty user mailbox:
 ```sh
 $> zmmailbox -z -m accoun@domain.com ef "/Inbox"
 ```
-Ver correos de una carpeta
+
+- List email of a folder:
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com search -l 100 "in:Inbox"
 ```
-Ver metadata de un correo:
+
+- List email metadata:
 ```sh
 $> zmmetadump -m cuenta@dominio.com -i 26747
 ```
-Borrar un mensaje
+
+- Delete a message:
 ```sh
 $> zmmailbox -z -m cuenta@dominio.com dm 4543
 ```
-4543 es el id del mensaje
+here, 4543 is the id of the message
