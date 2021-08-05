@@ -6,7 +6,7 @@
 #fi
 
 # If you come from bash you might have to change your $PATH.
-export PATH=/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:/opt/amdgpu-pro/bin/:$PATH
+export PATH=export PATH=$HOME/.minishift/cache/oc/v3.11.0/linux:/opt/minishift/minishift-1.34.3-linux-amd64/:/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:/opt/amdgpu-pro/bin/:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -166,7 +166,7 @@ nvm use --lts=erbium
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
 ## GOLANG setup version
-gvm use go1.12.9
+gvm use go1.16.6
 
 ## Colour to less command
 export LESS='-R'
@@ -277,3 +277,8 @@ alias combine-pdf='pdf-combine'
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh
 if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
+alias kubectl='kubecolor'
+
+source ~/.minikube-completion-zsh
+
+

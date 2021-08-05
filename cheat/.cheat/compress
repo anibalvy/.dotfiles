@@ -1,0 +1,38 @@
+# gzip
+  Compress
+    gzip -r --best -c dir > ./dir.gz
+    gzip -r -c dir > ./dir.gz
+  Uncompress
+    unzip ./dir.gz
+
+# bzip2
+  Compress
+    tar -c dir | bzip2 --best -c > ./dir.tar.bz2
+    tar -c dir | bzip2 -c > ./dir.tar.bz2
+  Uncompress
+    tar xf ./dir.tar.bz2
+    
+# 7z
+  Compress
+    7za -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on a ./dir.7z dir
+    7za a ./dir.7z dir
+  Uncompress
+    7za x ./dir.7z
+
+# RAR
+  Compress
+    rar -m5 a ./dir.rar dir
+    rar a ./dir.rar dir
+  Uncompress
+    rar x ./dir.rar
+
+#ZIP
+   Compress
+    zip -r -9 ./dir.zip dir
+    zip -r ./dir.zip dir
+  Uncompress
+    unzip ./dir.zip
+
+We can delete the options as show in the second option compress command 
+for faster compressing and shorter command line instead of best 
+compressing rate.

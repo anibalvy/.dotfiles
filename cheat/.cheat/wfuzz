@@ -1,4 +1,8 @@
 # t threads
 # 
 
+# report if status is not 404 with dict wordlist
 wfuzz -c --hc=404 -t 100 -w wordlist/dirbuster/directory-list-2.3-medium.txt http://<address>
+wfuzz -c --hc=404 -t 100 -w wordlist/dirbuster/directory-list-2.3-medium.txt http://<address>/FUZZ
+wfuzz -c --hc=404 -t 100 -w wordlist/dirbuster/directory-list-2.3-medium.txt -e extensions http://<address>/FUZZ.FUZ2Z
+

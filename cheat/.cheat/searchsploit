@@ -1,0 +1,36 @@
+# Install SearchSploit
+sudo apt -y install exploitdb
+
+# Updating SearchSploit
+searchsploit -u
+
+# Using SearchSploit
+searchsploit -h
+searchsploit window local smb # basic
+searchsploit -t oracle windows # by title
+searchsploit -c XSS # Case sensitive
+
+# Filtering
+searchsploit linux kernel 3.2 --exclude="(PoC)|/dos/" # filtering
+searchsploit ubuntu 14.10 -w --exclude="Linux Kernel"
+searchsploit linux kernel --exclude="(PoC)|/dos/" | grep ' 3.2'
+# using --colour to avoid problems with grep
+searchsploit linux kernel --exclude="(PoC)|/dos/" --colour | grep ' 3.2'
+
+# copy to clipboard 
+searchsploit -p 39446
+
+# copy scripts to folder to edit
+searchsploit -m 39446 win_x86-64/local/39525.py
+
+# print url for additional data like screenshot, setupfiles, tag, etc.
+searchsploit WarFTP 1.65 -w
+
+# examine script
+searchsploit 39166 --examine
+searchsploit -x 39166
+
+# examine a NMAP output
+nmap -sV [IP] -oX resultado.xml
+searchsploit -x --nmap resultado.xml
+

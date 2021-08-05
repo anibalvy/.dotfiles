@@ -1,7 +1,19 @@
 # WARNING ! netstat is deprecated. Look below.
 
+# Find open ports
+netstat --listen
+
+# To display open ports and established TCP connections, enter:
+netstat -vatn
+
+# To display only open UDP ports try the following command:
+netstat -vaun
+
+# If you want to see FQDN (full dns hostname), try removing the -n flag:
+netstat -vat
+
 # To view which users/processes are listening to which ports:
-sudo netstat -lnptu
+netstat -lnptu
 
 # To view routing table (use -n flag to disable DNS lookups):
 netstat -r
@@ -12,7 +24,7 @@ netstat -pln | grep <port> | awk '{print $NF}'
 Example output: 1507/python
 
 # Fast display of ipv4 tcp listening programs
-sudo netstat -vtlnp --listening -4
+netstat -vtlnp --listening -4
 
 # WARNING ! netstat is deprecated.
 # Replace it by:

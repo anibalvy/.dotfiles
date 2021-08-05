@@ -14,3 +14,7 @@ python -m smtpd -n -c DebuggingServer localhost:1025
 
 # Pretty print a json
 python -mjson.tool
+
+# SimpleHttpServer
+python  -m SimpleHTTPServer [port]
+python3 -m http.server 9000

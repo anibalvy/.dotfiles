@@ -1,5 +1,8 @@
-# To create a 2048-bit private key:
-openssl genrsa -out server.key 2048
+# To create a RSA private key:
+openssl genrsa -out myKey.priv 2048 # or 512, 758, 1024, 1536 or 2048
+
+# To create a RSA Public key from that key
+openssl rsa -in myKey.priv -out mykey.pub -pubout -outfrom PEM
 
 # To create the Certificate Signing Request (CSR):
 openssl req -new -key server.key -out server.csr
@@ -25,6 +28,11 @@ openssl x509 -noout -enddate
 
 # Generate Diffie-Hellman parameters:
 openssl dhparam -outform PEM -out dhparams.pem 2048
+
+# Verify SSL
+openssl s_client -connect google.com:443 -showcerts
+# Using an insecure cipher (RC4)
+openssl s_client -connect blog.mozilla.org:443 -showcerts -cipher RC4-SHA
 
 # Generate passwd
 openssl passwd -1

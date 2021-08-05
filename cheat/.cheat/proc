@@ -1,0 +1,42 @@
+ /proc -- Mount point for the proc filesystem, which gives access to kernel status information via the following files.
+
+ /proc/net/dev -- device information
+
+ /proc/net/raw -- raw socket information
+
+ /proc/net/tcp -- TCP socket information
+
+ /proc/net/udp -- UDP socket information
+
+ /proc/net/udplite -- UDPLite socket information
+
+ /proc/net/igmp -- IGMP multicast information
+
+ /proc/net/unix -- Unix domain socket information
+
+ /proc/net/ipx -- IPX socket information
+
+ /proc/net/ax25 -- AX25 socket information
+
+ /proc/net/appletalk -- DDP (appletalk) socket information
+
+ /proc/net/nr -- NET/ROM socket information
+
+ /proc/net/route -- IP routing information
+
+ /proc/net/ax25_route -- AX25 routing information
+
+ /proc/net/ipx_route -- IPX routing information
+
+ /proc/net/nr_nodes -- NET/ROM nodelist
+
+ /proc/net/nr_neigh -- NET/ROM neighbours
+
+ /proc/net/ip_masquerade -- masqueraded connections
+
+ /sys/kernel/debug/bluetooth/l2cap -- Bluetooth L2CAP information
+
+ /sys/kernel/debug/bluetooth/rfcomm -- Bluetooth serial connections
+
+ /proc/net/snmp -- statistics
+

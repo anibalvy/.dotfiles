@@ -1,0 +1,3 @@
+# yq is a lightweight and portable command-line YAML processor
+
+cat file.yml | yq e

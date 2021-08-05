@@ -34,5 +34,8 @@ lsof -p <pid>
 # mounted USB stick or CD/DVD.
 lsof +f -- </mount/point>
 
+# To display all open IPv4 network files in use by the process whose PID is 9255, use:
+lsof -i 4 -a -p 9255
+
 # See this primer: http://www.danielmiessler.com/study/lsof/
 # for a number of other useful lsof tips

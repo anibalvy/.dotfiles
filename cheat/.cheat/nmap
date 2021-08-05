@@ -73,3 +73,9 @@ nmap -T5 --min-parallelism=50 -n --script "ssl-heartbleed" -pT:443 127.0.0.1
 
 # Show all informations (debug mode)
 nmap -d ...
+
+# Fast... powerful
+nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn <ip-adress> -oG allPorts
+# with -f -> fragmentation
+nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn <ip-adress> -f -oG allPorts
+

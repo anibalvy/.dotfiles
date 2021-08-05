@@ -1,0 +1,29 @@
+# a Domain Name
+dig <domain.com>
+
+# short answer
+dig <domain.com> +short
+
+# Detailed Answer
+dig <domain.com> +noall + answer
+
+# Trace DNS Path
+dig <domain.com> +trace
+
+# .digrc
+echo "+noall +answer" > ~/.digrc
+
+# Custom Nameserver
+dig @8.8.8.8 <domain.com>
+
+# Records
+dig <domain.com> ANY   # All DNS Records
+dig <domain.com> A     # A DNS Records
+dig <domain.com> txt   # txt DNS Records
+dig <domain.com> ns    # ns DNS Records
+dig <domain.com> cname # cname DNS Records
+
+# Reverse 
+dig -answer -x <ip-address>
+
+

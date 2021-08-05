@@ -17,6 +17,9 @@ ssh -X user@example.com
 # host (remote.example.com:5000) through a proxy (personal.server.com):
 ssh -f -L 8080:remote.example.com:5000 user@personal.server.com -N
 
+# forward port (to make target machine port on the local)
+ssh user@target_machine -L  <port>:<ip_address>:<port>
+
 # To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'
 

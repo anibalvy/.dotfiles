@@ -1,0 +1,75 @@
+
+## Create an image and run it with docker-compose
+# Folder structure:
+.
+├── docker-compose.yml
+└── Dockerfile
+
+# Content of Dockerfile:
+
+FROM alpine
+CMD ["echo", "i am groot"]
+
+# Build and tag image:
+
+docker build -t groot .
+docker tag groot:latest groot:staging
+
+# docker-compose.yml:
+version: '3.1'
+services:
+  groot:
+    image: groot:staging
+    restart: always # or it ca be "unless-stopped", "on-failure:10"
+    ports;
+      - 3000:3000
+    networks:
+      - <network_name>
+    volumes:
+      - <local_path>:<container_path>
+    environment:
+      ENV_VAR1: value1
+      ENV_VAR2: value2
+
+networks:
+  <network_name>:
+    driver: bridge # See https://docs.docker.com/network/
+
+volumens:
+  <vol_name>:
+    driver: local # See https://docs.docker.com/storage/volumes/#use-a-volume-driver
+    driver_opts:
+      0: bind
+      type: none
+      device: <folder_path>
+
+# and start docker-compose:
+
+$ docker-compose up
+Creating groot_groot ... 
+Creating groot_groot_1 ... done
+Attaching to groot_groot_1
+groot_1  | i am groot
+groot_groot_1 exited with code 0
+
+$ docker-compose up -d
+
+# check 
+docker-compose ps
+
+# logs
+docker-compose logs
+
+# to pause the environment execution without changing the current state of your containers
+docker-compose pause
+docker-compose unpause
+
+# stop command will terminate the container execution, but it won’t destroy any data associated with your containers
+docker-compose stop
+
+# to remove the containers, networks, and volumes associated with this containerized environment
+docker-compose down
+
+# to remove the base image from your system
+docker image rm <image:tag>
+

@@ -5,7 +5,6 @@ set number relativenumber    "So I can see the queantity of lines of yank, delet
 "set splitbelow splitright    "by default split vertical
 set guifont=Hack\ Nerd\ Font\ Mono\ 11
 
-
 """ History settings
 " to check parameter type
 " :verbose set history
@@ -22,15 +21,19 @@ set softtabstop=4
 set shiftwidth=4   " Number of space characters inserted for indentation (>>)
 set expandtab " Insert space characters whenever the tab key is pressed
 set smartindent "do clever autoindenting
+" add point indicating indentation
+"set list listchars=space:·,trail:·,extends:»,precedes:«,nbsp:×
 "set smartcase "Override the 'ignorecase' option if the search pattern contains upper case characters.
 "
-" TAB dimesion for a particular file type like CSS here.
-"autocmd Filetype css setlocal tabstop=4
 "
 set scrolloff=10 " when scrolling down, not wait to end to show new lines.
 
 "to continue the cursor in the line at the end of the screen...
 set nowrap
+
+set cursorline " Highlight current cursor line
+"set cursorcolumn " Highlight current cursor column line
+set foldcolumn=1 " Place a width 1 margin on the left
 
 "to use after get use to UNDO
 " set noswapfile
@@ -217,7 +220,6 @@ let g:syntastic_check_on_wq = 1
 " To check checkers run :SyntasticInfo
 " To show enable/disable show all checkers revision (fallback at no errors by default)
 let g:syntastic_aggregate_errors = 0
-"For GOlang
 let g:syntastic_go_checkers = ['go']
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
@@ -322,6 +324,9 @@ Plugin 'editorconfig/editorconfig-vim'
 " when you hit " or @ in normal mode or <CTRL-R> in insert mode. 
 Plugin 'junegunn/vim-peekaboo'
 
+" Autocompletion
+Plugin 'codota/tabnine-vim' 
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -337,10 +342,14 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-
+" Set TAB dimesion formatting by language
 " For Python
-"autocmd FileType * set tabstop=2|set shiftwidth=2|set noexpandtab
 autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
+" For YAML
+autocmd FileType yaml set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType yml set tabstop=2|set shiftwidth=2|set expandtab
+" for CSS
+"autocmd Filetype css setlocal tabstop=4
 
 "turn off expandtab for editing makefiles
 autocmd FileType make setlocal noexpandtab
@@ -549,3 +558,34 @@ set nrformats+=hex,alpha
 
 
 set exrc " Whenever you have an .vimrc on the folder, and open with "vim ." it will excecute it.
+
+nnoremap <silent> <leader><bar> :call ToggleIndentGuides()<cr>
+
+function! ToggleIndentGuides()
+	if !exists('b:indentguides')
+		if !&expandtab && &tabstop == &shiftwidth
+			let b:indentguides = 'tabs'
+			let b:indentguides_listopt = &l:list
+			let b:indentguides_listcharsopt = &l:listchars
+			exe 'setl listchars' . '+'[!&l:list] . '=tab:˙\  list'
+		else
+			let b:indentguides = 'spaces'
+			let pos = range(1, &textwidth > 0 ? &textwidth : 80, &shiftwidth)
+			call map(pos, '"\\%" . v:val . "v"')
+			let pat = '\%(\_^ *\)\@<=\%(' . join(pos, '\|') . '\) '
+			let b:indentguides_match = matchadd('ColorColumn', pat)
+		endif
+	else
+		if b:indentguides == 'tabs'
+			let &l:list = b:indentguides_listopt
+			let &l:listchars = b:indentguides_listcharsopt
+			unlet b:indentguides_listopt b:indentguides_listcharsopt
+		else
+			call matchdelete(b:indentguides_match)
+			unlet b:indentguides_match
+		endif
+		unlet b:indentguides
+	endif
+endfunction
+
+call ToggleIndentGuides()

@@ -1,0 +1,85 @@
+🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳
+# create an Image of Node app
+server.js
+```js
+var http = require('http');
+var handleRequest = function(request, response) {
+          console.log('Received request for URL: ' + request.url);
+                  response.writeHead(200);
+                            response.end('Hello World!');
+};
+var www = http.createServer(handleRequest);
+www.listen(8080);
+```
+Dockerfile
+```
+FROM node:6.14.2
+EXPOSE 8080
+WORKDIR /APP
+COPY server.js . 
+CMD [ "node", "server.js" ]
+```
+
+# PARAMETERS
+FROM <image>:<TAG>
+RUN # for commands on container initialization
+CMD ["node", "app.js"] 
+
+# for commands that will run by default, but can be replaced by adding an argument at run
+#like, if the container is being run with bash, it will not run the CMD
+docker run -ti <image_name> /bin/bash
+
+# define working directory, will affect later steps
+WORKDIR /APP
+
+ENTRYPOINT ["python"]
+# for command that can call arguments, if I add another argument to the image,
+# the extra argument will be added to the commands in ENTRYPOINT, like, if I add
+# "bash" after the <image> name, it will execute "pyhton bash" at runtime.
+# Useful if I have a script that I want to run by cli, like "server.py" 
+
+## copy of the code must go in the end, because every change, invalidate the rest
+# copy files to the container
+COPY server.js .
+# allow use urls and also decompress file automatically
+ADD <URL>/file .
+
+# use multi-stages
+FROM mave:3-jdk-8-alpine AS builder
+WORKDIR /app
+COPY pom.xml
+RUN mvn -e -B package
+
+FROM openjdk:8-jre-alpine
+COPY --from=builder /app/target/app.jar
+CMD ["java", "-jar", "/app.jar"]
+
+# multi-container
+## create network
+docker network create <network_name>
+## run container with the network
+docker run -d --network <network_name> --network-alias <network_alias>  \
+ -v <local_storage>:<mount_point> \
+ -e <env_var> \
+ <container_name>:<tag>
+## test it
+docker run -it --network <network_name> nikolata/netshoot
+> dig <network_name>
+    
+#and building it on the same folder:
+docker build .
+
+# tagging
+docker  build -t <username>/<container_name>:<tag> .
+
+# Retagging of a existing image
+docker tag <username>/<container_name>:<tag> <container_id>
+
+# Login to Docker Hub registry
+docker login
+
+# Upload imagen
+docker push <username>/<container_name>:<tag>
+
+## Docker-compose has their own cheat (cheat docker-compose)
+

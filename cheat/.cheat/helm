@@ -7,84 +7,84 @@
 
 # REPOS and HUB
 ## Initialize a Helm Chart Repository
-$ helm repo add stable https://charts.helm.sh/stable
+helm repo add stable https://charts.helm.sh/stable
 
 ## search in repo that you have added to your local helm client 
-$ helm search repo postgres
+helm search repo postgres
 
 ## search in hub, https://artifacthub.io, which lists helm charts from dozens of different repositories.
-$ helm search hub postgres
+helm search hub postgres
 NOTE: use this first.
 
 ## repo operations
-$ helm repo update
-$ helm repo list
-$ helm repo remove
+helm repo update
+helm repo list
+helm repo remove
 
 # INSTALL
 ## install chart
-$ helm install <my_name_for_the_release> stable/mariadb
+helm install <my_name_for_the_release> stable/mariadb
 
 ## Install A local chart archive 
-$ helm install foo foo-0.1.1.tgz
+helm install foo foo-0.1.1.tgz
 
 ## Install an unpacked chart directory 
-$ helm install foo path/to/foo
+helm install foo path/to/foo
 
 ## Install using a full URL 
-$ helm install foo https://example.com/charts/foo-1.2.3.tgz
+helm install foo https://example.com/charts/foo-1.2.3.tgz
 
 ## install not specifying a name
-$ helm install stable/mysql --generate-name
+helm install stable/mysql --generate-name
 Released smiling-penguin
 
 ## list installed with
-$ helm ls
+helm ls
 NAME             VERSION   UPDATED                   STATUS    CHART
 smiling-penguin  1         Wed Sep 28 12:59:46 2016  DEPLOYED  mysql-0.1.0
 
-$ helm list
-$ helm list --all
+helm list
+helm list --all
 
 # UPGRADE
 ## to change the configuration of your release or a new version of a chart is released.
-$ helm upgrade -f panda.yaml happy-panda stable/mariadb
+helm upgrade -f panda.yaml happy-panda stable/mariadb
 
 ## roll back to a previous release using helm rollback [RELEASE] [REVISION].
-$ helm rollback happy-panda 1
+helm rollback happy-panda 1
 
 ## uninstall a release
-$ helm uninstall smiling-penguin
+helm uninstall smiling-penguin
 Removed smiling-penguin
 
 
 ## status
-$ helm status smiling-penguin
+helm status smiling-penguin
 Status: UNINSTALLED
 ...
 
 ## To see what options are configurable on a chart
-$ helm show values stable/mariadb
+helm show values stable/mariadb
 
 ## You can then override any of these settings in a YAML formatted file, and then pass that file during installation.
 $ echo '{mariadbUser: user0, mariadbDatabase: user0db}' > config.yaml
-$ helm install -f config.yaml stable/mariadb --generate-name
+helm install -f config.yaml stable/mariadb --generate-name
 
 # CREATE A CHARTs
 ##  create a Chart
-$ helm create <name_of_the_chart>
+helm create <name_of_the_chart>
 
 ## As you edit your chart, you can validate that it is well-formed by running 
-$ helm lint
+helm lint
 
 ## Check what will be generated (from inside the folder)
-$ helm install --dry-run debug .
+helm install --dry-run debug .
 
 ## package the chart up for distribution
-$ helm package <name_of_the_chart>
+helm package <name_of_the_chart>
 <name_of_the_chart>-0.1.0.tgz
 
 ## install it
-$ helm install <name_of_the_chart> ./<name_of_the_chart>-0.1.0.tgz
+helm install <name_of_the_chart> ./<name_of_the_chart>-0.1.0.tgz
 
 

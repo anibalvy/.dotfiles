@@ -80,3 +80,14 @@ echo ${(s._.)file}
 # Join expansion flag, opposite of the split flag.
 array=(a b c d)
 echo ${(j.-.)array} # a-b-c-d
+
+# ! Operator: 
+#If we take: echo a b c d as an example
+!$    # the last argument: d
+!:*   # all the arguments: a b c d (can be shorten !*)
+!:1   # the first argument: a (same as !^)
+!:1-3 # arguments from first to third: a b c
+!:2-$ # arguments from the second to the last one: b c d
+!:0   # is the last command executed
+
+

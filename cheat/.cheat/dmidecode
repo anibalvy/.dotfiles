@@ -1,0 +1,8 @@
+
+sudo dmidecode | less
+
+sudo dmidecode -s system-manufacturer
+
+sudo dmidecode -s bios-version
+
+
