@@ -1,4 +1,4 @@
-# kanibal dotfiles
+# My dotfiles
 
 personal script to install new workspaces tools.
 
