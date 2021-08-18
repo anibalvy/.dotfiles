@@ -5,9 +5,26 @@
 #create a Kubernetes Deployment using an existing image named echoserver
 #which is a simple HTTP server and expose it on port 8080 using --port.
 kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+kubectl create deployment hello-minikube --replicas=5 --image=k8s.gcr.io/echoserver:1.10
+
+# ussing apply
+kubectl apply -f <manifest>
+
+# using run, like docker
+kubectl run --rm -it --image=alpine -- sh
 
 #expose service
 kubectl expose deployment hello-minikube --type=NodePort --port=8080
+kubectl expose deployment hello-minikube --type=ClusterIP --port=80
+
+# replace image of a deployment and change it
+kubectl set image deployment my_nginx nginx=ngins:1.20.1 --record
+# check
+kubectl rollout status deployment/my_nginx
+# check history of rollouts
+kubectl rollout history deployment/my_nginx
+# rollback to specific revision
+kubectl rollout undo deployment/my_nginx --to-revision=<revision_number>
 
 #Get the URL of the exposed Service to view the Service details:
 minikube service hello-minikube --url
@@ -15,6 +32,8 @@ this result can be accesed outside k8s cluster.
  
 #get pods
 kubectl get pods
+kubectl get pods --sort-by=metadata.name
+kubectl get pods --sort-by=metadata.creationTimestamp
 
 #Get components of a namespace
 kubectl get all -n <namespace>
@@ -39,4 +58,23 @@ kubectl config use-context minikube
 #conecting with a config file
 kubectl --kubeconfig=<kubeconfig>.yml <cmd>
 kubectl --kubeconfig=kubeconfig.yml get nodes
+
+# Validate manifest
+kubectl create --dry-run=client --validate -f <manifest> # also with apply
+
+# scale deployment
+kubectl scale deploy/<name> --replicas 5
+
+# list resources
+kubectl api-resources
+
+# show info of resources
+kubectl explain <res_name>
+kubectl explain <res_name.option>
+kubectl explain pod.spec
+
+# create manifest from deployment
+kubectl create deploy --image=nginx --dry-run=client -o yaml > my_deployment.yaml
+kubectl create deploy --image=nginx --restart=Never --limits='cpu=300m,memory=512Mi' --dry-run=client -o yaml > my_deployment.yaml
+
 

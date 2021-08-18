@@ -180,7 +180,8 @@
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
-  typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=
+  #typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=
+  typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND='white'
   # Make the icon bold.
   typeset -g POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='${P9K_CONTENT}'
 
@@ -205,7 +206,7 @@
 
   ##################################[ dir: current directory ]##################################
   # Default current directory color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=31
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND=51
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
@@ -215,7 +216,7 @@
   typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=103
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=39
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=50
   # Display anchor directory segments in bold.
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
   # Don't shorten directories that contain any of these files. They are anchors.
@@ -815,11 +816,13 @@
 
   ##################################[ context: user@hostname ]##################################
   # Context color when running with privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=178
+  #typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=178
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=196
   # Context color in SSH without privileges.
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=180
   # Default context color (no privileges, no SSH).
-  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=180
+  #typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=180
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=226
 
   # Context format when running with privileges: bold user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%B%n@%m'
@@ -835,7 +838,7 @@
   # Custom icon.
   # typeset -g POWERLEVEL9K_CONTEXT_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # Custom prefix.
-  typeset -g POWERLEVEL9K_CONTEXT_PREFIX='%fwith '
+  #typeset -g POWERLEVEL9K_CONTEXT_PREFIX='%fwith '
 
   ###[ virtualenv: python virtual environment (https://docs.python.org/3/library/venv.html) ]###
   # Python virtual environment color.
@@ -1471,7 +1474,7 @@
 
   ####################################[ time: current time ]####################################
   # Current time color.
-  typeset -g POWERLEVEL9K_TIME_FOREGROUND=66
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND=5
   # Format for the current time: 09:51:02. See `man 3 strftime`.
   typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
   # If set to true, time will update when you hit enter. This way prompts for the past
@@ -1481,7 +1484,8 @@
   # Custom icon.
   # typeset -g POWERLEVEL9K_TIME_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # Custom prefix.
-  typeset -g POWERLEVEL9K_TIME_PREFIX='%fat '
+  #typeset -g POWERLEVEL9K_TIME_PREFIX='%fat '
+  typeset -g POWERLEVEL9K_TIME_PREFIX='%f '
 
   # Example of a user-defined prompt segment. Function prompt_example will be called on every
   # prompt if `example` prompt segment is added to POWERLEVEL9K_LEFT_PROMPT_ELEMENTS or

@@ -217,9 +217,11 @@ echo "$(python -V)"
 #~/.dotfiles/touchscreen/.touchscreen.sh
 
 #CHEAT
-export CHEAT_PATH="$CHEAT_PATH:$HOME/.cheat"
+export CHEAT_PATH="~/.cheat"
+export CHEAT_CONFIG_PATH="~/.config/cheat/conf.yml"
 export CHEAT_COLORS=true
 export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
+source ~/.config/cheat/cheat.zsh
 
 #CLING
 export PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
@@ -277,8 +279,10 @@ alias combine-pdf='pdf-combine'
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh
 if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
-alias kubectl='kubecolor'
+
+alias kb='kubecolor'
 
 source ~/.minikube-completion-zsh
+source ~/.yq-shell-completion-zsh
 
 
