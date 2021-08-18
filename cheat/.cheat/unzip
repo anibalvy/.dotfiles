@@ -1,8 +1,15 @@
-# Extract archive
-unzip archive.zip
+---
+tags: [ compression ]
+---
+# To extract an archive:
+unzip <archive>
 
-# Test integrity of archive
-unzip -tq archive.zip
+# To extract an archive to a specific directory:
+unzip <archive> -d <directory>
 
-# List files and directories in a file
-unzip -l archive.zip
+# To test integrity of archive:
+unzip -tq <archive>
+
+# To list files and directories an archive:
+unzip -l <archive>
+

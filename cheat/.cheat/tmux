@@ -1,10 +1,8 @@
 # TMUX
-
 ## Hotkey
 <prefix> keys are by default Ctrl-b (I change it to Ctrl-a, as screen)
 
 ## CLI
-```sh
 tmux # Start tmux
 tmux new -s [session_name] # Start new named session
 <prefix> d # Detach from tmux
@@ -14,19 +12,15 @@ tmux ls # Display session
 ### Start a shared session
 tmux -S /tmp/your_shared_session
 chmod 777 /tmp/your_shared_session
-```
 
 ## Sessions
-```sh
 <prefix> $ # Rename session
 <prefix> s # Switch session
 <prefix> ? # Help screen (Q to quit)
 <prefix> PageUp/PageDown # Scroll in window
 <prefix> : source-file /path/to/file # Reload configuation file
-```
 
 ## Window management
-```sh
 <prefix> c # Create window
 <prefix> & # Destroy window
 <prefix> f # find a window
@@ -35,10 +29,8 @@ chmod 777 /tmp/your_shared_session
 <prefix> n # move to next 
 <prefix> p # move to previous 
 <prefix> [0-9] # Switch between windows
-```
 
 ## Pane management
-```sh
 <prefix> % # Split horizontally
 <prefix> " # Split vertically
 <prefix> x # destroy pane
@@ -48,21 +40,17 @@ chmod 777 /tmp/your_shared_session
 <prefix> : set synchronize-panes [on|off] # Sync panes
 <prefix> Arrows # move to ...
 <prefix> {h,j,k,l} # move to left,down,up,right
-```
 
 - rearrange pane
-```sh
 <prefix> Space # change layout
 <prefix> Ctrl+o # swap them anti-clockwise
 <prefix> { # move pane to the left
 <prefix> } # move pane to the right
-```
 
 - resize
-```sh
 <prefix> : resize-pane -R 10
 <prefix> : resize-pane -L 10
 <prefix> : resize-pane -U 10
 <prefix> : resize-pane -D 10
-```
+
 

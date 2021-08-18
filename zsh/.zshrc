@@ -221,6 +221,7 @@ export CHEAT_PATH="~/.cheat"
 export CHEAT_CONFIG_PATH="~/.config/cheat/conf.yml"
 export CHEAT_COLORS=true
 export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
+export CHEAT_USE_FZF=true
 source ~/.config/cheat/cheat.zsh
 
 #CLING
