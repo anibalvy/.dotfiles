@@ -1,0 +1,9 @@
+# login
+gh auth login
+
+# create GIST
+gh gist create --public pg_timestamp.sql
+- Creating gist pg_timestamp.sql
+✓ Created gist pg_timestamp.sql
+https://gist.github.com/35cb6158325b442eb9471f605771becb
+

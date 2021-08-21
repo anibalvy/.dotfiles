@@ -15,6 +15,10 @@ locate gcc | awk '/gcc/ {print $0}'
 # or starting by g (^g)
 locate gcc | awk '/^g/ {print $0}'
 
+# print line/lines
+awk 'NR==15' file.txt
+awk 'NR>=15 && NR<=25' file.txt
+
 # in print you can use $0 $1... $NF (last value)
 
 # use the OFS (output field separator) variable to put a separator between fields in the output

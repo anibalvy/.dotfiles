@@ -1,6 +1,9 @@
 # To install the latest version of a package:
 yum install <package name>
 
+# Install a Package from Specific Repository
+yum --enablerepo=epel install phpmyadmin
+
 # To perform a local install:
 yum localinstall <package name>
 
@@ -12,6 +15,7 @@ yum search <package name>
 
 # To find what package installs a program:
 yum whatprovides </path/to/program>
+yum provides </path/to/program>
 
 # To find the dependencies of a package:
 yum deplist <package name>
@@ -19,12 +23,40 @@ yum deplist <package name>
 # To find information about a package:
 yum info <package name>
 
+# Interactive Shell
+yum shell
+
+# Clean cache
+yum clean all
+
+# View History
+yum history
+
 # List currently enabled repositories:
 yum repolist
+yum repolist all
+
+# check updates
+yum check-update
+
+# update packages
+yum update
 
 # List packages containing a certain keyword:
 yum list <package_name_or_word_to_search>
+
+# list Group packages
+yum grouplist
+
+# Install a Group Package
+yum groupinstall 'MySQL Database'
+
+# Update a Group Package
+yum groupupdate 'DNS Name Server'
  
+# Remove a Group Package
+yum groupremove 'DNS Name Server'
+
 # To download the source RPM for a package:
 yumdownloader --source <package name>
 

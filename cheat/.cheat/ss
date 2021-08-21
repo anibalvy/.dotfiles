@@ -19,3 +19,5 @@ ss -t state established '( dport = :ssh or sport = :ssh )'
 
 # 
 ss -nlt
+
+ ss -ta

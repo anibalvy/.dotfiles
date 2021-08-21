@@ -1,0 +1,11 @@
+# install/status/delete
+minishift start
+minishift status
+minishift delete 
+
+# Open console
+minishift console
+
+# Delete deployment/app
+oc delete all -l app=pg-oc-kasa11
+

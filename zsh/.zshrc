@@ -284,6 +284,8 @@ if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
 alias kb='kubecolor'
 
 source ~/.minikube-completion-zsh
+source ~/.minishift-completion-zsh
+source ~/.gh-github-completion-zsh
 source ~/.yq-shell-completion-zsh
 
 
