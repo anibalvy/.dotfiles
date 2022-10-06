@@ -17,6 +17,8 @@ kubectl run --rm -it --image=alpine -- sh
 kubectl expose deployment hello-minikube --type=NodePort --port=8080
 kubectl expose deployment hello-minikube --type=ClusterIP --port=80
 
+kubectl -n <namespace> expose pod <pod_name> --name <service name> --port 3000 --target-port 80
+
 # replace image of a deployment and change it
 kubectl set image deployment my_nginx nginx=ngins:1.20.1 --record
 # check
@@ -32,8 +34,13 @@ this result can be accesed outside k8s cluster.
  
 #get pods
 kubectl get pods
+kubectl get pods -w # watch
 kubectl get pods --sort-by=metadata.name
 kubectl get pods --sort-by=metadata.creationTimestamp
+
+# enter pod 
+kubectl exec -it <pod name> -- <command>
+kubectl exec -it nginx -- sh
 
 #Get components of a namespace
 kubectl get all -n <namespace>
@@ -43,6 +50,16 @@ kubectl delete services hello-minikube
 
 #delete deployment
 kubectl delete deployment hello-minikube
+
+# see resource info
+kubectl describe <type> <resource>
+kubectl describe <type> <resource> > resource.yml # save the resource info
+kubectl describe pods
+kubectl describe node
+
+# see logs
+kubectl logs <resource>
+kubectl logs <resource> -f # like tail -f
 
 #info
 kubectl cluster-info
@@ -76,5 +93,19 @@ kubectl explain pod.spec
 # create manifest from deployment
 kubectl create deploy --image=nginx --dry-run=client -o yaml > my_deployment.yaml
 kubectl create deploy --image=nginx --restart=Never --limits='cpu=300m,memory=512Mi' --dry-run=client -o yaml > my_deployment.yaml
+
+# secrets
+k auth can-i list secrets --as gianna
+yes
+
+k auth can-i get secrets --as gianna
+no
+
+# Use nginx:alpine and curl to check if one Pod is accessible on port 80:
+k run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.12.2.15 # this use a temporary pod
+# Use busybox and wget to check if one Pod is accessible on port 80:
+k run tmp --restart=Never --rm --image=busybox -i -- wget -O- 10.12.2.15
+
+
 
 

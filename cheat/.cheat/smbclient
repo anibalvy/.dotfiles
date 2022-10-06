@@ -2,4 +2,4 @@
 smbclient -L <hostname> -U%
 
 # To connect to a share:
-smbclient //<hostname>/<share> -U<username>%<password>
+smbclient //<hostname>/<share> -U'<username>%<password>'

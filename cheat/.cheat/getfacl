@@ -1,0 +1,54 @@
+# check if kernel has ACL support
+grep -i acl /boot/config*
+
+# check if FS has ACL support
+tune2fs -l /dev/sda1
+
+# remount a FS adding support
+mount -o remount -o acl /dev/sda1
+
+# get ACL - second level discritionary permissions
+getfacl <filename>
+
+user    the access granted to either the file owner (entry tag type ACL_USER_OBJ) or a specified user (en‐ try tag type ACL_USER).
+group   the access granted to either the file group (entry tag type ACL_GROUP_OBJ) or a specified group (entry tag type ACL_GROUP).
+mask    the maximum access which can be granted by any ACL entry except the user entry for the file owner and the other entry (entry tag type ACL_MASK).
+other   the access granted to any process that does not match any user or group ACL entries (entry tag type ACL_OTHER).
+
+# Granting an additional user read access
+setfacl -m u:<user>:rwx <filename>
+setfacl -m u:lisa:r file
+
+# Set default '-d' only to directories
+# will add acl permission to new files inside
+setfacl -d -m u:<username>:rx <directory>
+
+# change the mask
+# this will show #effective:<perm> if perm added are more than mask
+setfacl -m mask:rw <filename>
+
+# Revoking write access from all groups and all named users (using the effective rights mask)
+setfacl -m m::rx file
+
+# Removing a named group entry from a file's ACL
+setfacl -x g:staff file
+
+# To delete all of the extended ACL entries for all files and directories in the current working directory
+setfacl -D e *
+
+# Use -b option to remove all ACLs associated to a file
+setfacl -b <filename>
+
+# To delete all of the extended ACL entries for user user3 for all files and directories in the current directory
+setfacl -x user:user3,d:user:user3,f:user:user3 *
+
+# Copying the ACL of one file to another
+getfacl file1 | setfacl --set-file=- file2
+
+# Copying the access ACL into the Default ACL
+getfacl --access dir | setfacl -d -M- dir
+
+# Backup & Restore
+cd <path>
+getfacl -R * > acl_backup_for_folder
+setfacl --restore=/<path>/acl_backup_for_folder

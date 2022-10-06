@@ -11,7 +11,8 @@ curl -O URLOfFirstFile -O URLOfSecondFile
 curl http://example.com/pic[1-24].jpg
 
 # Download a file and pass HTTP Authentication
-curl -u username:password URL 
+curl -u username:password URL
+curl -u username:password -X POST URL
 
 # Download a file with a Proxy
 curl -x proxysever.server.com:PORT http://addressiwantto.access
@@ -35,7 +36,18 @@ curl http://ifconfig.me/all.json
 curl --limit-rate 1000B -O http://path.to.the/file
 
 # Get your global IP
-curl httpbin.org/ip 
+curl httpbin.org/ip
 
 # Get only the HTTP status code
 curl -o /dev/null -w '%{http_code}\n' -s -I URL
+
+# POST, application/x-www-form-urlencoded is the default:
+curl -d "param1=value1&param2=value2" -X POST http://localhost:3000/data
+#with a data file
+curl -d "@data.txt" -X POST http://localhost:3000/data
+
+# POST application/json
+curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data
+# with a data file
+curl -d "@data.json" -X POST http://localhost:3000/data
+

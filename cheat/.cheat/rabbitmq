@@ -1,0 +1,15 @@
+# RabbitMQ
+
+## durability" means the Exchange or Queue will survive a server restart..
+Messages marked as 'persistent' that are delivered to 'durable' queues will be logged to disk. Durable queues are recovered in the event of a crash, along with any persistent messages they stored prior to the crash.
+
+
+## delivery_mode in AMQP determines if message will be stored on disk after broker restarts. You can mark messages as persistent - by seting delivery_mode property = 2 when you publish message for instance in PHP (PECL AMQP extension):
+
+$exchange->publish($text, $routingKey, null, array('delivery_mode' => 2));
+
+## You would also need to declare queue as durable (or it will be dropped after broker stops)
+
+$queue->setFlags(AMQP_DURABLE);
+
+

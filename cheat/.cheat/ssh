@@ -17,8 +17,19 @@ ssh -X user@example.com
 # host (remote.example.com:5000) through a proxy (personal.server.com):
 ssh -f -L 8080:remote.example.com:5000 user@personal.server.com -N
 
+# reverse-ssh-tunnel
+#   On the machine that is needed to login is needed to run:
+ssh -fN -R 7000:localhost:22 username@yourMachine-ipaddress
+#   So this ssh connection request originating from remote server to your machine will make sure that any ssh connection request for port 7000 on your machine is forwarded to port 22 of remote server.
+#   Now do an ssh connection request from your machine to your own machine at port 7000:
+ssh username@localhost -p 7000
+
 # forward port (to make target machine port on the local)
 ssh user@target_machine -L  <port>:<ip_address>:<port>
+
+# This command creates an SSH connection to your workdesktop.com computer, but at the same time opens port 80 on your local machine. If you point your web browser at http://localhost, the connection will actually be forwarded through your SSH connection to your desktop, and sent onto the workserver.com server, port 80.
+ssh -L80:workserver.com:80 user@workdesktop.com
+
 
 # To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'

@@ -108,3 +108,6 @@ minikube addons enable registry
 
 # Enter dashboard
 minikube dashboard
+
+# get ip
+minikube ip

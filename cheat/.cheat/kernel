@@ -1,0 +1,53 @@
+# Compile kernel to .deb
+
+    ```sh
+    #Install necessary things
+    apt-get update
+    apt-get install kernel-package libncurses5-dev fakeroot wget bzip2 build-essential -y
+
+    #Get the kernel
+    cd /usr/src
+    wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.13.tar.xz
+    wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.13.tar.sign
+    gpg --verify linux-3.13.tar.sign
+    tar xpvf linux-3.13.tar.xz
+    ln -s linux-3.13 hlinux
+
+    ##Patch - optional
+    #cd /usr/src/linux
+    #bzip2 -dc /usr/src/patch-whatever.bz2 | patch -p1 --dry-run
+    #bzip2 -dc /usr/src/patch-whatever.bz2 | patch -p1
+
+    #Configure the kernel
+    cd /usr/src/linux
+    make clean && make mrproper
+    #Save the existing config
+    cp /boot/config-`uname -r` ./.config
+    make menuconfig
+    #Load alternative config file - .config
+    #Edit config and save
+
+    #Build the kernel
+    make-kpkg clean
+    fakeroot make-kpkg --initrd --append-to-version=-custom kernel_image kernel_headers
+    make modules
+    make modules_install
+
+    #Install new kernel
+    cd /usr/src
+    #Check file names before running dpkg
+    ls -l
+    dpkg -i linux-image-<VERSION>-custom_<VERSION>-custom-10.00.Custom_i386.deb
+    dpkg -i linux-headers-<VERSION>-custom_<VERSION>-custom-10.00.Custom_i386.deb
+
+    #Test the kernel
+    shutdown -r now
+    uname -r
+
+
+    #Notes
+    #http://www.berkes.ca/guides/linux_kernel.html
+    #http://www.howtoforge.com/kernel_compilation_ubuntu
+
+    ```
+

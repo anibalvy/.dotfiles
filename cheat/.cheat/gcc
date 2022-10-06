@@ -4,6 +4,15 @@ gcc file.c
 # Compile a file with a custom output
 gcc -o file file.c
 
+# Compile a file with a custom output intermediate object and list symbols
+gcc -c -o file.o file.c
+nm file.o
+
+# load shared library
+gcc -o libmy_lib.so -fpic -shared file.c
+gcc -c file.c -o main.o
+gcc -o file file.o -l<libname> -L<path_of_librery> # libname is the name without 'lib' prefix
+LD_LIBRARY_PATH=<path> ./file  # run indicating where the library is
 # Debug symbols
 gcc -g
 

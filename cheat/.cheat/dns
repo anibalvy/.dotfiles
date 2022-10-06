@@ -1,0 +1,85 @@
+### DNS
+* What function does DNS play on a network?
+
+    It provides translation from human read address to ip address, allowing to address url from avery part of the work. 
+    It is a service provided by TCP/IP protocol. It allows you to connect to other computers or networks by simple names instead of requiring memorization of IP addresses. The Internet maintains two principal namespaces: the domain name hierarchy[1] and the IP address system.[2] The Domain Name System maintains the domain namespace and provides translation services between these two namespaces. Internet name servers implement the Domain Name System.[3] The top hierarchy of the Domain Name System is served by the root name servers maintained by delegation by the Internet Corporation for Assigned Names and Numbers (ICANN). Below the root, Internet resources are organized into a hierarchy of domains, administered by the respective registrars and domain name holders. A DNS name server is a server that stores the DNS records, such as address (A, AAAA) records, name server (NS) records, and mail exchanger (MX) records for a domain name (see also List of DNS record types) and responds with answers to queries against its database.
+
+* Where DNS information stored on the system ?
+
+    A DNS cache (sometimes called a DNS resolver cache) is a temporary database, maintained by a computer's operating system, that contains records of all the recent visits and attempted visits to websites and other internet domains.
+
+    In other words, a DNS cache is just a memory of recent DNS lookups that your computer can quickly refer to when it's trying to figure out how to load a website.
+
+    Most people only hear the phrase "DNS cache" when it refers to flushing/clearing the DNS cache in order to help fix an internet connectivity issue.
+
+    software packages which can be used for DNS caching on Linux:
+
+    - nscd is a daemon that provides a cache for the most common name service requests. The default configuration file, /etc/nscd.conf, determines the behavior of the cache daemon. See nscd.conf(5).
+    - dnsmasq
+    - bind
+    After configuring the software for DNS forwarding and caching, you then set the system's DNS resolver to 127.0.0.1 in /etc/resolv.conf.
+
+    If your system is using NetworkManager you can either try using the dns=dnsmasq option in /etc/NetworkManager/NetworkManager.conf or you can change your connection settings to Automatic (Address Only) and then use a script in the /etc/NetworkManager/dispatcher.d directory to get the DHCP nameserver, set it as the DNS forwarding server in your DNS cache software and then trigger a configuration reload.
+
+# What commands do you know that can be used to check DNS records?
+
+host example.com
+nslookup example.com
+dig example.com
+python -c "import socket;print(socket.gethostbyname('example.com'))"
+resolvectl status
+
+# Records types
+
+    - A is used to map a ipv4 address to a string/hostname
+    - NS, Delegates a DNS zone to use the given authoritative name servers
+    - PTR, Pointer to a canonical name (CNAME), used as reverse DNS lookup, specially for email security.
+    - CNAME Alias of one name to another: the DNS lookup will continue by retrying the lookup with the new name. CNAME records must always be pointed to another domain name, never to an IP address.
+    - MX Maps a domain name to a list of message transfer agents for that domain
+    - TXT Originally for arbitrary human-readable text in a DNS record. Since the early 1990s, however, this record more often carries machine-readable data, such as specified by RFC 1464, opportunistic encryption, Sender Policy Framework, DKIM, DMARC, DNS-SD, etc.
+    - AAAA: like A but for ipv6
+
+* Why wouldn't you want a root DNS server to answer queries for you, instead of delegating you to an authoritative server?  
+    4 Answers
+    ~Because root DNS server can't handle zillions of requests at once, that's why you need a load balancer to split tasks on multiple DNS servers. every server has it's own limits, and load balancing helps to "scale" the limits.
+    DNS servers basically are text file doing Name to IP mapping(A type).
+    So if a root server had to answer all the queries ,it would essentially be a million line text file, mapping each and every website.This would result in large CPU processing and time.Essentially, Root servers redirect the query to top level DNS servers and so on
+
+* Name Servers
+  Use DNS (port 53)
+  An example of a name server is the server component of the Domain Name System (DNS), one of the two principal namespaces of the Internet. The most important function of DNS servers is the translation (resolution) of human-memorable domain names and hostnames into the corresponding numeric Internet Protocol (IP) addresses, the second principal name space of the Internet which is used to identify and locate computer systems and resources on the Internet.
+  In principle, authoritative name servers suffice for the operation of the Internet. However, with only authoritative name-servers operating, every DNS query must start with recursive queries at the root zone of the Domain Name System and each user system must implement resolver software capable of recursive operation.
+
+  - Authoritative "Only" name server: An authoritative-only name server returns answers only to queries about domain names that have been specifically configured by the administrator; can either be a primary server (master) or a secondary server (slave). A primary server for a zone is the server that stores the definitive versions of all records in that zone. It is identified by start-of-authority (SOA) resource record. A secondary server for a zone uses an automatic updating mechanism to maintain an identical copy of the primary server's database for a zone. 
+  - Authoritative answer: A name server indicates that its response is authoritative by setting the Authoritative Answer (AA) bit in the response to a query on a name for which it is authoritative. Name servers providing answers for which they are not authoritative (for example, name servers for parent zones) do not set the AA bit.
+  - Recursive query: If a name server cannot answer a query because it does not contain an entry for the host in its DNS cache, it may recursively query name servers higher up in the hierarchy.[10]This is known as a recursive query or recursive lookup.
+  - Caching name servers (DNS caches): store DNS query results for a period of time determined in the configuration (time-to-live) of each domain-name record. DNS caches improve the efficiency of the DNS by reducing DNS traffic across the Internet, and by reducing load on authoritative name-servers, particularly root name-servers. Because they can answer questions more quickly, they also increase the performance of end-user applications that use the DNS. 
+  - Caching resolvers: Recursive Server + Cache. Recursive name servers resolve any query they receive, even if they are not authoritative for the question being asked, by consulting the server or servers that are authoritative for the question. Caching name servers are often also recursive name servers.
+
+                    Local Host                        |  Foreign
+                                                    |
+        +---------+               +----------+         |  +--------+
+        |         | user queries  |          |queries  |  |        |
+        |  User   |-------------->|          |---------|->|Foreign |
+        | Program |               | Resolver |         |  |  Name  |
+        |         |<--------------|          |<--------|--| Server |
+        |         | user responses|          |responses|  |        |
+        +---------+               +----------+         |  +--------+
+                                    |     A            |
+                    cache additions |     | references |
+                                    V     |            |
+                                +----------+         |
+                                |  cache   |         |
+                                +----------+         |
+
+
+* Split-Horizon DNS?
+    DNS implementation to resolve an address according to the network that is requestes, normally by internal and external network. Can be done by hardware or Software.
+
+    http://jensd.be/160/linux/split-horizon-dns-masterslave-with-bind
+    Note:
+        split-brain is also used when for example a service thinks that a server01 is the master and in other machine this thinks that server02 is the master.
+
+* DNS over TLS
+
+systemd-resolved supports DNS over TLS (different from DNS over HTTPS). Although this feature will not initially be enabled by default, using systemd-resolved will enable us to turn on DNS over TLS in a future Fedora release, providing improved security if the user's DNS server supports DNS over TLS. 

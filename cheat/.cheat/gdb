@@ -1,26 +1,49 @@
 # start the debugger
 gdb your-executable
+gdb your-executable you_core_dump 
 
 # set a breakpoint
-b some-method, break some-method
+break main
+break some-method
+b some-method 
 
 # run the program
-r, run
+run
+r
 
 # when a breakpoint was reached:
-
-# run the current line, stepping over any invocations
-n, next
-# run the current line, stepping into any invocations
-s, step
+# run the current line, stepping OVER any invocations
+next
+n
+nexti # next line in assemby instruction
+# run the current line, stepping INTO any invocations
+step
+s
 # print a stacktrace
-bt, backtrace
+backtrace
+bt
 # evaluate an expression and print the result
 p length=strlen(string)
 # list surrounding source code
-l, list
+list
+l
 # continue execution
-c, continue
-
+continue
+c
 # exit gdb (after program terminated)
-q, quit
+quit
+q
+# refresh interface
+ref
+
+# examing/instruction at <register>
+x/i $pc
+
+# see values registers 
+info registers
+
+# see layout
+layout next
+lay next
+
+

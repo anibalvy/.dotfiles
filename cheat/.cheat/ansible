@@ -1,0 +1,89 @@
+# installation
+pip3 install --upgrade ansible
+
+# install community extension with galaxy hub
+ansible-galaxy collection install community.<extension>
+
+# config files
+mkdir ansible_<env>
+# replace config of /etc/ansible/hosts
+#vim ansible.cfg 
+
+[defaults]
+inventory=inventory
+host_key_ckecking=False
+
+#vim inventory
+[master]
+ansible_master
+
+[home]
+ansible_master
+node1
+node2
+
+[master:vars]
+ansible_ssh_user=<user>
+ansible_ssh_pass=<pass>
+
+[home:vars]
+ansible_ssh_user=<user>
+ansible_ssh_pass=<pass>
+ansible_sudo_pass=<pass>
+
+# check connection
+ansible <machine|group> -m ping
+
+# run commands
+ansible -i <inventory_file> <machine|group> -m <module_name> -a "<command>" -u <user> 
+ansible <machine|group> -m shell "<command>"
+ansible <machine|group> -m command -a "<command>" -u <user>
+ansible -i inventory -m command -a "<command>" -u <user>
+ansible -i inventory -a "<command>" -u <user> # if no -m given, command module is assumed
+ansible -i inventory -m ping  -u <user> # ping module to machines
+
+# ad-hoc
+ansible -i inventory -a "hostname"
+ansible -i inventory -a "hostname" -f 1  # execute 1 at a time
+ansible -i inventory -a "date"
+ansible -i inventory -a "free -h"
+ansible -i inventory -a "free -h" --limit "192.168.1.3,*.4,!<host_to_skip>"  # --limit: specify targets
+ansible -i inventory -b -m yum -a "name=ntp state=present" -u <user> # -b: --become
+# return all than ansible discovers
+ansible -i inventory -a setup
+
+# backgroud tasks (run dettached)
+ansible -i inventory -B <seconds> -a "date"  # second that will take to see if the task is completed
+ansible -i inventory -B <seconds> -P 0 -a "date"  # -P 0: will dettach, this will output the "ansible_job_id" 
+# to ckeck status
+ansible -i inventory -m async_status -a "jid=<ansible_job_id>"
+
+# some modules
+ansible <machine|group> -m shell -a "tail /var/log/messages | grep ansible-command | wc -l " # this allows to use pipes
+ansible <machine|group> -m cron -a "name=<name> hour=4 job=<path to script.sh>" 
+ansible <machine|group> -m git -a "repo=<url_repo> dest=/<path> update=yes version=<version>" 
+
+# Playbooks
+vim package_install.yaml
+---
+- hosts: node1
+  become: yes
+  tasks:
+    - name: install <package>
+      apt:
+        name: <package>
+        state: present
+        update_cache: yes
+        update_cache_retries: 1
+        update_cache_retry_max_delay: 5
+
+# Execute playbook
+ansible-playbook package_install.yaml
+# Excute playbook and ask for password, will fail if machines have different.
+ansible-playbook package_install.yaml -K 
+# it possible to use ansible bot to avoid passwords.
+# or user authorized_keys (module)
+ansible-galaxy collection install ansible.posix
+
+
+

@@ -1,5 +1,36 @@
+# Sections
+1 User commands, executable programs or shell commands
+2 System calls (functions provided by the kernel)
+3 Library functions ((functions within program libraries))
+4 Special files (device files which usually found in /dev)
+5 File formats and conventions (config files and structures)
+6 Games
+7 Miscellaneous (including macro packages and conventions)
+8 Linux system administration commands
+9 Linux kernel API
+
+# update man db cache, ckeck cron entry
+cat /etc/cron.daily/man-db
+
 # Convert a man page to pdf
 man -t bash | ps2pdf - bash.pdf
 
-# View the ascii chart
+# View the ascii chart on section 7
 man 7 ascii
+
+# Syntax
+man {page_name_here}
+man [section] {page_name_here}
+man '{page_name_here}(section)'
+man '{page_name_here}.(section)'
+
+# Search
+man -k keyword
+man -k delete
+man -k printf
+apropos printf # equivalent
+
+# brute-force search,
+man -K keyword
+whereis printf # also useful
+

@@ -1,0 +1,9 @@
+# install
+pip install gunicorn
+
+# start app with 4 workers
+gunicorn -w 4 app:app
+
+# use on port 5000
+gunicorn -b :5000 app:app
+

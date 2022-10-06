@@ -1,0 +1,29 @@
+# cgroup
+
+* How can you limit process memory usage?
+
+    - Use Linux control groups - cgroup. This is especially useful if you want to limit a process's (or group of processes') allocation of physical memory distinctly from virtual memory. For example:
+      ```sh
+      cgcreate -g memory:/myGroup
+      echo $(( 500 * 1024 * 1024 )) > /sys/fs/cgroup/memory/myGroup/memory.limit_in_bytes
+      echo $(( 5000 * 1024 * 1024 )) > /sys/fs/cgroup/memory/myGroup/memory.memsw.limit_in_bytes
+      ```
+      will create a control group named myGroup, cap the set of processes run under myGroup up to 500 MB of physical memory and up to 5000 MB of swap. To run a process under the control group:
+      ```sh
+      cgexec -g memory:myGroup pdftoppm
+      ```
+      Note that on a modern Ubuntu distribution this example requires installing the cgroup-bin package and editing /etc/default/grub to change GRUB_CMDLINE_LINUX_DEFAULT to:
+
+      ```sh
+      GRUB_CMDLINE_LINUX_DEFAULT="cgroup_enable=memory swapaccount=1"
+      ```
+
+      and then running sudo update-grub and rebooting to boot with the new kernel boot parameters.
+
+    - If your process doesn't spawn more children that consume the most memory, you may use setrlimit function. More common user interface for that is using ulimit command of the shell:
+
+    ```sh
+    $ ulimit -Sv 500000     # Set ~500 mb limit
+    $ pdftoppm ...
+    ```
+

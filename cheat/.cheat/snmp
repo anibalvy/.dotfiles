@@ -1,0 +1,17 @@
+# SNMP
+
+* What is SNMP and what is it used for?
+    - Acronym of Simple Network Management Protocol, it is user for monitor and control devics over the network.
+    - Simple Network Management Protocol (SNMP) is an Internet-standard protocol for collecting and organizing information about managed devices on IP networks and for modifying that information to change device behavior.
+    - Using SNMP, you can monitor network performance, audit network usage, detect network faults or inappropriate access, and in some cases configure remote devices. SNMP is designed to be deployed on the largest possible number of network devices, to have minimal impact on the managed nodes, to have minimal transport requirements, and to continue working when most other network applications fail.
+    - SNMP exposes management data in the form of variables on the managed systems organized in a management information base (MIB) which describe the system status and configuration. These variables can then be remotely queried (and, in some circumstances, manipulated) by managing applications.
+    - SNMP Ports 161/162 - secure 10161/10162
+    - SNMP v1: most device - 32 bit counters - Limited security (clear text password)
+    - SNMP v2c: 64 bit counters - Limited security (clear text password)
+    - SNMP v3: + authentication and encryyption - Difficult to set up  and configure - Performance problem (cause encryption)
+
+    https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol
+    https://www.digitalocean.com/community/tutorials/an-introduction-to-snmp-simple-network-management-protocol
+
+# command
+# See: cheat snmpwalk

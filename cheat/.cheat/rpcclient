@@ -1,0 +1,3 @@
+# check connection
+rpcclient -U "" <ip-target> -N
+

@@ -15,3 +15,13 @@ asterisk -rx "sip show users"
 
 # To print out the current active channels:
 asterisk -rx "core show channels"
+
+# in console
+sip show peers
+sip show users
+sip reload
+## when reload trunk
+dialplan reload
+core show channels
+sip show channesls
+

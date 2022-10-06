@@ -1,0 +1,4 @@
+# convert audio format from wav, ratio 8000, 1 channel to .gsm for asterisk
+sox <filename.wav> -r 8000 -c 1 <filename.gsm>
+
+

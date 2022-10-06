@@ -3,3 +3,7 @@ alias
 
 # Map `ll` to `ls -l` (Can be used per session or put inside a shell config file)
 alias ll='ls -l'
+
+# disable excecution for a command using "\"
+\ll    # command not found
+

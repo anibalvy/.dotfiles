@@ -1,0 +1,9 @@
+# basic
+xclip <filename>
+xclip -sel clip <filename>
+
+# from output
+<command> | xclip -sel clip
+
+
+

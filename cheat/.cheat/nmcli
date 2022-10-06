@@ -1,10 +1,14 @@
 # Desc: Command line interface to NetworkManager
 
+# modify parameters
+nmcli con modify <iface> ipv4.address <ip>/<net-segment> ipv4.gateway <gateway> ipv4.dns <dns> connection.autoconnect yes ipv4.method manual
+
 # Connect to a wireless access point - Parameters:
 # 	<wiface> -- the name of your wireless interface
 #	<ssid> -- the SSID of the access point
 #	<pass> -- the WiFi password
 nmcli d wifi connect <ssid> password <pass> iface <wiface>
+nmcli --ask con up <ssid>
 
 # Disconnect from WiFi - Parameters:
 #	<wiface> -- the name of your wireless interface
@@ -41,3 +45,4 @@ nmcli con import type openvpn file <path_to_ovpn_file>
 
 # Bring up the ethernet connection
 nmcli con up <name>
+

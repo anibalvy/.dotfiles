@@ -15,7 +15,6 @@ else:
     import rlcompleter
     readline.parse_and_bind("tab: complete")
 ##################
-
 # Enable a History
 ##################
 HISTFILE="%s/.pyhistory" % os.environ["HOME"]
@@ -28,6 +27,9 @@ if os.path.exists(HISTFILE):
 readline.set_history_length(300)
 
 def savehist():
+    import readline
+    import os
+    HISTFILE="%s/.pyhistory" % os.environ["HOME"]
     readline.write_history_file(HISTFILE)
 
 readline.parse_and_bind("tab: complete")

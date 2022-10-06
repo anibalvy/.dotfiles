@@ -2,6 +2,16 @@
 # Start docker daemon
 docker -d
 
+# network
+# - bridge
+# - host: bindiar puertos
+# - overlay: redes virtuales entre contenedores y entre nodos
+# - macvlan: asigna direccion mac a un contenedor
+# - none: desactiva networking
+
+# Registry
+
+
 # start a container with an interactive shell
 docker run -ti <image_name> /bin/bash
 docker run -ti --entrypoint=bash <image_name>  # change entrypoint for debug
@@ -25,8 +35,9 @@ docker exec -ti <container_name> bash
 # update to update restart policy.
 docker update --restart=always <container_id>
 
-# pause / unpause container
+# pause / unpause container 
 docker pause <container_id>
+docker unpause <container_id>
  
 # inspect a running container
 docker inspect <container_name> (or <container_id>)
@@ -89,10 +100,8 @@ docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu tar cvf /backup/
 # copy a file from a container that is not running
 docker cp <container-name>:<path/inside/container> <path/on/host/>
 
-# save image
+# save/restore image
 docker save <container_id> > container_snapshot.tar
-
-# restore image
 docker load < container_snapshot.tar
 
 # search images

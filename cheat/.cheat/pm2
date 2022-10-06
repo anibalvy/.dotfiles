@@ -1,0 +1,74 @@
+# PM2: long live process manager
+# [https://pm2.keymetrics.io/docs/usage/quick-start/]
+# Install
+npm install pm2@latest -g
+
+# Fork mode
+pm2 start app.js --name my-api # Name process
+pm2 start app.js --restart-delay 10000 # run it every 10sec
+pm2 start app.js "My app" --watch
+pm2 start app.py --interpreter=/<path>/bin/python3
+pm2 start app.py --name app1 --interpreter python3
+
+# Cluster mode
+pm2 start app.js -i 0        # Will start maximum processes with LB depending on available CPUs
+pm2 start app.js -i max      # Same as above, but deprecated.
+pm2 scale app +3             # Scales `app` up by 3 workers
+pm2 scale app 2              # Scales `app` up or down to 2 workers total
+
+# Listing
+pm2 list               # Display all processes status
+pm2 ls
+pm2 show <id/name>
+pm2 jlist              # Print process list in raw JSON
+pm2 prettylist         # Print process list in beautified JSON
+
+pm2 describe 0         # Display all informations about a specific process
+
+pm2 monit              # Monitor all processes, Terminal Based realtime Dashboard
+pm2 plus               # pm2.io: Monitoring & Diagnostic Web Interface
+
+# Logs
+pm2 l
+pm2 logs
+pm2 logs <all/id/name>
+pm2 logs --lines 200
+pm2 logs [--raw|--json] # Display all processes logs in streaming
+pm2 flush               # Empty all log files
+pm2 reloadLogs          # Reload all logs
+
+# Actions
+pm2 stop
+pm2 stop "My app"
+pm2 stop all           # Stop all processes
+pm2 restart <all/id/name>
+pm2 reload <all/id/name>
+pm2 restart all        # Restart all processes
+
+pm2 reload all         # Will 0s downtime reload (for NETWORKED apps)
+
+pm2 stop 0             # Stop specific process id
+pm2 restart 0          # Restart specific process id
+
+pm2 delete 0           # Will remove process from pm2 list
+pm2 delete <all/id/name>
+pm2 delete all         # Will remove all processes from pm2 list
+
+# Misc
+pm2 reset <process>    # Reset meta data (restarted time...)
+pm2 updatePM2          # Update in memory pm2
+pm2 ping               # Ensure pm2 daemon has been launched
+pm2 sendSignal SIGUSR2 my-app # Send system signal to script
+pm2 start app.js --no-daemon
+pm2 start app.js --no-vizion
+pm2 start app.js --no-autorestart
+pm2 save               # save list of all application
+pm2 resurrect          # brings back previously saved processes
+pm2 startup            # Command for running PM2 on startup
+
+pm2 start app.py --cron '0 * * * *' --no-autorestart # restart your script every 1 hour (at minute 0)
+
+# Ecosystem
+pm2 init             # generate a ecosystem.config.js
+pm2 start ecosystem.config.js # start ecosystem
+pm2 restart ecosystem.config.js --env production # Restart in production

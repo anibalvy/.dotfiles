@@ -1,0 +1,98 @@
+# -- for GUI, Mongo Compass seems OK!!!
+
+RDBMS 	      | MongoDB
+:-------------|:----------
+Database      | Database
+Table         | Collection
+Tuple/Row     | Document
+column        | Field
+Table Join    | Embedded Documents
+Primary Key   | Primary Key (Default key _id provided by MongoDB itself)
+
+DataTypes          | Description
+:------------------|:---------------------
+String             | This is the most commonly used datatype to store the data. String in MongoDB must be UTF-8 valid.
+Integer            | This type is used to store a numerical value. Integer can be 32 bit or 64 bit depending upon your server.
+Boolean            | This type is used to store a boolean (true/ false) value.
+Double             | This type is used to store floating point values.
+Min/ Max keys      | This type is used to compare a value against the lowest and highest BSON elements.
+Arrays             | This type is used to store arrays or list or multiple values into one key.
+Timestamp          | ctimestamp. This can be handy for recording when a document has been modified or added.
+Object             | This datatype is used for embedded documents.
+Null               | This type is used to store a Null value.
+Symbol             | This datatype is used identically to a string; however, it\'s generally reserved for languages that use a specific symbol type.
+Date               | This datatype is used to store the current date or time in UNIX time format. You can specify your own date time by creating object of Date and passing day, month, year into it.
+Object ID          | This datatype is used to store the document’s ID.
+Binary data        | This datatype is used to store binary data.
+Code               | This datatype is used to store JavaScript code into the document.
+Regular expression | This datatype is used to store regular expression.
+
+# Start client
+mongo --port 4000
+
+# List  (must have at least 1 document)
+show dbs
+show collections
+
+# Create or Enter DB
+use <db_name>
+
+# Delete, after exec "use <db_name>"
+#db.dropDatabase()
+#db.COLLECTION_NAME.drop()
+
+# Create Collection
+db.createCollection(<name>, { options } )
+db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } ){
+    "ok" : 0,
+    "errmsg" : "BSON field 'create.autoIndexID' is an unknown field.",
+    "code" : 40415,
+    "codeName" : "Location40415"
+    }
+db.createCollection ("mycollection", { capped: true,
+                    size: 6142800,
+                    max: 10000 } )
+
+# Add documents
+# .insertOne()
+# .insertMany()
+# .insert()
+db.mycollection.insertOne(
+    {   Name: "name",
+        Age: 28,
+        Job: "student" })
+
+# Find document / Query
+# .find()
+# .find({$text: { $search: "\"Post"\"}})  # search with wildcard
+# .find().sorit({ key: -1})  # 1: ascending, -1: descending
+# .find().count()
+# .find().limit(2)
+# .find().forEach(function(doc) {print('field 1: ' + field.one)})
+# .findOne()
+db.mycollection.find( { Name:"name", Age: 28 } ).pretty()
+
+Operation              | Syntax                                            | Example                                                            | RDBMS Equivalent
+:---------             |:-------                                           |:--------                                                           |:------
+Equality               |```{<key>:{$eg;<value>}}```                        | db.mycol.find({"by":"my value"}).pretty()                          | where by = 'my value'
+Less Than              |```{<key>:{$lt:<value>}}```                        | db.mycol.find({"likes":{$lt:50}}).pretty()                         | where likes < 50
+Less Than Equals       |```{<key>:{$lte:<value>}}```                       | db.mycol.find({"likes":{$lte:50}}).pretty()                        | where likes <= 50
+Greater Than           |```{<key>:{$gt:<value>}}```                        | db.mycol.find({"likes":{$gt:50}}).pretty()                         | where likes > 50
+Greater Than Equals    |```{<key>:{$gte:<value>}}```                       | db.mycol.find({"likes":{$gte:50}}).pretty()                        | where likes >= 50
+Not Equals             |```{<key>:{$ne:<value>}}```                        | db.mycol.find({"likes":{$ne:50}}).pretty()                         | where likes != 50
+Values in an array     |```{<key>:{$in:[<value1>, <value2>,……<valueN>]}}```| db.mycol.find({"name":{$in:["name1", "name2", "name3"]}}).pretty() | Where name matches any of the value in :["name1", "name2", "name3"]
+Values not in an array |```{<key>:{$nin:<value>}}```                       | db.mycol.find({"name":{$nin:["name2", "namex"]}}).pretty()         | Where name values is not in the array :["name2", "namex"] or, doesn’t exist at all
+
+# Update document
+db.mycollection.update(
+        { Age: 28 },
+        { $set: { Age: 30 } }
+    )
+
+# Remove document
+db.mycollection.remove ()   # all
+db.mycollection.remove ( { Edad: 28 } ) # specific
+db.mycollection.remove ( { Edad: 28 }, 1 ) # justOne
+
+
+

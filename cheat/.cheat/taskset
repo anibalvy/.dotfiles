@@ -1,0 +1,15 @@
+# Processor affinity - CPU affinity
+
+    Processor affinity, or CPU pinning enables the binding and unbinding of a process or a thread to a central processing unit (CPU) or a range of CPUs, so that the process or thread will execute only on the designated CPU or CPUs rather than any CPU. This can be viewed as a modification of the native central queue scheduling algorithm in a symmetric multiprocessing operating system. Each item in the queue has a tag indicating its kin processor. At the time of resource allocation, each task is allocated to its kin processor in preference to others.
+    
+    On Linux, the CPU affinity of a process can be altered with the taskset(1) program[2] and the sched_setaffinity(2) system call. The affinity of a thread can be altered with one of the library functions: pthread_setaffinity_np(3) or pthread_attr_setaffinity_np(3).
+
+    get proc affinity
+    ```sh
+    taskset -p <pid>
+    taskset -p [mask] <pid>
+                f: all, 1: CPU 1 (0x00000001), 3: CPU 1 y 3 (0x00000003)
+    taskset -p -d [cpu_list] <pid>
+                  0,5,8-11
+    ```
+

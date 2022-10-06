@@ -1,0 +1,3 @@
+# indicate format
+/usr/bin/time -f "Total Time:  %E " <command>
+/usr/bin/time -f "Total Time:  %e " <command>

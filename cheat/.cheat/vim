@@ -1,53 +1,133 @@
 # VIM
 
-- File management
-```sh
+## File management
 :e              reload file
 :q              quit
 :q!             quit without saving changes
 :w              write file
 :w {file}       write new file
 :x              write file and exit
-```
 
-- Movement
+- Navigation
+  
+h/j/k/l - Left/Down/Up/Right
+^ / $   - move to the beginning/end of line
+I / A   - move to the beginning/end of line and insert
+o / O   - insert new line above/below current line and insert
 
-```sh
-    k
-  h   l         basic motion
-    j
+( / )   - jump to the previous/next sentence
+{ / }   - jump to the previous/next paragraph
+[[ / ]] - jump previous/next section
+[] / ][ - jump to the end of the previous/next section
 
-w               next start of word
-W               next start of whitespace-delimited word
-e               next end of word
-E               next end of whitespace-delimited word
-b               previous start of word
-B               previous start of whitespace-delimited word
-0               start of line
-$               end of line
-gg              go to first line in file
-G               go to end of file
-gk		move down one displayed line
-gj		move up one displayed line
-```
+^E - scroll the window down
+^Y - scroll the window up
+^F - scroll down one page
+^B - scroll up one page
+H - move cursor to the top of the window
+M - move cursor to the middle of the window
+L - move cursor to the bottom of the window
+gg - go to top of file
+G - go to bottom of file
 
-- Insertion
-   To exit from insert mode use Esc or Ctrl-C
-   Enter insertion mode and:
+w - words
+e - next end of word
+E - next end of whitespace-delimited word
+b - word backward
+s - sentences
+p - paragraphs
+t - tags[^1]
 
-```sh
-a               append after the cursor
-A               append at the end of the line
-i               insert before the cursor
-I               insert at the beginning of the line
-o               create a new line under the cursor
-O               create a new line above the cursor
-R               enter insert mode but replace instead of inserting chars
-:r {file}       insert from file
-```
+10w - Move 10 words
+10b - Move back 10 words
 
-- Editing
-```sh
+a - all
+i - inside
+t - 'til
+f - find forward
+F - find backward
+n - move to next find match
+N - move to previous find match
+
+Edits:
+x - delete character at cursor
+d - delete (also cut)
+c - change (delete, then place in insert mode)
+y - yank (copy)
+v - visually select
+dd / yy - delete/yank the current line
+D / C - delete/change until end of line
+r - replace the character under the cursor
+R - Replace mode
+["x]yy - copy the current lines into the register x
+
+d5w - delete 5 words forwards
+c5w - delete 5 words forwards and enter insert mode
+d5b - delete 5 words backwards
+c5b - delete 5 words backwards and enter insert mode
+
+di( - delete inside parentesis
+ci( - delete inside parentesis and enter insert mode
+da( - delete inside parentesis and the parentesis
+ca( - delete inside parentesis, the parentesis and enter insert mode.
+
+dip - delete paragraph
+cip - delete paragraph and enter insert mode
+
+dis - delete sentence
+cis - delete sentence and enter insert mode
+
+dit - delete inside tag 
+dat - delete inside tag and tag 
+cit - delete inside tag and enter insert mode
+
+df<?> - delete words until find character <?>
+cf<?> - delete words until find character <?> and enter insert mode
+
+dt<?> - delete words until character <?>
+ct<?> - delete words until character <?> and enter insert mode
+
+dw - delete characters if a word from cursor forward
+diw - delete in word (the word I'm in)
+db - delete charaters if a word from cursor backwards
+
+d0 - delete to the beginning of the line
+d$ - delete to the end of the line
+
+dgg - delete to the beginning of the file
+dG - delete to the end of the file
+
+Special Insert:
+:r [filename] - Insert the file [filename] below the cursor.
+:r ![command] - Execute [command] and insert the output below the cursor.
+
+. - Repetition
+
+Record a Macro
+   q{register} - Record a macro
+   (do the things)
+   q
+Play a Macro
+   @{register}
+Play a Macro 23 times
+   23@{register}
+ 
+Show Registers
+   :registers
+
+"{register}p  - Paste a Register after current line
+"{register}P  - Paste a Register before current line
+
+ Marks - Bookmarks
+m{mark} - create a mark
+'{mark} - go to a mark
+:marks  - list marks
+
+set numbers
+    :set number
+
+
+## Editing
 u               undo
 yy              yank (copy) a line
 y{motion}       yank text that {motion} moves over
@@ -56,28 +136,31 @@ P               paste before cursor
 <Del> or x      delete a character
 dd              delete a line
 d{motion}       delete text that {motion} moves over
-```
 
-- Search and replace with the `:substitute` (aka `:s`) command
+## Search
+- Search in file
+/<pattern>
+- Search in file case insensitive
+/<pattern>\c
 
-```sh
+## Search and replace with the `:substitute` (aka `:s`) command
+
 :s/foo/bar/	replace the first match of 'foo' with 'bar' on the current line only
 :s/foo/bar/g	replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
 :%s/foo/bar/g	replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
-:%s/foo/bar/gc	ask to manually confirm (`c` flag) each replacement 
-```
+:%s/foo/bar/gc	ask to manually confirm (`c` flag) each replacement
+
+## delete lines
+:g/foo/d
 
 - Preceding a motion or edition with a number repeats it 'n' times
  Examples:
-```sh
 50k         moves 50 lines up
 2dw         deletes 2 words
 5yy         copies 5 lines
 42G         go to line 42
-```
 
-- Options
-```sh
+## Options
 :set option=<value>
 :set option? # display the value
 :set option! # invert the option, like paste to nopaste, or autoindent to noautoindent
@@ -87,5 +170,62 @@ d{motion}       delete text that {motion} moves over
 :set all # show all
 :set all& # set all at default
 :help option # open manual
-```
+
+## Panes
+:sp # Hotizontal Split
+:vnew # - Vertical Split
+:vs   
+<Ctrl+W> + r # Reverse Windows
+<Ctrl+W> + <#>< # pane size <#>, is a number, optional
+<Ctrl+W> + <#>> # pane size 
+<Ctrl+W> + <#>+ # pane size 
+<Ctrl+W> + <#>- # pane size 
+
+
+## TABS
+:tabnew
+:tabner <file>
+
+## SORT
+:%sort
+:%sort!    # Sort in reverseEdit
+:%sort u   # Sort, removing duplicate linesEdit
+:%!sort -M # Sort using the external Unix sort utility, respecting month-name orderEdit ("respecting month-name order" means January < February < ... < December)
+:sort n    # Numeric sortEdit (this way, 100 doesn't precede 20 in the sort)
+
+#Sort subsections independently, in this example sort numbers between "start" and "end" markersEdit
+:296,349sort # Sort only specific lines using ranges Edit, sort lines 296 to 349, inclusive
+
+## VIMDIFF
+vimdiff <file1> <file2>
+:windo diffthis # - having a split view
+:windo diffoff  # - Closing the diff
+
+## Execute command
+#after invoke with :! the % is an alias of the current file
+:! ./%
+:! wc %
+
+## Sessions
+:mksession ~/.vim/sessions/<name>.session
+:source
+:so
+
+# format json
+:%!python -m jsontool
+:% | jq .
+
+## Generate Sequence
+vector[0] = 1;       vector[0] = A;
+vector[0] = 1;       vector[1] = B;
+vector[0] = 1;  -->  vector[2] = C;
+vector[0] = 1;       vector[3] = D;
+vector[0] = 1;       vector[4] = E;
+
+# 1.-Write the original line: A = mapping[0] Esc
+# 2.-Yank line and put 25 copies of it below: yy25p
+# 3.-Visually select the column containing the 0 char (block selection, using Ctrl-v), excluding the 0 from the 1st line (so you end up with a column containing the last 25 zeroes), then increment them with g Ctrl-a.
+# 4.-Apply the same method for the column containing A.
+For letters it is needed here:
+set nrformats+=hex,alpha
 

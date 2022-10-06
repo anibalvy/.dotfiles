@@ -65,6 +65,9 @@ Status: UNINSTALLED
 
 ## To see what options are configurable on a chart
 helm show values stable/mariadb
+helm show values stable/mariadb > values.yaml
+## You can then override any of these settings in a YAML formatted file, and then pass that file during installation.
+helm install -f values.yaml stable/mariadb 
 
 ## You can then override any of these settings in a YAML formatted file, and then pass that file during installation.
 $ echo '{mariadbUser: user0, mariadbDatabase: user0db}' > config.yaml
@@ -86,5 +89,7 @@ helm package <name_of_the_chart>
 
 ## install it
 helm install <name_of_the_chart> ./<name_of_the_chart>-0.1.0.tgz
+## example
+helm install [RELEASE_NAME] prometheus-community/kube-prometheus-stack
 
 

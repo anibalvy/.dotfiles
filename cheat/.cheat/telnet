@@ -1,0 +1,2 @@
+# linux install minicom
+minicom -D /dev/ttyUSB0

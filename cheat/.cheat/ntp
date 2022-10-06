@@ -24,6 +24,7 @@ sudo hwclock --set --date="8/10/15 13:10:05"
 
 # Query surrounding stratum time servers
 ntpq -pn
+ntpq -pn salt
 
 # Config file:
 /etc/ntp.conf
@@ -31,3 +32,8 @@ ntpq -pn
 # Driftfile:
 location of "drift" of your system clock compared to ntp servers
 /var/lib/ntp/ntp.drift
+
+# 
+ntpdate -q 0.rhel.pool.ntp.org
+
+# NOTE: check on redhat systems if chrony is running

@@ -1,0 +1,23 @@
+
+gvm version
+
+gvm install go1.18.5
+gvm list
+
+gvm alis
+gvm alias list
+gvm use go1.18.5
+gvm use go1.18.5 --default
+gvm
+gvm help
+gvm uninstall go1.13.1
+
+ # delete version with packages
+gvm uninstall go1.<old-version>
+ERROR: Couldn't remove pkgsets
+gvm use go1.<old-version>
+go cleam -modcache
+gvm use go1.<new-version>
+
+
+

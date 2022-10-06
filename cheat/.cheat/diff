@@ -16,6 +16,10 @@ diff -ui version1 version2
 # To report whether the files differ:
 diff -q version1 version2
 
+# To report whether the files in a directory differ:
+diff -q directory1 directory2
+diff -qr directory1 directory2 # recursive
+
 # To report whether the files are identical:
 diff -s version1 version2
 

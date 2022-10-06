@@ -10,4 +10,11 @@ stty susp ''
 # To reset all settings to the default:
 stty sane
 
+# To stop echo 
+stty -echo
 
+# to go back to a background job 
+stty -echo raw; fg
+
+# setup col and row
+stty rows 16 cols 118

@@ -1,3 +1,6 @@
+# setup password
+sudo -u postgres psql -h <port>
+
 # psql is the PostgreSQL terminal interface. The following commands were tested on version 9.5.
 # Connection options:
 # -U username (if not specified current OS user is used).
@@ -24,3 +27,13 @@ psql -f fileName
 
 # Restore databases from file:
 psql -f fileName.backup postgres
+
+# cli 
+\l  -- list DBs
+\c <database> -- connect DB
+\dt *   -- list tables
+\dt+ *  -- list tables
+\dm  *  -- list materialize views
+\dv  *  -- list views
+\dx  *  -- list extensions
+desc <table> -- describe table

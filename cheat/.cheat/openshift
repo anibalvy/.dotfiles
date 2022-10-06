@@ -1,0 +1,17 @@
+# Components
+
+- Horizon -Dashboard/UI
+- Nova - Compute service
+- Zune - container service
+- Glance - Deployment images
+- Cinder - Storage
+- Ceilometer - Monitor
+- Keystone - auth
+- Neutron - part of Networking
+- Ironic - Bare metal provissioning service
+- Cyborg - Lifeclycle management of accelerators
+- Trove
+- Sahara
+- Swift - Object Store
+
+

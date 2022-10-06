@@ -1,0 +1,22 @@
+# Fillfactor - [https://www.cybertec-postgresql.com/en/what-is-fillfactor-and-how-does-it-affect-postgresql-performance/]
+The fillfactor for a table is a percentage between 10 and 100. 100 (complete packing) is the default. 
+When a smaller fillfactor is specified, INSERT operations pack table pages only to the indicated percentage; 
+the remaining space on each page is reserved for updating rows on that page. This gives UPDATE a chance 
+to place the updated copy of a row on the same page as the original, which is more efficient than placing it on a different page. 
+For a table, whose entries are never updated, complete packing is the best choice, but in heavily updated tables smaller fillfactors are appropriate. 
+This parameter cannot be set for TOAST tables.
+
+-- leave 10% of block space unused when inserting data
+ALTER TABLE pgbench_accounts SET (fillfactor = 90);
+
+# JSON [https://dzone.com/articles/using-jsonb-in-postgresql-how-to-effectively-store]
+# TIMESTAMP [https://www.cybertec-postgresql.com/en/time-zone-management-in-postgresql/]
+
+# size of table 
+SELECT pg_size_pretty( pg_total_relation_size('tablename') );
+# size of DB
+SELECT pg_size_pretty( pg_database_size(‘databname‘) );
+
+# pg dump
+pg_dump --file "~/Backups/DB_-202208051053.sql" --host "<url>" --port "5432" --username "master" --no-password --verbose --role "master" --format=p --create --section=pre-data --section=data --section=post-data --inserts --encoding "UTF8" "vote"
+

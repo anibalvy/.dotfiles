@@ -6,7 +6,7 @@
 #fi
 
 # If you come from bash you might have to change your $PATH.
-export PATH=export PATH=$HOME/.minishift/cache/oc/v3.11.0/linux:/opt/minishift/minishift-1.34.3-linux-amd64/:/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:/opt/amdgpu-pro/bin/:$PATH
+export PATH=$HOME/.rvm/bin:$HOME/.minishift/cache/oc/v3.11.0/linux:/opt/minishift/minishift-1.34.3-linux-amd64/:/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:/opt/amdgpu-pro/bin/:$HOME/.local/share/nvim/lsp_servers/terraform:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -18,7 +18,7 @@ export ZSH=~/.oh-my-zsh
 #ZSH_THEME="honukai"
 ##kanibal- Install powerlevel10k
 #https://github.com/romkatv/powerlevel10k
-if [ $USER = 'root' ]; then 
+if [ $USER = 'root' ]; then
 	ZSH_THEME="honukai"
         echo "Theme: Honukai"
 else
@@ -65,6 +65,9 @@ COMPLETION_WAITING_DOTS="true"
 # HIST_STAMPS="mm/dd/yyyy"
 HIST_STAMPS="yyyy-mm-dd"
 
+# for ignore in the history when a command start with a " " (space) - 
+# this commands will not show in other sessions
+HIST_IGNORE_SPACE="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
@@ -72,9 +75,13 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(adb aws git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions)
-
+plugins=(adb aws git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
+fpath+=~/.zfunc
+autoload -U compinit && compinit
 source $ZSH/oh-my-zsh.sh
+
+# change color of autosuggest
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
 
 #oh-my-zsh to automatically upgrade itself without prompting you, set the following in your ~/.zshrc:
 #DISABLE_UPDATE_PROMPT=true
@@ -130,9 +137,15 @@ alias isntall="install"
 alias info='pinfo'
 alias rm='rm -i'
 alias cat='bat'
+alias cls='clear'
+# Stop asking to correct the following:
+alias git='nocorrect git'
+
+alias tmux-resurrect-session='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
+
 if command -v pinfo > /dev/null 2>&1  ; then
 	alias info='pinfo'
-else 
+else
 	echo 'pinfo not installed, please install.'
 fi
 
@@ -158,7 +171,8 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm // updated 20190823
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 ##nvm use latest
-nvm use --lts=erbium
+#nvm use --lts
+nvm use stable 
 
 ## GOLANG VERSION MANAGER Selection
 # bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
@@ -166,7 +180,7 @@ nvm use --lts=erbium
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
 ## GOLANG setup version
-gvm use go1.16.6
+#gvm use go1.18.1
 
 ## Colour to less command
 export LESS='-R'
@@ -178,17 +192,23 @@ export LESSOPEN='|~/.lessfilter %s'
 ## Pythonrc
 export PYTHONSTARTUP="$HOME/.pythonrc"
 
-# Python PyENV
+# Python PyENV ( pyenv init changeg to .zprofile
+# (next changed to .zprofile. (to be delete)
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - )"
-echo "PyENV Global version:"
+PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+#eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init --path )"
+#echo "PyENV Global version:"
 echo "$(python -V)"
+
 # I commented pyenv virtualenv because is 100% better to manage them with ****pipenv****.
 #eval "$(pyenv virtualenv-init -)"
 # *** use pipenv for virtualenv
 # Commands
-# pyenv install --list 
+# pyenv install --list
 # pyenv install 2.7.8
 # pyenv global 3.6.8
 # pyenv local 2.7.15
@@ -206,7 +226,7 @@ echo "$(python -V)"
 # pyenv activate <environment_name>
 # pyenv deactivate
 #
-#pip completion --zsh 
+#pip completion --zsh
 # pip install flask
 # pip freeze > requirements.txt
 
@@ -217,41 +237,73 @@ echo "$(python -V)"
 #~/.dotfiles/touchscreen/.touchscreen.sh
 
 #CHEAT
-export CHEAT_PATH="~/.cheat"
+#export CHEAT_PATH="~/.cheat"
 export CHEAT_CONFIG_PATH="~/.config/cheat/conf.yml"
 export CHEAT_COLORS=true
 export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 export CHEAT_USE_FZF=true
-source ~/.config/cheat/cheat.zsh
+export PERSONAL_PATH=~/.cheat/
+source ~/.config/cheat/cheat.zsh # autocomplete
 
 #CLING
-export PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
+PATH=$HOME/Development/CLang/cling/cling_2019-11-22_ubuntu18/bin:$PATH
 
 # Tmux must be disable if we are running inside a pipenv VirtualENV (pipenv shell)
 alias tmux='tmux -2'
 if [  -z "$PIPENV_ACTIVE" ] ; then
     if [ $USER != 'root' ]; then
         #env | grep TMUX
-        if [ -n "$TMUX" ]; then 
+        if [ -n "$TMUX" ]; then
             #echo "\nTmux pane $TMUX_PANE....\n"
             #tmux list-sessions
-            #tmux choose-session
+            if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -gt 1 ]; then 
+            tmux choose-session
+            fi
             #tmux a
+
+            env | grep TMUX_PANE
+            if [ $TMUX_PANE = '%0' ] ; then
+                if read -q "load_tmux_resurrect? Do you want to load tmux-resurrect saved session [Y/n]" ; then
+                    # restore session
+                    tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh
+                fi
+            fi
         else
-            echo 'sessions'
-            tmux ls
-            if read -q "load_tmux?Do you want to load TMUX [Y/n]"; then
+            if read -q "load_tmux? Do you want to load TMUX [Y/n]"; then
                 echo '\n'
-                if read -q "new_session?Tmux new session [Y/n]"; then
-                    tmux new-session 
-                else
-                    tmux a
+                if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -gt 0 ]; then 
+                    echo '\nTMUX current sessions: '
+                    tmux ls
+                    echo '\n'
+                    if read -q "new_session? Tmux new session [Y/n]: "; then
+                        tmux new-session
+                    else
+                        if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -eq 1 ]; then 
+                            tmux a
+                        else
+                            echo '\n'
+                            if read -r "session_number? Insert session number: "; then
+                                tmux a -t $session_number
+                                while [ $? -eq 1 ] 
+                                do
+                                    echo '\nTMUX current sessions: '
+                                    tmux ls
+                                    
+                                    if read -r "session_number? Insert session number: "; then
+                                        tmux a -t $session_number
+                                    fi
+                                done
+                            fi
+                        fi
+                    fi
+                else 
+                    tmux new-session
                 fi 
             fi
         fi
     else
         echo "WARNIGN: logged as user root!!!"
-        echo "     - No autmatic Tmux session to avoid nested sessions"
+        echo "     - No automatic Tmux session to avoid nested sessions"
         echo "     - be carefull!!"
     fi
 else
@@ -279,13 +331,76 @@ pdf-combine() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_
 alias combine-pdf='pdf-combine'
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh
-if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
 
-alias kb='kubecolor'
+# kubectl
+#if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
+# get zsh complete kubectl
+source <(kubectl completion zsh)
+alias kubectl=kubecolor
+# make completion work with kubecolor
+compdef kubecolor=kubectl
+alias k='kubectl'
 
 source ~/.minikube-completion-zsh
 source ~/.minishift-completion-zsh
 source ~/.gh-github-completion-zsh
 source ~/.yq-shell-completion-zsh
 
+eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
+#PATH="/home/kanibal/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PATH="/home/kanibal/perl5/bin:$PATH"; 
+PERL5LIB="/home/kanibal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/kanibal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/kanibal/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/kanibal/perl5"; export PERL_MM_OPT;
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+PATH="$PATH:$HOME/.rvm/bin"
+
+
+###-begin-pm2-completion-###
+### credits to npm for the completion file model
+#
+# Installation: pm2 completion >> ~/.bashrc  (or ~/.zshrc)
+#
+
+COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+COMP_WORDBREAKS=${COMP_WORDBREAKS/@/}
+export COMP_WORDBREAKS
+
+if type complete &>/dev/null; then
+  _pm2_completion () {
+    local si="$IFS"
+    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
+                           COMP_LINE="$COMP_LINE" \
+                           COMP_POINT="$COMP_POINT" \
+                           pm2 completion -- "${COMP_WORDS[@]}" \
+                           2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  complete -o default -F _pm2_completion pm2
+elif type compctl &>/dev/null; then
+  _pm2_completion () {
+    local cword line point words si
+    read -Ac words
+    read -cn cword
+    let cword-=1
+    read -l line
+    read -ln point
+    si="$IFS"
+    IFS=$'\n' reply=($(COMP_CWORD="$cword" \
+                       COMP_LINE="$line" \
+                       COMP_POINT="$point" \
+                       pm2 completion -- "${words[@]}" \
+                       2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  compctl -K _pm2_completion + -f + pm2
+fi
+###-end-pm2-completion-###
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
+alias  tf='terraform'
+export PATH;

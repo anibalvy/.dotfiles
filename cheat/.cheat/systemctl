@@ -29,8 +29,17 @@ systemctl list-dependencies foo.service
 # List currently loaded targets
 systemctl list-units --type=target
 
+# get default target (aka runlevel)
+systemctl get-default
+
+# set default target (aka runlevel)
+systemctl set-default foo.target
+
 # Change current target
 systemctl isolate foo.target
+
+# See info of target, like if can be 'isolate'
+systemctl cat foo.target
 
 # Change default target
 systemctl enable foo.target

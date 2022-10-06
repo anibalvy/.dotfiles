@@ -20,3 +20,21 @@ SHELL=/bin/bash
 
 # every Saturday at 8:05 AM
 5 8 * * 6 /home/user/command.sh
+
+# Replace crontab from file
+crontab file [-u user] 
+
+# Replace crontab from stdin
+crontab - [-u user] 
+
+# List crontab for user
+crontab -l [user] 
+
+# Edit crontab for user
+crontab -e [user] 
+
+# Delete crontab for user
+crontab -d [user] 
+
+# Specify crontab directory
+crontab -c dir 
