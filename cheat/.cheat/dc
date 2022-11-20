@@ -1,0 +1,36 @@
+# is a stack calculator
+# you need to enter the numbers to the stack, later the operations, finally print them (p)
+# It can evaluate +, -, /, *, %, ^.
+# ex: sum 5+4
+$ dc
+5
+4
++
+p
+9
+
+# operations:
+Command	Operation
+p	Prints the value on the top of the stack and ends the statement with a newline.
+n	Prints the value on the top of the stack and ends the line with a null statement.
+f	Prints the entire stack, without any alteration.
+P	Pops the value from the top of the stack.
+c	Clear the stack.
+d	Duplicates the top value and push it into the main stack.
+r	Reverses the order of top two elements in the stack.
+Z	Pops the value from the stack, calculate the number of digits in it and pushes that number.
+X	Pops the value from the stack, calculate the number of fraction digits in it and pushes that number.
+z	Pushes the stack length into the stack.
+i	Pops the value from the stack and uses it as input radix.
+o	Pops the value from the stack and uses it as output radix.
+k	Pops the values from the stack and uses it to set precision.
+I	Pushes the value of input radix into the stack.
+O	Pushes the value of output radix into the stack
+K	Pushes the precision value into the stack.
+
+# using inline expressions
+$ dc --expression="5 5 * p"
+25
+
+# from file (in stack mode)
+$ dc --file="operations.txt"

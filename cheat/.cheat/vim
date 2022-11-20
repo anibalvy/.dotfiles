@@ -9,7 +9,7 @@
 :x              write file and exit
 
 - Navigation
-  
+
 h/j/k/l - Left/Down/Up/Right
 ^ / $   - move to the beginning/end of line
 I / A   - move to the beginning/end of line and insert
@@ -77,8 +77,8 @@ cip - delete paragraph and enter insert mode
 dis - delete sentence
 cis - delete sentence and enter insert mode
 
-dit - delete inside tag 
-dat - delete inside tag and tag 
+dit - delete inside tag
+dat - delete inside tag and tag
 cit - delete inside tag and enter insert mode
 
 df<?> - delete words until find character <?>
@@ -111,7 +111,7 @@ Play a Macro
    @{register}
 Play a Macro 23 times
    23@{register}
- 
+
 Show Registers
    :registers
 
@@ -145,13 +145,16 @@ d{motion}       delete text that {motion} moves over
 
 ## Search and replace with the `:substitute` (aka `:s`) command
 
-:s/foo/bar/	replace the first match of 'foo' with 'bar' on the current line only
-:s/foo/bar/g	replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
-:%s/foo/bar/g	replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
-:%s/foo/bar/gc	ask to manually confirm (`c` flag) each replacement
+:s/foo/bar/	#replace the first match of 'foo' with 'bar' on the current line only
+:s/foo/bar/g	#replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
+:%s/foo/bar/g	#replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
+:%s/foo/bar/gc	#ask to manually confirm (`c` flag) each replacement
 
 ## delete lines
 :g/foo/d
+
+## delete spaces at the end
+:%s/\s\+$//g
 
 - Preceding a motion or edition with a number repeats it 'n' times
  Examples:
@@ -174,12 +177,12 @@ d{motion}       delete text that {motion} moves over
 ## Panes
 :sp # Hotizontal Split
 :vnew # - Vertical Split
-:vs   
+:vs
 <Ctrl+W> + r # Reverse Windows
 <Ctrl+W> + <#>< # pane size <#>, is a number, optional
-<Ctrl+W> + <#>> # pane size 
-<Ctrl+W> + <#>+ # pane size 
-<Ctrl+W> + <#>- # pane size 
+<Ctrl+W> + <#>> # pane size
+<Ctrl+W> + <#>+ # pane size
+<Ctrl+W> + <#>- # pane size
 
 
 ## TABS
@@ -228,4 +231,8 @@ vector[0] = 1;       vector[4] = E;
 # 4.-Apply the same method for the column containing A.
 For letters it is needed here:
 set nrformats+=hex,alpha
+
+# color cursor
+:set cursorline - to highlight the current line
+:set cursorcolumn - to highlight the current column
 

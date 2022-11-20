@@ -1,8 +1,18 @@
 # To implement a for loop:
-for file in *;
-do 
+for file in *; do 
     echo $file found;
 done
+
+#  sequence 
+for i in {0..20..5}  # 0, 5, 10, 15, 20
+do
+  echo "Number: $i"
+done
+
+{a..z}    # a b c d e f g h i j k l m n o p q r s t u v w x y z
+{00..3}   # 00, 01, 02, 03
+A{00..3}B # A00B A01B A02B A03B
+
 
 # To implement a case command:
 case "$1"
@@ -12,6 +22,54 @@ in
     2) echo "two found";;
     3*) echo "something beginning with 3 found";;
 esac
+
+
+# SELECT 
+PS3="Enter a number: "
+
+select character in Sheldon Leonard Penny Howard Raj
+do
+    echo "Selected character: $character"
+    echo "Selected number: $REPLY"
+done
+        output:
+            1) Sheldon
+            2) Leonard
+            3) Penny
+            4) Howard
+            5) Raj
+            Enter a number: 3
+            Selected character: Penny
+            Selected number: 3
+            Enter a number:
+
+
+# while
+i=0
+while [ $i -le 2 ]; do
+  echo Number: $i
+  ((i++))
+   if [[ "$i" == '2' ]]; then
+    continue # will jump to the start of the loop starting the next value
+   fi
+   if [[ "$i" == '3' ]]; then
+    break # will jump to out of the loop starting the next value
+   fi
+done
+# infinite while
+while :
+do
+  echo "Press <CTRL+C> to exit."
+  sleep 1
+done
+
+while :; do echo 'Press <CTRL+C> to exit.'; sleep 1; done # one line while
+
+# By default, the read command trims the leading/trailing whitespace characters (spaces and tabs). Use the IFS= option before read to prevent this behavior
+file=/etc/passwd
+while IFS= read -r line; do
+  echo $line
+done < "$file"
 
 # Turn on debugging:
 set -x
@@ -25,3 +83,32 @@ echo ${PIPESTATUS[0]}  # replace 0 with N
 
 # Lock file:
 ( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
+
+# Wait: is a command that waits for the given jobs to complete and returns the exit status of the waited for command.
+wait [options] ID # ID is the process or job ID. If no ID is specified, the command waits until all child background jobs are completed.
+#!/bin/bash
+sleep 3 &
+sleep 30 &
+sleep 5 &
+wait -n
+echo "First job completed."
+wait
+echo "All jobs completed."
+
+# redirect
+    0 - stdin, the standard input stream.
+    1 - stdout, the standard output stream.
+    2 - stderr, the standard error stream.
+command 2> error.txt 1> output.txt
+command 2>&1 > file
+
+# Changing the Delimiter: The default behavior of read is to split the line into words using one or more spaces, tabs, and newline as delimiters. To use another character as a delimiter, assign it to the IFS variable (Internal Field Separator).
+echo "Linux:is:awesome." | (IFS=":" read -r var1 var2 var3; echo -e "$var1 \n$var2 \n$var3")
+echo 'Linux_is-awesome.' | (IFS="-_" read -r var1 var2 var3; echo -e "$var1 \n$var2 \n$var3")
+
+# Exit
+exit N  #If N is not given, the exit status code is that of the last executed command.
+# Exit status
+echo $?
+
+

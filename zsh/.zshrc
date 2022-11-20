@@ -1,10 +1,41 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block, everything else may go below.
-#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
 
+## Pythonrc
+export PYTHONSTARTUP="$HOME/.pythonrc"
+
+# Python PyENV ( pyenv init changeg to .zprofile
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
+
+# I commented pyenv virtualenv because is 100% better to manage them with ****pipenv****.
+#eval "$(pyenv virtualenv-init -)"
+# *** use pipenv for virtualenv
+# Commands
+# pyenv install --list
+# pyenv install 2.7.8
+# pyenv global 3.6.8
+# pyenv local 2.7.15
+# pyenv uninstall 2.7.15
+# pyenv versions
+# pyenv commands
+# pyenv shims --help
+# pyenv which pip
+# Create Virtual Env:
+# pyenv virtualenv <python_version> <environment_name>
+# pyenv virtualenv 3.6.8 myproject
+# Activate Virtual Env:
+# pyenv local myproject
+# manually activate/deactivate your Python versions:
+# pyenv activate <environment_name>
+# pyenv deactivate
+#
+#pip completion --zsh
+# pip install flask
+# pip freeze > requirements.txt
+
+#added by Anaconda3 installer
+#export PATH="/opt/anaconda/anaconda3/bin:$PATH"
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/.rvm/bin:$HOME/.minishift/cache/oc/v3.11.0/linux:/opt/minishift/minishift-1.34.3-linux-amd64/:/snap/bin:$HOME/bin:/usr/local/bin:$HOME/.local/bin:/opt/amdgpu-pro/bin/:$HOME/.local/share/nvim/lsp_servers/terraform:$PATH
 
@@ -71,11 +102,33 @@ HIST_IGNORE_SPACE="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+
+## NODE VERSION MANAGER Selection
+## 20221012 - update to zsh-nvm
+export NVM_DIR="$HOME/.config/nvm"
+export NVM_COMPLETION=true
+#export NVM_LAZY_LOAD=true
+#export NVM_NO_USE=true
+export NVM_AUTO_USE=true # load version .nvmrc file
+
+#export NVM_DIR="~/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm ///old - deprecated
+# install with:
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+###export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+###[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm // updated 20190823
+###[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#####nvm use latest
+####nvm use --lts
+###nvm use stable 
+
+
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(adb aws git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
+plugins=(adb aws git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap zsh-nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
 fpath+=~/.zfunc
 autoload -U compinit && compinit
 source $ZSH/oh-my-zsh.sh
@@ -138,6 +191,7 @@ alias info='pinfo'
 alias rm='rm -i'
 alias cat='bat'
 alias cls='clear'
+alias grepk='grep -R -n -i '
 # Stop asking to correct the following:
 alias git='nocorrect git'
 
@@ -161,24 +215,10 @@ bindkey -v
 ## System Info
 neofetch
 
-## NODE VERSION MANAGER Selection
-
-#export NVM_DIR="~/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm ///old - deprecated
-# install with:
-# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm // updated 20190823
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-##nvm use latest
-#nvm use --lts
-nvm use stable 
 
 ## GOLANG VERSION MANAGER Selection
 # bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
-
 ## GOLANG setup version
 #gvm use go1.18.1
 
@@ -187,51 +227,10 @@ export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
+#[[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh
 
-## Pythonrc
-export PYTHONSTARTUP="$HOME/.pythonrc"
-
-# Python PyENV ( pyenv init changeg to .zprofile
-# (next changed to .zprofile. (to be delete)
-export PYENV_ROOT="$HOME/.pyenv"
-PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
-#eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-#export PYENV_ROOT="$HOME/.pyenv"
-#export PATH="$PYENV_ROOT/bin:$PATH"
-#eval "$(pyenv init --path )"
-#echo "PyENV Global version:"
-echo "$(python -V)"
-
-# I commented pyenv virtualenv because is 100% better to manage them with ****pipenv****.
-#eval "$(pyenv virtualenv-init -)"
-# *** use pipenv for virtualenv
-# Commands
-# pyenv install --list
-# pyenv install 2.7.8
-# pyenv global 3.6.8
-# pyenv local 2.7.15
-# pyenv uninstall 2.7.15
-# pyenv versions
-# pyenv commands
-# pyenv shims --help
-# pyenv which pip
-# Create Virtual Env:
-# pyenv virtualenv <python_version> <environment_name>
-# pyenv virtualenv 3.6.8 myproject
-# Activate Virtual Env:
-# pyenv local myproject
-# manually activate/deactivate your Python versions:
-# pyenv activate <environment_name>
-# pyenv deactivate
-#
-#pip completion --zsh
-# pip install flask
-# pip freeze > requirements.txt
-
-#added by Anaconda3 installer
-#export PATH="/opt/anaconda/anaconda3/bin:$PATH"
 
 # fix touchscreen only to the screen
 #~/.dotfiles/touchscreen/.touchscreen.sh
@@ -261,7 +260,7 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
             fi
             #tmux a
 
-            env | grep TMUX_PANE
+            #env | grep TMUX_PANE
             if [ $TMUX_PANE = '%0' ] ; then
                 if read -q "load_tmux_resurrect? Do you want to load tmux-resurrect saved session [Y/n]" ; then
                     # restore session
@@ -271,7 +270,7 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
         else
             if read -q "load_tmux? Do you want to load TMUX [Y/n]"; then
                 echo '\n'
-                if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -gt 0 ]; then 
+                if [ $(tmux ls 2>&1 | grep -v 'no server running' | grep -v 'error connecting' | wc -l) -gt 0 ]; then 
                     echo '\nTMUX current sessions: '
                     tmux ls
                     echo '\n'
@@ -329,8 +328,6 @@ complete -C aws_completer aws
 
 pdf-combine() { gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=combinedpdf_`date +'%F_%Hh%M'`.pdf -f "$@" ;}
 alias combine-pdf='pdf-combine'
-# To customize prompt, run `p10k configure` or edit ~/.dotfiles/zsh/.p10k.zsh.
-[[ ! -f ~/.dotfiles/zsh/.p10k.zsh ]] || source ~/.dotfiles/zsh/.p10k.zsh
 
 # kubectl
 #if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
@@ -404,3 +401,6 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
 alias  tf='terraform'
 export PATH;
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

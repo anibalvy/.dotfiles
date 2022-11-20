@@ -1,0 +1,45 @@
+# Job control consists of the following commands:
+# 
+# - The fg command moves a background job into the foreground.
+# - The bg command moves a suspended foreground job into the background.
+# - The jobs command shows the current list of jobs.
+# - The kill command can kill jobs or send signals to them.
+# - The disown command removes a job from the list of jobs (without killing it).
+# - A foreground job can be suspended by typing ^Z (Control-Z). A suspended job is temporarily stopped.
+
+## pressing CTRL+z, send program to bg
+^Z
+[2]+  Stopped                 vi otherfile
+$ jobs
+[1]-  Stopped                 vi somefile
+[2]+  Stopped                 vi otherfile
+# Bring fist vi session to the foreground.
+$ fg 1
+
+# to detach a program from terminal and send it to bg
+^Z
+[3]+  Stopped                 kate
+$ bg 3
+[3]+ kate &
+$ # and now the bash prompt returns
+
+
+$ jobs
+[1]+  Stopped                 vi somefile
+[2]+  Stopped                 vi otherfile
+[3]+  Running                 kate &
+
+# since it's unlikely that I will want to move a GUI program back into the foreground again, I can "disown" it and remove it from the list of jobs
+$ disown 3
+$ jobs
+[1]+  Stopped                 vi somefile
+[2]+  Stopped                 vi otherfile
+$
+
+# sending program to bg
+$ sleep 100 &
+[1] 1384
+
+$ jobs
+[1]+  Running                 sleep 100 &
+

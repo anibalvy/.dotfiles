@@ -4,9 +4,9 @@ server.js
 ```js
 var http = require('http');
 var handleRequest = function(request, response) {
-          console.log('Received request for URL: ' + request.url);
-                  response.writeHead(200);
-                            response.end('Hello World!');
+console.log('Received request for URL: ' + request.url);
+response.writeHead(200);
+response.end('Hello World!');
 };
 var www = http.createServer(handleRequest);
 www.listen(8080);
@@ -22,7 +22,7 @@ CMD [ "node", "server.js" ]
 
 # PARAMETERS
 FROM <image>:<TAG>
-RUN # for commands on container initialization
+RUN # for commands on container initialization -The RUN directive is executed only when you are building the image.  
 CMD ["node", "app.js"] 
 
 # for commands that will run by default, but can be replaced by adding an argument at run
@@ -59,13 +59,13 @@ CMD ["java", "-jar", "/app.jar"]
 docker network create <network_name>
 ## run container with the network
 docker run -d --network <network_name> --network-alias <network_alias>  \
- -v <local_storage>:<mount_point> \
- -e <env_var> \
- <container_name>:<tag>
+    -v <local_storage>:<mount_point> \
+    -e <env_var> \
+    <container_name>:<tag>
 ## test it
 docker run -it --network <network_name> nikolata/netshoot
 > dig <network_name>
-    
+
 #and building it on the same folder:
 docker build .
 

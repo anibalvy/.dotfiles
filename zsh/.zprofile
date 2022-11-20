@@ -3,8 +3,14 @@
 #       THIS IS CALLED ONLY IN LOGIN SHELL (mainly at boot)
 #       and not Interactive (on scripts and new virtual shells)
 
-
+# this loads in tmux panes
+#echo  $PATH
 # Python PyENV
+# 20221012
+#export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_ROOT="/home/kanibal/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
 #export PYENV_ROOT="$HOME/.pyenv"
 #export PATH="$PYENV_ROOT/bin:$PATH"
 #export PYENV_ROOT="$HOME/.pyenv"
