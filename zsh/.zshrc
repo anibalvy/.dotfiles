@@ -197,6 +197,9 @@ alias git='nocorrect git'
 
 alias tmux-resurrect-session='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
 
+# make themes to work in sc-im
+alias sc-im='TERM=xterm-256color sc-im'
+
 if command -v pinfo > /dev/null 2>&1  ; then
 	alias info='pinfo'
 else
