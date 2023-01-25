@@ -53,3 +53,6 @@ find . -type f -samefile MY_FILE_HERE 2>/dev/null
 
 # To find all files in the current directory and modify their permissions
 find . -type f -exec chmod 644 {} \;
+
+# it stop after the first match with -quit
+find . -name <search> -print -quit

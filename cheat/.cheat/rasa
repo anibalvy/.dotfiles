@@ -1,0 +1,382 @@
+# RASA
+
+virtualenv -p python3 env   # create env
+source env/bin/activate     # activate env
+pip install rasa            # install rasa
+rasa —-version              # check version
+rasa init                   # initialize a new project
+ - dar nombre a carpeta
+ - si le doy entrenar crea carpeta models (sino se crear con rasa train)
+ - si no le doy que speak trained assistant on cli: No -- luego hay que dar rasa train
+
+rasa shell                  # talk to assitant in cli
+rasa shell --debug          # talk to assitant in cli and more verbose
+rasa run --enable-api       # enable rest with json
+rasa interactive
+rasa train # genera carpeta models si no existe
+
+https://rasa.com/docs/rasa/pages/http-api#operation/getStatus
+https://rasa.com/docs/rasa/http-api/
+
+Rasa HTTP API
+Read about Rasa's HTTP API that has endpoints for conversations, training models, and configuring your bot.
+http://0.0.0.0:5005/webhooks/rest/webhook
+
+curl --location --request POST 'http://0.0.0.0:5005/webhooks/rest/webhook' \
+--header 'Content-Type: application/json' \
+--data-raw '{ "sender": "1" , "message": "hey" }'
+
+
+
+archivos
+domain.yml: contains everything that the assistant 'knows'
+ - Responses: the things that the assistant say to user
+ - intents: categories of things users say
+ - slots: variables remembered over the course of the conversation
+ - entities: pieces of information extracted from incoming text
+ - Forms and Actions: these add application logic and extend what the assistant can do
+
+responses:
+  utter_greet:    # utter_<intent>
+   - text: "Hey There!"
+   - text: "Hey {name}. How are you!"  # if more than one, response are random
+                                       # {name} is a slot					   
+     buttons:
+     - title: "great"
+       payload: "/mood_great"
+     - title: "super sad"
+       pauload: "/mood_sad"
+   - text: "Hey There 2!"
+     image: "https://i.imkkkk/asdfa.jpg"
+   - text: "Hey There 3!"
+     channel: "slack"
+  utter_book_time:
+  - custom:
+    blocks:
+    - type: section
+      text:
+        text: "book a time"
+	type: mrkdwn
+      accessory:
+        type: datepicker
+	initial_date: '2023-01-13'
+	placeholder:
+	  type: plain_text
+	  text: Select a date
+
+
+nlu.ymll 
+  estan los entrenamientos
+intents: # list of intents
+ - affirm
+ - deny
+ - search_something
+ - the_init
+ - my account number is [1234567891](account_number) # ENTITY
+
+rules.yml
+
+ rules:
+ - rule: 
+   steps:
+   - intent:
+   - action:   ## utter_Xxx dice algo estatico. action_Xxx es llamar a funcion
+
+
+
+
+tracker store: guardar conversacion
+
+
+carpeta actions: funciones en python
+
+stories:
+- story: beginning of conversation
+  steps:
+  - intent: greet
+  #### - user: good day!  ## instead of an intent, "user" is to use literal word
+  - action: utter_great
+  - intent: goodbye
+  - action: utter_goodbye
+  - checkpoint: ask_feedback
+
+- story: user provides feedback
+  steps: 
+  - checkpoint: ask_feedback
+  - action: utter_ask_feedback
+  - intent: inform
+  - action: utter_thank_you
+  - action: utter_anything_else
+
+- story: user doesn't have feedback
+  steps: 
+  - checkpoint: ask_feedback
+  - action: utter_ask_feedback
+  - intent: deny
+  - action: utter_no_problem
+  - action: utter_anything_else
+
+
+
+
+hacer flujos
+https://rasa.com/docs/rasa/stories/#checkpoints
+
+hacer forms
+https://rasa.com/docs/rasa/forms
+
+# ENTITIES:
+ numbers
+ dataes
+ country names
+ ....
+ ...
+
+# 1/3 way entities can be extracted: Using pre-built models (Duckling and SpaCy)
+entity: destination
+value: sydney
+component: 
+  SpaCyEntityEctractor
+
+entity: number
+value: 500
+component:
+  DuclingHttpExtractor  ## pre-built models 
+                          ## - duckling for extracting numbers, dates, url, email_addresses
+			  ## - SpaCy  for extracting names, product names, locations, etc
+
+# 1/3 way entities can be extracted: Using regex 
+regex: \d{10,12}
+
+nlu:
+- regex: account_number
+  example: |
+  -   \d{10.12}
+- intent: inform
+  example: |
+  - My account number is [1234567891](account_number)
+
+# 1/3 way entities can be extracted: using machine learning
+entity: account_type
+value: savings_account
+component: DIETClassifier
+
+
+nlu:
+- intent: check_balance
+  examples:
+  - I would like to check my [savings account](account_type)
+  - Can you show me the banace of my [current account](account_type)
+
+## entity responses: is a snippet of json
+
+{
+  "entities": [{
+	  "value": "New York City",
+	  "start": 20,
+	  "end": 33,
+	  "confidence": 0.78,
+	  "entity": "city",
+	  "extractor": "DIETClassifier"
+	  }
+}
+
+## entities synonymous: to map differents input to a value
+  # it can be added as a section in nlu (1/2)
+nlu:
+- synonym: credit
+  examples: |
+  - credit card account
+  - credit account
+  
+  # it can be added inline in nlu (2/2)
+nlu:
+  - intent: check balance
+    example: |
+    - I would like to ckeck [credit card account]{"entity": "account", "value": "credit"}
+    - How do I ckeck the [credit account]{"entity": "account", "value": "credit"}
+
+## entities Lookup tables
+  # are list of words used to generate case-sensitive regular expression patterns
+nlu:
+- lookup: country
+  example: |
+  - Afghanistan
+  - Argentina
+  - ..
+  - Chile
+  ...
+  - Zambia
+
+## entity Roles and Group
+  # cach more than one entity in an input
+  # it's needed to add role label
+nlu:
+- intent: book_a_flight
+  examples: |
+    - I am looking for a flight from [New York]{"entity": "location", "role": "origin"} to [Boston]{"entity": "location", "role": "destination"}.  
+
+     
+# SLOTS
+  # variables that remains in conversation
+  # defined inside domain.yml file
+slots:
+  destination:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  # they can be set by:
+  ## (1/2) Using NLU, entities
+entities:
+- destination
+
+slots:
+  destination:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: destination
+
+  ## (2/2) Using custom actions
+
+  # Using slot to influence the flow of the conversation
+slots:
+  destination:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+
+  # when configured to influence true, it is needed to include it in the stories to train it:
+stories:
+- story: booking a flight ticket
+  steps:
+  - intent: book_a_ticket
+  - or:
+    - slot_was_set:
+      - destination: Toronto
+    - slot_was_set:
+      - destination: London
+
+  # SLOT MAPPING
+   # define if slot is applied if intent is predicted 
+entities:
+- entity_name
+slots:
+  amount_of_money:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: number
+      intent: make_transaction        ## apply slot if this intent is predicted
+      not_intent: check_transaction   ## if this intent is predicted, slot mapping is excluded
+
+  # SLOT MAPPING: from_entity
+entities:
+- entity_name
+slots:
+  amount_of_money:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: entity_name
+      role: role_name
+      group: group name
+      intent: intent_name
+      not_intent: excluded_intent 
+
+  # SLOT MAPPING: from_text
+slots:
+  slot_name:
+    type: text 
+    mappings:
+    - type: from_text
+      intent: intent_name
+      not_intent: excluded_intent 
+
+  # SLOT MAPPING: from_intent
+slots:
+  slot_name:
+    type: any
+    mappings:
+    - type: from_intent
+      value: my_value
+      intent: intent_name
+      not_intent: excluded_intent 
+
+  # SLOT MAPPING: from_trigger_intent
+    # fill slot with value if a form is activated by a user message with a specific intent
+slots:
+  slot_name:
+    type: any
+    mappings:
+    - type: from_trigger_intent
+      value: my_value
+      intent: intent_name
+      not_intent: excluded_intent 
+
+  # SLOT MAPPING: custom
+slots:
+  day_of_week:
+    type: text
+    mappings:
+    - type: custom
+      action: action_calculate_day_of_week
+
+  # SLOT TYPES
+  # - text: influences if is present or not
+  # - boolean: influences if is present or not
+  # - categorical: 
+slots:
+  price_range:
+    type: categorical
+    values:
+      - low
+      - medium
+      - high
+    mappings:
+    - type: custom
+   
+  # - float:  for numerical values
+slots:
+  radius:
+    type: float
+    min_value: 0      # if user provides a number < min_value => will set slot to min_value
+    max_value: 100    # if user provides a number > max_value => will set slot to max_value
+    mappings:
+    - type: custom
+  
+  # - list:
+slots:
+  items:
+    type: list
+    mappings:
+    - type: from_entity
+      entity: shopping_item
+
+  # - any: this will NOT influence conversation
+slots:
+  shopping_items:
+    type: any
+    mappings:
+    - type: custom
+
+  # SLOT initial_value
+slots:
+  current_account:
+    type: float 
+    initial_value: 100
+    mappings:
+    - type: custom
+
+
+### debug
+parse the message using rasa model
+(lo que interpreta con cada mensaje dando un ranking the todos los intents considerados)
+
+http://0.0.0.0:5005/model/parse
+{ "text": "hi there"}
+

@@ -1,2 +1,14 @@
-# Printout disk free space in a human readable format
-df -h
+# Syntax
+df [option] [/dev/DEVICE]
+
+# options
+
+df -h    # print sizes in powers of 1024 (e.g., 1023M)
+df -H    # print sizes in powers of 1000 (e.g., 1.1G) 
+
+df -k   # 1024-byte blocks (default)
+df -Bm   # 1M-byte blocks
+df -Bk   # 1024-byte blocks 
+df -Bg   # 1 Gibibyte block
+
+df -ih    # to see inodes usage

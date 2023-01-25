@@ -12,29 +12,22 @@ SHELL=/bin/bash
 +--------- minute (0 - 59)
 
 # example entries
-# every 15 min
-*/15 * * * * /home/user/command.sh
+0 * * * * /home/user/command.sh    # every hour 
+*/15 * * * * /home/user/command.sh # every 15 min
+0 0 * * * /home/user/command.sh    # every midnight
+5 8 * * 6 /home/user/command.sh    # every Saturday at 8:05 AM
+@hourly /home/user/command.sh      # every hour  
+@daily  /home/user/command.sh      # every day 
+@weekly /home/user/command.sh      # every week
+@monthly /home/user/command.sh     # every month
+@yearly  /home/user/command.sh     # every year
+@reboot /home/user/command.sh      # every reboot
 
-# every midnight
-0 0 * * * /home/user/command.sh
 
-# every Saturday at 8:05 AM
-5 8 * * 6 /home/user/command.sh
+crontab file [-u user] # Replace crontab from file
+crontab - [-u user]    # Replace crontab from stdin
+crontab -l [user]      # List crontab for user
+crontab -e [user]      # Edit crontab for user
+crontab -d [user]      # Delete crontab for user
+crontab -c dir         # Specify crontab directory
 
-# Replace crontab from file
-crontab file [-u user] 
-
-# Replace crontab from stdin
-crontab - [-u user] 
-
-# List crontab for user
-crontab -l [user] 
-
-# Edit crontab for user
-crontab -e [user] 
-
-# Delete crontab for user
-crontab -d [user] 
-
-# Specify crontab directory
-crontab -c dir 

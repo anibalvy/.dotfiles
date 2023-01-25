@@ -1,0 +1,14 @@
+# Create Files of Specific Size in Linux
+
+fallocate [-o offset] -l length [-n] filename
+fallocate -l 10MB my_big_file   # create a 10MB file 
+
+KB 	KiB or K
+MB 	MiB or M  # An MB (Mega Byte) is 1000*1000 bytes where as MiB (Mebibyte) is 1024*1024 bytes.
+GB 	GiB or G
+TB 	TiB or T
+PB 	PiB or P
+ZB 	ZiB or Z
+YB 	YiB or Y
+
+it also can be done with dd command

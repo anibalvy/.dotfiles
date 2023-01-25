@@ -217,6 +217,7 @@ vimdiff <file1> <file2>
 # format json
 :%!python -m jsontool
 :% | jq .
+:% ! jq 
 
 ## Generate Sequence
 vector[0] = 1;       vector[0] = A;

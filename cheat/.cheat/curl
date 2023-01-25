@@ -48,6 +48,11 @@ curl -d "@data.txt" -X POST http://localhost:3000/data
 
 # POST application/json
 curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data
+# POST Form Data with cURL
+curl -X POST -F 'username=davidwalsh' -F 'password=something' http://domain.tld/post-to-me.php
 # with a data file
 curl -d "@data.json" -X POST http://localhost:3000/data
+# POST with file
+curl -X POST -F 'image=@/path/to/pictures/picture.jpg' http://domain.tld/upload
+
 

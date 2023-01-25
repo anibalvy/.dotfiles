@@ -1,38 +1,29 @@
-# install package
-pipenv install package
+pipenv install package                            # install package
+pipenv run python script.py                       # run a command with the indicated version in pipenv
+pipenv install -r app/requirements.txt            # install from requirements file
 
-# run a command with the indicated version in pipenv
-pipenv run python script.py
+pipenv lock --requirements > requirements.txt     # create requirements.txt old version
+pipenv requirements > requirements.txt            # create requirements.txt default dependencies
+pipenv requirements --dev > dev-requirements.txt  # create requirements.txt to freeze dev dependencies as well use the --dev option
 
-# install from requirements file
-pipenv install -r app/requirements.txt
+pip show <package>                                # show a package version
 
-# give an output to requirements
-pipenv lock --requirements > requirements.txt
+pipenv check                                      # check 
 
-# show a package version
-pip show <package>
+pipenv --python 3.8                               # change python version 
 
-# check 
-pipenv check
+pipenv install <package> --dev                    # install development [dev-packages]
 
-# change python version 
-pipenv --python 3.8
+pipenv uninstall <package>                        # uninstall 
 
-# install development [dev-packages]
-pipenv install <package> --dev
+pipenv --venv                                     # get path of virtual environment
 
-# uninstall 
-pipenv uninstall <package>
+echo 'SECRET_KEY="supersecret"' > .env            # load environment variables, create a .env file
+os.environ['TOKEN']                               # using in app
 
-# get path of virtual environment
-pipenv --venv
+pipenv --rm                                       # delete virtual env
 
-# load environment variables
-# create a .env file
-echo 'SECRET_KEY="supersecret"' > .env
-
-# using in app
-os.environ['TOKEN']
-
+# troubleshooting
+# ERROR:: --system is intended to be used for pre-existing Pipfile installation, not installation of specific packages. Aborting.
+pipenv --rm
 

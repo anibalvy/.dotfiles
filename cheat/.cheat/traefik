@@ -1,0 +1,67 @@
+## traefik.yml
+---
+api:
+  dashboard: true
+  insecure: true   # to not expose in prod ???
+
+entryPoints:
+  metrics:
+    address: ":8082"
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"   # can be for https and gRPC instead of nginx that you cannot use the same
+
+global:
+  checknewversion: false    
+  sendanonymoususage: false # disable telemetry
+
+providers:    ## to discover upstream services
+  file:        ## simple provider (a file)
+    filename: "/etc/traefik/config.yml"
+    watch: true
+  providersThrottleDuration: 10
+
+metrics:
+  prometheus:
+    entryPoint: metrics
+    addServicesLabels: true
+    addRoutersLabels: true
+    addEntryPointsLabels: true
+    buckets: [0.0005, 0.0006, 0.0007, 0.0008, 0.0009, 0.001, 0.0011, 0.0012, 0.0013, 0.0014, 0.0015, 0.0016, 0.0017, 0.0018, 0.0019, 0.002, 0.01, 0.02, 0.03, 0.04, 0.05, 0.1, 0.5, 1, 2, 3, 4, 5]  # histogram bucket, be careful, each req takes 900ms
+
+
+## /etc/traefik/config.yml
+---
+http:
+  routers:
+    to-api:
+      rule: "Host(`api.traefik.server.pvt`) && PathPrefix(`/`)"
+      service: api
+    
+    to-secure-api:
+      rule: "Host(`api.traefik.server.pvt`) && PathPrefix(`/`)"
+      service: api
+      tls: {}
+
+    to-secure-grpc:
+      rule: "Host(`grpc.traefik.server.pvt`)"
+      service: grpc
+      tls: {}
+
+  services:
+
+    api:
+      loadBalancer:
+        servers:
+        - url: http://10.0.32.200:8080
+
+    grpc:
+      loadBalancer:
+        servers:
+        - url: h2c://10.0.32.200:8082   # this will remove gRPC tls to the server
+
+tls: ## it is possible to use a built-in plugin to automatically issue cert to let's encypt
+  certificates:
+  - certFile: /etc/ssl/certs/traefik-server-pvt.cert
+    keyFile: /etc/ssl/private/traefik-server-pvt.cert

@@ -11,3 +11,31 @@ jq '.[0]'
 jq '.[2:4]'
 jq '.[:3]'
 jq '.[-2:]'
+
+# extract 2 fields
+cat file.json | jq '.[] | .field1, .field2'
+
+# Generate CSV file with , as separator use the following syntax:
+cat file.json | jq '.[]| join(",")'
+
+# -r raw option to get rid of double quotes:
+cat file.json | jq -r '.[]| join(",")'
+
+# json to csv
+# First type the following to get CIDR prefixes:
+cat bingbot.json | jq '.prefixes[]'
+
+# Then pipe outputs to create new JSON to add a comment field:
+cat bingbot.json | jq -r '.prefixes[] | {cidr: .ipv4Prefix, comment: "BingBot"}'
+
+# Finally, use the join() to make a .CSV file:
+cat bingbot.json | jq -r '.prefixes[] | {cidr: .ipv4Prefix, comment: "BingBot"} | join(",")'
+
+# Save it:
+cat bingbot.json | jq -r '.prefixes[] | {cidr: .ipv4Prefix, comment: "BingBot"} | join(",")' > bingbot.csv
+
+# the @csv filter
+# You can pass the resulting jq row stream to the @csv filter as follows too:
+jq -r '.prefixes[] | .[] | [., "Bingbot"] | @csv' bingbot.json
+jq -r '.prefixes[] | .[] | [., "Bingbot"] | @csv' bingbot.json > bingbot.csv
+cat bingbot.csv

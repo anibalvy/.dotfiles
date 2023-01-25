@@ -2,7 +2,7 @@
 openssl genrsa -out myKey.priv 2048 # or 512, 758, 1024, 1536 or 2048
 
 # To create a RSA Public key from that key
-openssl rsa -in myKey.priv -out mykey.pub -pubout -outfrom PEM
+openssl rsa -in myKey.priv -out mykey.pub -pubout -outform PEM
 
 # To create the Certificate Signing Request (CSR):
 openssl req -new -key server.key -out server.csr
@@ -11,6 +11,9 @@ openssl req -new -key server.key -out server.csr
 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
 # (The above commands may be run in sequence to generate a self-signed SSL certificate.)
+
+#####  Create an RSA Private Key and CSR to send for domain application (one line)
+openssl req -new -newkey rsa:2048 -nodes -keyout your_domain.key -out your_domain.csr
 
 # To show certificate information for a certificate signing request
 openssl req -text -noout -in server.csr
@@ -39,3 +42,5 @@ openssl passwd -1
  Password:
  Verifying - Password:
  $1$eJJb58ou$oiUuCWYX4EAH9AMwUZuL/1
+
+
