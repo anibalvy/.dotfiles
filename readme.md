@@ -27,6 +27,31 @@ or manually
 stow <folder>
 ```
 
+## managing changes
+
+When configurations changes it is possible to eliminate folders that are stow or reload them:
+
+Delete config:
+```sh
+stow -D <folder>
+```
+
+Reload config:
+```sh
+stow -R <folder>
+```
+
+Choose anothe destination folder:
+```sh
+stow -t <destination_folder> <folder>
+```
+
+more options, see:
+
+```sh
+man stow
+```
+
 ## TODO
 
 1. check installation script:
