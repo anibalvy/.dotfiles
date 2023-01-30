@@ -12,7 +12,7 @@ set overlap
 # set autowrap  # show content of the cell wrap it increaing the rows hight
 
 # set xlsx_readformulas  # import formulas instead of values from xlxs file
-# set XLSX_READFORMULAS
+set XLSX_READFORMULAS
 # set import_delimited_as_text # import numbers as text
 
 # set half_page_scroll=1 # 1: half screen, 0: full page (default)

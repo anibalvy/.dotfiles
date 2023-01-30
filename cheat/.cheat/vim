@@ -98,96 +98,85 @@ dgg - delete to the beginning of the file
 dG - delete to the end of the file
 
 Special Insert:
-:r [filename] - Insert the file [filename] below the cursor.
-:r ![command] - Execute [command] and insert the output below the cursor.
+:r [filename]  # Insert the file [filename] below the cursor.
+:r ![command]  # Execute [command] and insert the output below the cursor.
 
-. - Repetition
+.              # Repetition last command
 
-Record a Macro
-   q{register} - Record a macro
+#Record a Macro
+   q{register} # Record a macro
    (do the things)
-   q
-Play a Macro
-   @{register}
-Play a Macro 23 times
-   23@{register}
+   q           # end recording macro
+@{register}    # Play a Macro
+23@{register}  # Play a Macro 23 times
 
-Show Registers
-   :registers
+:registers     # Show Registers
 
-"{register}p  - Paste a Register after current line
-"{register}P  - Paste a Register before current line
+"{register}p   # Paste a Register after current line
+"{register}P   # Paste a Register before current line
 
- Marks - Bookmarks
-m{mark} - create a mark
-'{mark} - go to a mark
-:marks  - list marks
+ Marks          # Bookmarks
+m{mark}         # create a mark
+'{mark}         # go to a mark
+:marks          # list marks
 
-set numbers
-    :set number
-
+:set number     # set numbers
 
 ## Editing
-u               undo
-yy              yank (copy) a line
-y{motion}       yank text that {motion} moves over
-p               paste after cursor
-P               paste before cursor
-<Del> or x      delete a character
-dd              delete a line
-d{motion}       delete text that {motion} moves over
+u               # undo
+yy              # yank (copy) a line
+y{motion}       # yank text that {motion} moves over
+p               # paste after cursor
+P               # paste before cursor
+<Del> or x      # delete a character
+dd              # delete a line
+d{motion}       # delete text that {motion} moves over
 
 ## Search
-- Search in file
-/<pattern>
-- Search in file case insensitive
-/<pattern>\c
+/<pattern>      # Search in file
+/<pattern>\c    # Search in file case insensitive
 
 ## Search and replace with the `:substitute` (aka `:s`) command
 
-:s/foo/bar/	#replace the first match of 'foo' with 'bar' on the current line only
-:s/foo/bar/g	#replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
-:%s/foo/bar/g	#replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
-:%s/foo/bar/gc	#ask to manually confirm (`c` flag) each replacement
+:s/foo/bar/	         #replace the first match of 'foo' with 'bar' on the current line only
+:s/foo/bar/g	         #replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
+:%s/foo/bar/g	         #replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
+:%s/foo/bar/gc	         #ask to manually confirm (`c` flag) each replacement
+:,$s/<original>/<new>/gc # delete from current line 
+:g/foo/d                 # delete lines
+:%s/\s\+$//g             # delete spaces at the end
 
-## delete lines
-:g/foo/d
 
-## delete spaces at the end
-:%s/\s\+$//g
-
-- Preceding a motion or edition with a number repeats it 'n' times
- Examples:
-50k         moves 50 lines up
-2dw         deletes 2 words
-5yy         copies 5 lines
-42G         go to line 42
+# Preceding a motion or edition with a number repeats it 'n' times, Examples:
+50k         # moves 50 lines up
+2dw         # deletes 2 words
+5yy         # copies 5 lines
+42G         # go to line 42
 
 ## Options
-:set option=<value>
-:set option? # display the value
-:set option! # invert the option, like paste to nopaste, or autoindent to noautoindent
-:set option? # set to default
+:set option=<value>  # set option
+:set option?         # display the value
+:set option!         # invert the option, like paste to nopaste, or autoindent to noautoindent
+:set option?         # set to default
+:set                 # show options not as default
+:set all             # show all
+:set all&            # set all at default
+:help option         # open manual
 :verbose set option? # to show where this value was last set.
-:set # show options not as default
-:set all # show all
-:set all& # set all at default
-:help option # open manual
 
 ## Panes
-:sp # Hotizontal Split
-:vnew # - Vertical Split
-:vs
-<Ctrl+W> + r # Reverse Windows
+:sp             # Hotizontal Split
+:vnew           # Vertical Split
+:vs             # Vertica split
+<Ctrl+W> + r    # Reverse Windows
 <Ctrl+W> + <#>< # pane size <#>, is a number, optional
 <Ctrl+W> + <#>> # pane size
 <Ctrl+W> + <#>+ # pane size
 <Ctrl+W> + <#>- # pane size
 
-
 ## TABS
-:tabnew
-:tabner <file>
+:tabnew         # new tab
+:tabnew <file>  # open file in tab
 
 ## SORT
 :%sort
@@ -197,7 +186,7 @@ d{motion}       delete text that {motion} moves over
 :sort n    # Numeric sortEdit (this way, 100 doesn't precede 20 in the sort)
 
 #Sort subsections independently, in this example sort numbers between "start" and "end" markersEdit
-:296,349sort # Sort only specific lines using ranges Edit, sort lines 296 to 349, inclusive
+:296,349sort # Sort only specific lines using ranges Edit, sort lines 296 to 349, inclusive; also, is possible to visual select first
 
 ## VIMDIFF
 vimdiff <file1> <file2>
@@ -206,13 +195,13 @@ vimdiff <file1> <file2>
 
 ## Execute command
 #after invoke with :! the % is an alias of the current file
-:! ./%
+:! ./%    # % is an alias for current file
 :! wc %
 
 ## Sessions
-:mksession ~/.vim/sessions/<name>.session
-:source
-:so
+:mksession ~/.vim/sessions/<name>.session    # save session
+:source                                      # load session  
+:so                                          # load session short
 
 # format json
 :%!python -m jsontool
