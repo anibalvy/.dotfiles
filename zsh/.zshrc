@@ -179,7 +179,7 @@ export LANGUAGE=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # loaded from file
-[ -f .zsh_aliases] && source .zsh_aliases
+[ -f ~/.zsh_aliases] && source ~/.zsh_aliases
 
 ### fix: for autocorrect works with alias that have 'nocorrect' 
 unsetopt correct_all  
