@@ -35,3 +35,6 @@ SHOW PROCEDURE STATUS;
 
 # To check stored function
 SHOW FUNCTION STATUS;
+
+# To check TRIGGERS
+SHOW TRIGGERS;

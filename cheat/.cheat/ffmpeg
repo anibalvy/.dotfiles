@@ -10,6 +10,9 @@ ffmpeg -i input.foo -vcodec bar -acodec baz -b:v 21000k -b:a 320k -g 150 -thread
 
 # Convert image sequence to video
 ffmpeg -r 18 -pattern_type glob -i '*.png' -b:v 21000k -s hd1080 -vcodec vp9 -an -pix_fmt yuv420p -deinterlace output.ext
+# -r:  -> change frame rate
+# -b:v -> change bit rate (change queality)
+# -s   -> change resolution
 
 # Combine video and audio into one file
 ffmpeg -i video.ext -i audio.ext -c:v copy -c:a copy output.ext

@@ -1,109 +1,122 @@
 # VIM
 
 ## File management
-:e              reload file
-:q              quit
-:q!             quit without saving changes
-:w              write file
-:w {file}       write new file
-:x              write file and exit
+:e           # reload file
+:q           # quit
+:q!          # quit without saving changes
+:w           # write file
+:w {file}    # write new file
+:x           # write file and exit
+:X           # Encrypt file, it will ask for password
+             # to remove encryption, press :X <ENTER> <ENTER> and save after :w
+%            # Create a new file
+d            # Create a new directory
 
-- Navigation
+##  Navigation
+h/j/k/l      # Left/Down/Up/Right
+^ / $        # move to the beginning/end of line
+I / A        # move to the beginning/end of line and insert
+o / O        # insert new line above/below current line and insert
 
-h/j/k/l - Left/Down/Up/Right
-^ / $   - move to the beginning/end of line
-I / A   - move to the beginning/end of line and insert
-o / O   - insert new line above/below current line and insert
+( / )        # jump to the previous/next sentence
+{ / }        # jump to the previous/next paragraph
+[[ / ]]      # jump previous/next section
+[] / ][      # jump to the end of the previous/next section
 
-( / )   - jump to the previous/next sentence
-{ / }   - jump to the previous/next paragraph
-[[ / ]] - jump previous/next section
-[] / ][ - jump to the end of the previous/next section
+^E           # scroll the window down
+^Y           # scroll the window up
+^F           # scroll down one page
+^B           # scroll up one page
+H            # move cursor to the top of the window
+M            # move cursor to the middle of the window
+L            # move cursor to the bottom of the window
+gg           # go to top of file
+G            # go to bottom of file
 
-^E - scroll the window down
-^Y - scroll the window up
-^F - scroll down one page
-^B - scroll up one page
-H - move cursor to the top of the window
-M - move cursor to the middle of the window
-L - move cursor to the bottom of the window
-gg - go to top of file
-G - go to bottom of file
+w            # words
+e            # next end of word
+E            # next end of whitespace-delimited word
+b            # word backward
+s            # sentences
+p            # paragraphs
+t            # tags[^1]
 
-w - words
-e - next end of word
-E - next end of whitespace-delimited word
-b - word backward
-s - sentences
-p - paragraphs
-t - tags[^1]
+# go to lines and columns
+:<line_number>      # go to line
+<column_number>|    # go to column (in NORMAL MODE)
+:call cursor(<line_number>,<column_number>) # go to column  
 
-10w - Move 10 words
-10b - Move back 10 words
+# Preceding a motion or edition with a number repeats it 'n' times, Examples:
+50k          # moves 50 lines up
+2dw          # deletes 2 words
+5yy          # copies 5 lines
+42G          # go to line 42
+10w          # Move 10 words
+10b          # Move back 10 words
 
-a - all
-i - inside
-t - 'til
-f - find forward
-F - find backward
-n - move to next find match
-N - move to previous find match
+a            # all
+i            # inside
+t            # 'til
+f            # find forward
+F            # find backward
+n            # move to next find match
+N            # move to previous find match
 
-Edits:
-x - delete character at cursor
-d - delete (also cut)
-c - change (delete, then place in insert mode)
-y - yank (copy)
-v - visually select
-dd / yy - delete/yank the current line
-D / C - delete/change until end of line
-r - replace the character under the cursor
-R - Replace mode
-["x]yy - copy the current lines into the register x
+## Edits
+x            # delete character at cursor
+d            # delete (also cut)
+c            # change (delete, then place in insert mode)
+y            # yank (copy)
+v            # visually select
+dd / yy      # delete/yank the current line
+D / C        # delete/change until end of line
+r            # replace the character under the cursor
+R            # Replace mode
+["x]yy       # copy the current lines into the register x
 
-d5w - delete 5 words forwards
-c5w - delete 5 words forwards and enter insert mode
-d5b - delete 5 words backwards
-c5b - delete 5 words backwards and enter insert mode
+d5w          # delete 5 words forwards
+c5w          # delete 5 words forwards and enter insert mode
+d5b          # delete 5 words backwards
+c5b          # delete 5 words backwards and enter insert mode
 
-di( - delete inside parentesis
-ci( - delete inside parentesis and enter insert mode
-da( - delete inside parentesis and the parentesis
-ca( - delete inside parentesis, the parentesis and enter insert mode.
+di(          # delete inside parentesis
+ci(          # delete inside parentesis and enter insert mode
+da(          # delete inside parentesis and the parentesis
+ca(          # delete inside parentesis, the parentesis and enter insert mode.
 
-dip - delete paragraph
-cip - delete paragraph and enter insert mode
+dip          # delete paragraph
+cip          # delete paragraph and enter insert mode
 
-dis - delete sentence
-cis - delete sentence and enter insert mode
+dis          # delete sentence
+cis          # delete sentence and enter insert mode
 
-dit - delete inside tag
-dat - delete inside tag and tag
-cit - delete inside tag and enter insert mode
+dit          # delete inside tag
+dat          # delete inside tag and tag
+cit          # delete inside tag and enter insert mode
 
-df<?> - delete words until find character <?>
-cf<?> - delete words until find character <?> and enter insert mode
+df<?>        # delete words until find character <?>
+cf<?>        # delete words until find character <?> and enter insert mode
 
-dt<?> - delete words until character <?>
-ct<?> - delete words until character <?> and enter insert mode
+dt<?>        # delete words until character <?>
+ct<?>        # delete words until character <?> and enter insert mode
 
-dw - delete characters if a word from cursor forward
-diw - delete in word (the word I'm in)
-db - delete charaters if a word from cursor backwards
+dw           # delete characters if a word from cursor forward
+diw          # delete in word (the word I'm in)
+db           # delete charaters if a word from cursor backwards
 
-d0 - delete to the beginning of the line
-d$ - delete to the end of the line
+d0           # delete to the beginning of the line
+d$           # delete to the end of the line
 
-dgg - delete to the beginning of the file
-dG - delete to the end of the file
+dgg          # delete to the beginning of the file
+dG           # delete to the end of the file
 
-Special Insert:
+## Special Insert:
 :r [filename]  # Insert the file [filename] below the cursor.
 :r ![command]  # Execute [command] and insert the output below the cursor.
 
 .              # Repetition last command
 
-#Record a Macro
+## Record a Macro
    q{register} # Record a macro
    (do the things)
    q           # end recording macro
@@ -115,43 +128,38 @@ Special Insert:
 "{register}p   # Paste a Register after current line
 "{register}P   # Paste a Register before current line
 
- Marks          # Bookmarks
-m{mark}         # create a mark
-'{mark}         # go to a mark
-:marks          # list marks
+ Marks         # Bookmarks
+m{mark}        # create a mark
+'{mark}        # go to a mark
+:marks         # list marks
 
-:set number     # set numbers
+:set number    # set numbers
 
 ## Editing
-u               # undo
-yy              # yank (copy) a line
-y{motion}       # yank text that {motion} moves over
-p               # paste after cursor
-P               # paste before cursor
-<Del> or x      # delete a character
-dd              # delete a line
-d{motion}       # delete text that {motion} moves over
+u              # undo
+yy             # yank (copy) a line
+y{motion}      # yank text that {motion} moves over
+p              # paste after cursor
+P              # paste before cursor
+<Del> or x     # delete a character
+dd             # delete a line
+d{motion}      # delete text that {motion} moves over
 
 ## Search
-/<pattern>      # Search in file
-/<pattern>\c    # Search in file case insensitive
+/<pattern>     # Search in file
+/<pattern>\c   # Search in file case insensitive
 
 ## Search and replace with the `:substitute` (aka `:s`) command
-
 :s/foo/bar/	         #replace the first match of 'foo' with 'bar' on the current line only
 :s/foo/bar/g	         #replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
 :%s/foo/bar/g	         #replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
 :%s/foo/bar/gc	         #ask to manually confirm (`c` flag) each replacement
 :,$s/<original>/<new>/gc # delete from current line 
+:23,$s/<original>/<new>/gc # delete from line  23
 :g/foo/d                 # delete lines
 :%s/\s\+$//g             # delete spaces at the end
 
 
-# Preceding a motion or edition with a number repeats it 'n' times, Examples:
-50k         # moves 50 lines up
-2dw         # deletes 2 words
-5yy         # copies 5 lines
-42G         # go to line 42
 
 ## Options
 :set option=<value>  # set option
@@ -174,6 +182,21 @@ d{motion}       # delete text that {motion} moves over
 <Ctrl+W> + <#>+ # pane size
 <Ctrl+W> + <#>- # pane size
 
+<Ctrl+W> + R    # To rotate windows up/left
+<Ctrl+W> + r    # To rotate windows down/right
+
+<Ctrl+w> + L    # Move the current window to the "far right"
+<Ctrl+w> + H    # Move the current window to the "far left"
+<Ctrl+w> + J    # Move the current window to the "very bottom"
+<Ctrl+w> + K    # Move the current window to the "very top"
+
+<Ctrl+w> + T    # Break out current window into a new tabview
+
+<Ctrl+w> + _    # Max out the height of the current pane
+<Ctrl+w> + |    # Max out the width of the current pane
+<Ctrl+w> + =    # Normalize all split sizes, which is very handy when resizing terminal
+
+
 ## TABS
 :tabnew         # new tab
 :tabnew <file>  # open file in tab
@@ -190,8 +213,8 @@ d{motion}       # delete text that {motion} moves over
 
 ## VIMDIFF
 vimdiff <file1> <file2>
-:windo diffthis # - having a split view
-:windo diffoff  # - Closing the diff
+:windo diffthis # having a split view
+:windo diffoff  # Closing the diff
 
 ## Execute command
 #after invoke with :! the % is an alias of the current file
@@ -214,7 +237,6 @@ vector[0] = 1;       vector[1] = B;
 vector[0] = 1;  -->  vector[2] = C;
 vector[0] = 1;       vector[3] = D;
 vector[0] = 1;       vector[4] = E;
-
 # 1.-Write the original line: A = mapping[0] Esc
 # 2.-Yank line and put 25 copies of it below: yy25p
 # 3.-Visually select the column containing the 0 char (block selection, using Ctrl-v), excluding the 0 from the 1st line (so you end up with a column containing the last 25 zeroes), then increment them with g Ctrl-a.
@@ -223,6 +245,7 @@ For letters it is needed here:
 set nrformats+=hex,alpha
 
 # color cursor
-:set cursorline - to highlight the current line
-:set cursorcolumn - to highlight the current column
+:set cursorline   # to highlight the current line
+:set cursorcolumn # to highlight the current column
+:set cuc          # highlight line and column
 

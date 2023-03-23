@@ -111,4 +111,23 @@ exit N  #If N is not given, the exit status code is that of the last executed co
 # Exit status
 echo $?
 
+# sub shells
+echo $BASH_SUBSHELL    ## not in subshell, we are in a "main" or a child subshell (like enter bash from bash) 
+0
+(echo $BASH_SUBSHELL)  ## in subshell, this is usefull to group commands
+1
+
+# math operations, must use "echo $((expression))"
+echo $((1+5))
+6
+
+val1=$((1+5))
+((val1++)); echo $val1
+6
+((--val1)); echo $val1
+5
+echo $((val1--));
+5
+echo $((val1));
+4
 

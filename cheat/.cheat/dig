@@ -26,4 +26,9 @@ dig <domain.com> cname # cname DNS Records
 # Reverse 
 dig -answer -x <ip-address>
 
+#Step 1: Find caching service name
+sudo lsof -i :53 -S
 
+#Step 2: Restart the service
+sudo systemd-resolve --flush-caches
+sudo systemd-resolve --statistics

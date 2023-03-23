@@ -1,10 +1,14 @@
 # WARNING ! netstat is deprecated. Look below.
 
-# Find open ports
-netstat --listen
+netstat -a       # To display open ports and established TCP connections
+netstat --listen # Find listening ports
+netstat -l       # Find listening ports
+netstat -lt      # list listening TCP ports
+netstat -lu      # list listening UDP ports
+netstat -at      # List all TCP port connections
+netstat -au      # List all UDP port connections
 
-# To display open ports and established TCP connections, enter:
-netstat -vatn
+netstat -vatn # To display open ports and established TCP connections, enter:
 
 # To display only open UDP ports try the following command:
 netstat -vaun

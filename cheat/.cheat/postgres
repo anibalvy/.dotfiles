@@ -20,3 +20,25 @@ SELECT pg_size_pretty( pg_database_size(‘databname‘) );
 # pg dump
 pg_dump --file "~/Backups/DB_-202208051053.sql" --host "<url>" --port "5432" --username "master" --no-password --verbose --role "master" --format=p --create --section=pre-data --section=data --section=post-data --inserts --encoding "UTF8" "vote"
 
+# see tuples
+select ctid from <table>;
+
+  # see dead tuples
+  select n_live_tup, n_dead_tup, relname
+    from pg_stat_all_tables
+   where relname = '<table_name>';
+
+# see transactions number 
+select xmin, xmax from <table>;
+# xmin: transaction that create that row 
+# xmax: transaction that kill that row
+
+
+# -- check which sessions are encrypted
+SELECT datname,usename, ssl, client_addr 
+  FROM pg_stat_ssl
+  JOIN pg_stat_activity
+    ON pg_stat_ssl.pid = pg_stat_activity.pid;
+
+SELECT * FROM pg_stat_activity JOIN pg_stat_ssl USING(pid);
+

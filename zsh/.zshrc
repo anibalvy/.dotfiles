@@ -178,34 +178,13 @@ export LANGUAGE=en_US.UTF-8
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias s="sudo"
-alias sduo="sudo"
-alias suod="sudo"
-# PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
-# Fonts: also is needed a NERDFont.
-alias ls="lsd  "  # PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
-alias ll="lsd -lh --group-dirs=first"
-alias la="lsd -lah --group-dirs=first"
-alias isntall="install"
-alias info='pinfo'
-alias rm='rm -i'
-alias cat='bat'
-alias cls='clear'
-alias grepk='grep -R -n -i '
-# Stop asking to correct the following:
-alias git='nocorrect git'
+# loaded from file
+[ -f .zsh_aliases] && source .zsh_aliases
 
-alias tmux-resurrect-session='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
-
-# make themes to work in sc-im
-alias sc-im='TERM=xterm-256color sc-im'
-alias excel='TERM=xterm-256color sc-im'
-
-if command -v pinfo > /dev/null 2>&1  ; then
-	alias info='pinfo'
-else
-	echo 'pinfo not installed, please install.'
-fi
+### fix: for autocorrect works with alias that have 'nocorrect' 
+unsetopt correct_all  
+setopt correct
+###
 
 # use vim mode
 bindkey -v
