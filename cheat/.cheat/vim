@@ -154,6 +154,7 @@ d{motion}      # delete text that {motion} moves over
 :s/foo/bar/g	         #replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
 :%s/foo/bar/g	         #replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
 :%s/foo/bar/gc	         #ask to manually confirm (`c` flag) each replacement
+:s/\Cfoo/bar/g	         # replacement all match CASE-SENSITIVE
 :,$s/<original>/<new>/gc # delete from current line 
 :23,$s/<original>/<new>/gc # delete from line  23
 :g/foo/d                 # delete lines

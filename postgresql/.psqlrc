@@ -11,6 +11,7 @@
 
 \set PROMPT1 '%M:%[%033[1;31m%]%>%[%033[0m%] %n@%/%R% \n#%x '
 \set PROMPT1 '%[%033[1m%]%M %n@%/%R%[%033[0m%]%# '
+\set PROMPT1 '%[%033[1;34;40m%]%M% [%033[1;33;40m%]%n@%/%R%[%033[0;37m%]%\n# '
 -- 
 --    The %[..%] sets the default prompt color to a bold black.
 --    %M is “The full host name (with domain name) of the database server, or [local] if the connection is over a Unix domain socket”.
@@ -45,3 +46,8 @@
 \echo 'Type \\q to exit. \n'
 \set version 'SELECT version();'
 \set extensions 'select * from pg_available_extensions;'
+
+-- nice format
+\pset linestyle unicode
+\pset columns 0
+\pset format wrapped

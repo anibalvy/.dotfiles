@@ -14,43 +14,42 @@ tmux -S /tmp/your_shared_session
 chmod 777 /tmp/your_shared_session
 
 ## Sessions
-<prefix> $ # Rename session
-<prefix> s # Switch session
-<prefix> ? # Help screen (Q to quit)
+<prefix> $     # Rename session
+<prefix> s     # Switch session
+<prefix> ?     # Help screen (Q to quit)
 <prefix> PageUp/PageDown # Scroll in window
 <prefix> : source-file /path/to/file # Reload configuation file
 
 ## Window management
-<prefix> c # Create window
-<prefix> & # Destroy window
-<prefix> f # find a window
-<prefix> w # list all window
-<prefix> , # rename a window
-<prefix> n # move to next 
-<prefix> p # move to previous 
+<prefix> c     # Create window
+<prefix> &     # Destroy window
+<prefix> f     # find a window
+<prefix> w     # list all window
+<prefix> ,     # rename a window
+<prefix> n     # move to next window 
+<prefix> p     # move to previous window
 <prefix> [0-9] # Switch between windows
 
 ## Pane management
-<prefix> % # Split horizontally
-<prefix> " # Split vertically
-<prefix> x # destroy pane
-<prefix> q # show pane number
-<prefix> ; # go to last active pane
-<prefix> o # go to next clockwise
-<prefix> : set synchronize-panes [on|off] # Sync panes
-<prefix> Arrows # move to ...
+<prefix> %         # Split pane horizontally
+<prefix> "         # Split pane vertically
+<prefix> x         # destroy pane
+<prefix> q         # show pane number
+<prefix> ;         # go to last active pane
+<prefix> o         # go to next pane clockwise
+<prefix> Arrows    # move to ...
 <prefix> {h,j,k,l} # move to left,down,up,right
+<prefix> : set synchronize-panes [on|off] # Sync panes
 
-- rearrange pane
-<prefix> Space # change layout
-<prefix> Ctrl+o # swap them anti-clockwise
-<prefix> { # move pane to the left
-<prefix> } # move pane to the right
+## rearrange pane
+<prefix> Space  # change pane layout
+<prefix> Ctrl+o # swap pane anti-clockwise
+<prefix> {      # move pane to the left
+<prefix> }      # move pane to the right
 
-- resize
+## resize
 <prefix> : resize-pane -R 10
 <prefix> : resize-pane -L 10
 <prefix> : resize-pane -U 10
 <prefix> : resize-pane -D 10
-
 

@@ -31,3 +31,8 @@ if command -v pinfo > /dev/null 2>&1  ; then
 else
 	echo 'pinfo not installed, please install.'
 fi
+
+### fix: for autocorrect works with alias that have 'nocorrect' 
+unsetopt correct_all  
+setopt correct
+###

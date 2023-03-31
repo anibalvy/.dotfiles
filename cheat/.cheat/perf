@@ -1,0 +1,4 @@
+
+perf record <program> # give us an assemby print that report percent of time taken by instructions (color coded by how hot they are)
+
+perf stat <program>   # give us performance counter data
