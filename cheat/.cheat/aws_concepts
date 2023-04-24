@@ -1,0 +1,37 @@
+source: https://medium.com/@neonforge/the-ultimate-cheatsheet-for-aws-solutions-architect-exam-saa-c02-part-1-ed56a8096392
+Highly Available = Use Multiple Availability zones
+
+Fault-Tolerant = Use Multiple Availability zones and a complete replica of the application environment for fail-over. The application failure in one AZ should automatically lead to recovery in a different AZ or region
+
+Real-Time Data = if you read real-time data processing, it’s likely related to Kinesis services
+
+Disaster = Failover to a different region is required
+
+Long Term Storage = Glacier or Deep Glacier storage
+
+Managed Service = S3 for data storage, Lambda for computing, Aurora for RDS andDynamoDB for NoSQL database
+
+Use AWS Network = usually, these keywords are related to communication between VPC instances and AWS services. Use VPC gateways and endpoints to connect to these services.
+
+VPC Gateway = enables connection to your On-Prem network via the public internet.
+
+NAT Gateway = enables internet connection from instances in a private subnet (i.e. for software updates). Some exam questions may give you a choice between NAT Gateway and NAT Instance. Generally, NAT Gateway is the right answer, as NAT instance needs to be managed by the user and doesn’t scale automatically. NAT Gateway on the other hand is an AWS managed service and can scale automatically based on demand. A question may come up in the exam asking for high availability of NAT Gateways if your VPC spans across multiple AZs. The right answer is to use individual NAT Gateways in each AZ.
+
+VPC peering = enables you to establish connection between different VPCs. You can connect to your own VPC as well to other accounts/users VPCs (with their permission). Important to remember that the CIDR-range of connected VPCs shouldn’t overlap. VPC peering doesn't work as transconnectivity tool. For instance if you have 3 VPCs (A, B and C) and create peering between A and B, and between B and C, the instances in VPC A are not able to connect to instances in VPC C, you have to peer VPC A with VPC B if you need to establish connection.
+
+AWS Transit Gateway = acts as VPC hub and connects multiple VPC as a giant VPC web. You can connect AWS VPCs and your on-premises VPCs. Here is also important to remember that CIDR ranges shouldn't overlap.
+
+EC2 instances = That is your computing resource and data storage
+
+Network Access Control List (NACL) = defines rules for incoming and outgoing traffic for your subnet. Important to remember are 2 things.
+- Default NACL allows all traffic to go out and go in (all ports open)
+- NACL can block traffic (explicit Deny), for instance, you can block particular IP or IP range from accessing your subnet.
+
+Route Tables = define network traffic paths through your VPC. Route tables are attached to each subnet
+VPC Endpoints = Access to all AWS services which are not part of the VPC. Important to remember that there a 2 types of Endpoints:
+Gateway Endpoint = enables use of S3 and DynamoDB services
+Interface Endpoint = enables use of all other AWS services
+CIDR = stands for Classless Inter-Domain Routing (you don't need to remember it), but what you need to understand is how CIDR range is defined.
+
+WAF (Web Application Firewall) = is used to protect against attacks like cross-site scripting, while Shield
+AWS Shield = is offering protection against DDOS attacks.

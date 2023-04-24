@@ -1,0 +1,5 @@
+
+
+# ECS
+ aws --region us-east-2 ecs describe-task-definition --task-definition 'integraciones_devafsd' 2>&1 # find task definitions
+

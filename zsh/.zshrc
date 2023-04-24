@@ -187,6 +187,17 @@ bindkey -v
 # use emacs mode
 #bindkey -e
 
+# Yank to the system clipboard
+function vi-yank-xclip {
+    zle vi-yank
+   #echo "$CUTBUFFER" | pbcopy -i #mac
+   # xclip -in -selection clipboard <<<\$CUTBUFFER #linux
+   echo "$CUTBUFFER" | xclip -in -selection clipboard #linux
+}
+
+zle -N vi-yank-xclip
+bindkey -M vicmd 'y' vi-yank-xclip
+
 
 #export PAGER="/usr/bin/most -s"
 #source .mancolors

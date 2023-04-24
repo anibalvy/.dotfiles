@@ -12,10 +12,10 @@ ALTER TABLE pgbench_accounts SET (fillfactor = 90);
 # JSON [https://dzone.com/articles/using-jsonb-in-postgresql-how-to-effectively-store]
 # TIMESTAMP [https://www.cybertec-postgresql.com/en/time-zone-management-in-postgresql/]
 
-# size of table 
-SELECT pg_size_pretty( pg_total_relation_size('tablename') );
 # size of DB
-SELECT pg_size_pretty( pg_database_size(‘databname‘) );
+SELECT pg_size_pretty( pg_database_size('databname'));
+# size of table 
+SELECT pg_size_pretty( pg_total_relation_size('tablename'));
 
 # pg dump
 pg_dump --file "~/Backups/DB_-202208051053.sql" --host "<url>" --port "5432" --username "master" --no-password --verbose --role "master" --format=p --create --section=pre-data --section=data --section=post-data --inserts --encoding "UTF8" "vote"
@@ -42,3 +42,21 @@ SELECT datname,usename, ssl, client_addr
 
 SELECT * FROM pg_stat_activity JOIN pg_stat_ssl USING(pid);
 
+##
+#
+SELECT -- * --table_schema || '.' || table_name
+       'drop table '|| table_name ||'; '
+  FROM information_schema.tables
+ WHERE table_type = 'BASE TABLE'
+   AND table_schema NOT IN ('pg_catalog', 'information_schema')
+   and table_name like 'datos_campana_temp%';
+   
+   
+
+SELECT  * --table_schema || '.' || table_name
+       --'drop table '|| table_name ||'; '
+  FROM information_schema.sequences;
+  
+  
+SELECT  * 
+  FROM information_schema.schemata;

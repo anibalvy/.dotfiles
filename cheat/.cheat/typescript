@@ -1,0 +1,64 @@
+tsc file.ts          # compile ts to js
+tsc --watch file.ts  # watch and compile ts to js
+
+tsc --init          # create tsconfig.json configuration file
+
+
+let id = 5         # js
+let id: number = 5 # ts
+id = '5'    # error
+
+let age: number
+age = 5
+
+let ids: number[] = [1,2,3,4,5]
+ids.push('hello')  # error
+
+let person: [number, string, boolean] = [1, 'hello', true] //tuple
+
+let employee = [number, string][] // typle array
+employee = [[1, 'one'],[2, 'two']]
+
+
+let id: string | number = 5 # Union: value can be a string or a number
+
+enum Direction1 {
+    Up=1,          // default: 0
+    Down,
+    Left,
+    Right
+}
+console.log(Direction1.Left) // gives: 3
+
+// Objects
+const user: {
+    id: number,
+    name: string
+} = {
+    id: 1,
+    name: 'John'
+}
+
+// Object 2
+type User = {
+    id: number,
+    name: string
+    }
+
+const user: User = {
+    id: 1,
+    name: 'John'
+}
+
+// Type Assertion: telling compiler that we want to treat an entity as a different type
+let cid: any = 1
+let customerId = <number>cid // now customerId should be a number
+let customerId = cid ad number // idem (another notation)
+customerId = true // error
+
+// Functions
+function addNum(x, y) {...  // implicitamente ANY
+function addNum(x: nubmer, y: number): number {...  // correct way
+function log(message: string | number): void {...  // no return value -> void
+
+// Interfaces: like a custom type or a specific structure to an object
