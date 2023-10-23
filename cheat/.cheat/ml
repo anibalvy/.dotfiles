@@ -1,0 +1,259 @@
+Curso de Inteligencia Artificial (IA): Machine Learning o Aprendizaje de Máquina
+
+Esta guía y curso para aprender Inteligencia Artificial (en particular "Machine Learning") tiene 5 niveles:
+
+        1. Programación Básica con Python
+        2. Manejo de Datos
+        3. Visualización de Datos
+        4. Análisis de Datos
+        5. Aprendizaje de Máquina
+
+A continuación un listado de los videos agrupados por nivel sugiriendo un orden: 
+
+*** NIVEL 1: Programación Básica con Python ***
+
+Instalación de Python
+https://youtu.be/ZgTA87Owe84
+
+Variables 
+https://youtu.be/RC4QkyWthbI
+
+Estructura IF
+https://youtu.be/AaeVXnf-xno
+
+Listas
+https://youtu.be/WCfR0nWOKdU
+
+Conjuntos
+https://youtu.be/rHiu2ZAp4eA
+
+Tuplas
+https://youtu.be/9hDL2gZqYJs
+
+Ciclos: While & For
+https://youtu.be/JP7ljJe-rAQ
+
+Funciones
+https://youtu.be/d1Tl2ZDV0Cc
+
+Parámetros por Referencia y Valor
+https://youtu.be/aVN2wp1Oosk
+
+Alcance
+https://youtu.be/wxBrLA9pOas
+
+Funciones Lambda
+https://youtu.be/BY0uu-ueisM
+
+Diccionarios
+https://youtu.be/YK1aKWAdeyc
+
+Excepciones
+https://youtu.be/Itmbtm_3kfM
+
+Lectura y Escritura de Archivos
+https://youtu.be/JQTZB979H1A
+
+Creación e Importación de Módulos
+https://youtu.be/bf_698bfPDU
+
+Recursividad
+https://youtu.be/Oy9vWWss1n4
+
+Búsqueda Binaria
+https://youtu.be/Ds61hiuBcOk
+
+Objetos y Clases
+https://youtu.be/Qc0qD00RmRA
+
+Encapsulamiento
+https://youtu.be/5kMOFIOWKvs
+
+Atributos de Clase
+https://youtu.be/CpgxlrImUhk
+
+Herencia y Polimorfismo
+https://youtu.be/8FjY7_mhuqM
+
+Instalación de Paquetes
+https://youtu.be/rjwUCXkJZ8E
+
+*** NIVEL 2: Manejo de Datos ***
+
+Arrays de Numpy
+https://youtu.be/LVq_8mworXM
+
+Búsqueda y Filtros con Numpy
+https://youtu.be/U-7Q-koi-Cc
+
+Ejes y Agregación con Numpy
+https://youtu.be/l0dAuuNZZvg
+
+Unir y Separar Arrays de Numpy
+https://youtu.be/E1i8fVEfMOo
+
+Funciones Universales
+https://youtu.be/0PGW7WzG5uQ
+
+Jupyter Notebooks
+https://youtu.be/mcG_wcR4e6M
+
+Series Pandas
+https://youtu.be/E7Tt458sTUE
+
+Dataframes: Guía Básica
+https://youtu.be/DjQyHmy9AqQ
+
+Dataframes: Cargar datos CSV y Excel
+https://youtu.be/uGx0PHD6o9M
+
+Dataframes: Filtrar datos
+https://youtu.be/Ys02DmUwl30
+
+*** NIVEL 3: Visualización de Datos ***
+
+Matplotlib
+https://youtu.be/foLHkB6W_Ww
+
+Distribución de Datos
+https://youtu.be/a013caLihMg
+
+Diagramas de Caja (y Datos Anómalos)
+https://youtu.be/wsfV4AO8UFw
+
+Gráficas Relacionales con Seaborn
+https://youtu.be/Mq4lF0eEw8s
+
+Gráficas Categóricas con Seaborn 
+https://youtu.be/ncfPK06nKA8
+
+*** NIVEL 4: Análisis de Datos ***
+
+Centralidad
+https://youtu.be/LwTmpSLJvSI
+
+Cuantiles
+https://youtu.be/u5U6OGqVjbI
+
+Medidas de Dispersión
+https://youtu.be/-O9E8f7ibfE
+
+Distribución Normal
+https://youtu.be/GUF-1i9L6JI
+
+Correlación de Pearson
+https://youtu.be/IBMrXyTR6CU
+
+Correlación de Spearman
+https://youtu.be/lzF6NggCSdY
+
+Estadística Inferencial
+https://youtu.be/lRcPa9i7p9E
+
+Imputación Básica o Manejo de Datos Faltantes
+https://youtu.be/XiKYdHUsgyM
+
+Categóricos Nominales
+https://youtu.be/cp7Uo5MSFSE
+
+Categóricos Ordinales
+https://youtu.be/KUEsLv8EaVY
+
+Escalar, Normalizar y Estandarizar
+https://youtu.be/-VuR14Qyl7E
+
+Dónde conseguir Datos
+https://youtu.be/lIPCpPd0YuI
+
+Matriz de Covarianza
+https://youtu.be/jo3XizfYjek
+
+Datos Categóricos a partir de Numéricos
+https://youtu.be/26wA0ChTffc
+
+*** NIVEL 5: Aprendizaje de Máquina ***
+
+Inteligencia Artificial y Machine Learning
+https://youtu.be/KOVBu-jn3dQ
+
+Supervisado y No Supervisado
+https://youtu.be/OmeoSewA2D0
+
+Regresión y Clasificación
+https://youtu.be/iEqdtiW_UdY
+
+Regresión Lineal
+https://youtu.be/1CGbP0l0iqo
+
+Datos de Entrenamiento, Validación y Prueba
+https://youtu.be/vdYzm4xC7mc
+
+Regresión Logística
+https://youtu.be/Z-bFsyiQxb0
+
+Métricas para Clasificación 
+https://youtu.be/uaGMk43XTOw
+
+Área bajo la Curva ROC
+https://youtu.be/Uyfcqn3Nidc
+
+Métricas para Regresión
+https://youtu.be/9IZ6OPQWtpw
+
+Árboles de Decisión
+https://youtu.be/z5rmY-LV7ME
+
+Impureza Gini
+https://youtu.be/PFn31_hzQ2Y
+
+Bosques Aleatorios
+https://youtu.be/yOCJQLf_YFI
+
+Validación Cruzada
+https://youtu.be/Qnth2VXopLg
+
+Tunea Hiperparámetros
+https://youtu.be/YAfS8-BXp8Q
+
+K-Vecinos Más Cercanos (KNN): Clasificación 
+https://youtu.be/XN6fChNqfbs
+
+K-Vecinos Más Cercanos (KNN): Regresión
+https://youtu.be/z3140gOhuVI
+
+Bagging
+https://youtu.be/NOiKfIhQG6A
+
+K-Means - Clustering
+https://youtu.be/mICySHB0fh4
+
+DBSCAN - Clustering
+https://youtu.be/HMis89lGdkA
+
+Propagación de Afinidad - Clustering
+https://youtu.be/kInYC2l_W4M
+
+Distancias en Clustering
+https://youtu.be/1g49iwKrV-U
+
+La Maldición de la Dimensionalidad
+https://youtu.be/nhgCwWGNDiM
+
+PCA reducción de dimensionalidad
+https://youtu.be/x-7BHjMA15M
+
+Datos Anómalos con iforests
+https://youtu.be/n2PpD7xnPoM
+
+Clases Desbalanceadas con Pesos
+https://youtu.be/2FbugqoBz94
+
+KNN para Imputación
+https://youtu.be/dToVCgCPW1o
+
+Perceptrón
+https://youtu.be/dkhXGTersP0
+
+Gradiente Descendente
+https://youtu.be/FNWbigoQNOk
+

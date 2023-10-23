@@ -1,0 +1,6 @@
+# uncompress
+# i: uncompress
+# d: create folder if needed
+# m: no timestamps
+# --no-absolute-filenames: avoid overwrite filesystem machine 
+cpio -idm --no-absolute-filenames < ../kernel_fs_file 

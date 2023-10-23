@@ -1,0 +1,52 @@
+# enter ftp and connect to server
+$ ftp
+ftp> open <server>
+
+# connect directly to server
+ftp <server>
+ftp -i <server>
+
+?           # help
+
+# remote navigation
+dir             # list remote files
+cd <directory>  # change remote working directory
+
+# local navigation
+!ls -l          # list local file (my machine)
+lcd             # list local path
+lcd <directory> # change local working directory
+
+# upload
+put <file>                      # upload a file
+put <file> <remote_path>        # upload a file to a different directory
+mput *.txt                      # upload multiple files using wildcard
+mput <file_1> <file_2> <file_3> # upload a multiple files
+
+# download
+get <file>                      # downloading a file
+get <file> <local_path>         # downloading a file to a different directory
+mget *.txt                      # downloading multiple files using wildcard
+mget <file_1> <file_2> <file_3> # downloading multiple files
+
+# excecute local
+!touch local.txt
+
+# create/delete folders
+mkdir <directory>
+rmdir <directory>
+
+# file
+delete <filename>
+
+# FTP con Curl
+curl ftp://<server>/<path>
+curl ftp://<username>:<password>@<server>/<path>
+curl -T <filename> -u "<username>:<password>" ftp://<server>/
+curl -u "<username>:<password>" --quote "DELE <filename>" ftp://<server>/
+
+# FTP con Telnet
+telnet ftp.vim.org 21
+USER anonymous
+PASS anonymous
+

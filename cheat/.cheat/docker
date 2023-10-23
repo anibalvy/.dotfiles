@@ -2,6 +2,14 @@
 # Start docker daemon
 docker -d
 
+# create project from init
+docker init
+
+#build
+docker build .
+docker build --rm . # delete intermidate containers
+docker build --rm -f Dockerfile -t <image_name_given> .
+
 # network
 # - bridge
 # - host: bindiar puertos
@@ -16,6 +24,7 @@ docker -d
 docker run -ti <image_name> /bin/bash
 docker run -ti --entrypoint=bash <image_name>  # change entrypoint for debug
 docker run -ti --name <custom_name> <image_name> # rename container
+docker run -ti -p <machine_port>:<container_port> --name <custom_name> <image_name> # open and mapping a port from container
 
 # Set CPU affinity (see cheat numbactl)
 docker run --cpuset-cpus=0,4,8,12,16,20,24,28 --name test
@@ -113,6 +122,12 @@ docker update --restart=unless-stopped <container_id>
 
 # show the exit output of a container (useful in script)
 docker wait <container_id>
+
+# list networks
+docker network ls
+
+# add network to container
+docker network connect <id or name of the network> <id or name of the container>
 
 ## Dockerfile has their own cheat (cheat dockerfile)
 

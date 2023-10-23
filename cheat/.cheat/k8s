@@ -43,21 +43,17 @@ Volumenes:
 	- configmap: a config values that resides in k8s
 
 RABC:
-        - Roles: 
-		declare permissions that affect namespaces
+        - Roles: declare permissions that affect namespaces
 		- Resource
 		- Verbs: actions like get, list, delete, create
-	- RoleBinding:
-		assing user to roles
+	- RoleBinding: assing user to roles
 		- Role
 		- Subject
 		- ServiceAccount
-	- ClusterRole:
-		declare permissions that affect all Cluster
-	- CluserRoleBinding:
-		assing user to Cluster roles
-	- ServiceAccount:
-		assing permissions to Pod (like a user to pod)
+	- ClusterRole: declare permissions that affect all Cluster
+	- CluserRoleBinding: assing user to Cluster roles
+	- ServiceAccount: assing permissions to Pod (like a user to pod)
+
      Create user:
        - Create key:
        		openssl genrsa -out <user>.key 2048
@@ -94,6 +90,15 @@ CNI (Container Network Interface) API:
 	- calico
 	- cillium
 
+pods:    deployments
+demoset: pods that are deployed to all nodes 
+
+labels and annotations:
+The biggest difference between annotations and labels in Kubernetes is this: while labels attach identifying metadata to a K8s object, annotations attach additional information that is not identifying.
+
+# installing metrics server
+kubectl top nodes
+kubectl top pods
 
 # MANIFESTs
 
@@ -293,4 +298,4 @@ data:
     color.bad=yellow
     allow.textmode=true
 
-
+## cost calculator - https://learnk8s.io/kubernetes-instance-calculator

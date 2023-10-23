@@ -16,12 +16,73 @@ asterisk -rx "sip show users"
 # To print out the current active channels:
 asterisk -rx "core show channels"
 
+# Config directory
+# /etc/asterisk
+# channels
+#       -> 2 per call... 1 from dev 1 to asterisk and then another to the dev 2
+#       -> 1 when go to ivr
+#       there is SIP, IAX, DAHDI channels
+# Interfaces
+#       -> .conf files
+#       -> CLI
+#       -> AGI: Asterisk Gateway Interface
+#       -> AMI: Asterisk Manager Interface
+#       -> ARI: Asterisk Rest Interface
+# Extensions:
+#       -> is a scipt, is the mapping between dialplan address and a named set of actions, each action is called an "application"
+#       -> in extensions.cong
+#          [context]
+#          extension
+#          - application
+#          - application
+#          - application
+#        -> syntax:
+#          exten => name,priority,application
+#          exten => 1000,1,Dial(SIP/digium-phone)
+#          exten => Tom,1,Dial(SIP/digium-phone)
+#          exten => 1234,1,NoOp(Hello World!)
+#           same => n,NoOp(after Hello!) ; same: keep extension, n: next number in priority
+#           same => n(my-label),NoOp(after Hello!) ; same: keep extension, n: next number in priority, (my-label): to tag action
+#           same => n,Goto(my-label)
+#
+#           same => n,Playback(${IF(${tweet_success}?demo-congrats:tts-somethingwrong)}) ; conditions and variables
+#
 # in console
-sip show peers
-sip show users
-sip reload
+*CLI> core show version
+*CLI> core show channels
+*CLI> sip show peers
+*CLI> sip show users
+*CLI> sip reload
+*CLI> dialplan show
+*CLI> dialplan show + tab     # show contexts
+*CLI> dialplan show <context> # show context <context>
+*CLI> dialplan show <extension>@<context> # show endpoint at context <context>
+*CLI> dialplan show 100@default           # show endpoint 100 at context default
+*CLI> core show applications  # see applications for extensions
+*CLI> core show application  <application_name # see application help
+
 ## when reload trunk
-dialplan reload
-core show channels
-sip show channesls
+*CLI> dialplan reload
+*CLI> core show channels
+*CLI> sip show channesls
+*CLI> sip reload
+
+# modules  - /usr/lib/asterisk/modules
+*CLI> core show modules
+*CLI> core show channeltypes
+*CLI> module show like so
+*CLI> module show like dial
+*CLI> module load app_dial.so
+*CLI> module unload app_dial.so
+
+# Database commands on the CLI
+*CLI> core show help database
+database del                   -- Removes database key/value
+database deltree               -- Removes database keytree/values
+database get                   -- Gets database value
+database put                   -- Adds/updates database value
+database query                 -- Run a user-specified query on the astdb
+database show                  -- Shows database contents
+database showkey               -- Shows database contents
+
 

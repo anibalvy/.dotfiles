@@ -4,11 +4,15 @@
 # start minikube with custom driver docker, kvm2, virtualbox,  
 minikube start --driver=<driver_name>
 
-# To make kvm2 the default driver:
-minikube config set driver kvm2
+# set default driver
+minikube config set driver <driver_name>
+minikube config set driver kvm2    # To make kvm2 the default driver
 
 # Increase the default memory limit (requires a restart):
 minikube config set memory 16384
+
+# Options available are: containerd, cri-o, docker
+minikube start --container-runtime=docker
 
 # start with a custom profile (a cluster defined by <name>)
 minikube start -p <name> # (*) 
@@ -31,8 +35,37 @@ minikube start --driver=podman --container-runtime=cri-o
 # specify Kubernetes version
 minikube start --kubernetes-version v1.19.0
 
-# set driver
-minikube config set driver <driver_name>
+#  start example
+minikube start --nodes 3 -p kasa-k8s-cluster --driver=kvm2 --cpus=4 --memory='4g' --disk-size='50g'
+minikube start --addons=ingress --cpus=2 --cni=flannel --install-addons=true --kubernetes-version=stable --memory=6g
+
+#use containerd
+minikube start \
+    --network-plugin=cni \
+    --enable-default-cni \
+    --extra-config=kubelet.container-runtime=remote \
+    --extra-config=kubelet.container-runtime-endpoint=unix:///run/containerd/containerd.sock \
+    --extra-config=kubelet.image-service-endpoint=unix:///run/containerd/containerd.sock \
+    --bootstrapper=kubeadm
+
+#use CRI-O
+minikube start \
+    --network-plugin=cni \
+    --enable-default-cni \
+    --extra-config=kubelet.container-runtime=remote \
+    --extra-config=kubelet.container-runtime-endpoint=/var/run/crio.sock \
+    --extra-config=kubelet.image-service-endpoint=/var/run/crio.sock \
+    --bootstrapper=kubeadm
+
+#Addons
+minikube addons list
+minikube addons enable registry
+
+# Enter dashboard
+minikube dashboard
+
+# get ip
+minikube ip
 
 # status of the cluster
 minikube status
@@ -83,31 +116,3 @@ kubectl config use-context minikube
 kubectl --kubeconfig=<kubeconfig>.yml <cmd>
 kubectl --kubeconfig=kubeconfig.yml get nodes
 
-#use containerd
-minikube start \
-    --network-plugin=cni \
-    --enable-default-cni \
-    --extra-config=kubelet.container-runtime=remote \
-    --extra-config=kubelet.container-runtime-endpoint=unix:///run/containerd/containerd.sock \
-    --extra-config=kubelet.image-service-endpoint=unix:///run/containerd/containerd.sock \
-    --bootstrapper=kubeadm
-
-#use CRI-O
-minikube start \
-    --network-plugin=cni \
-    --enable-default-cni \
-    --extra-config=kubelet.container-runtime=remote \
-    --extra-config=kubelet.container-runtime-endpoint=/var/run/crio.sock \
-    --extra-config=kubelet.image-service-endpoint=/var/run/crio.sock \
-    --bootstrapper=kubeadm
-
-
-#Addons
-minikube addons list
-minikube addons enable registry
-
-# Enter dashboard
-minikube dashboard
-
-# get ip
-minikube ip

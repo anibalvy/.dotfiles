@@ -1,0 +1,3 @@
+dmesg -T         # human readable timestamp
+dmesg -w        # continue listening
+dmesg --follow   # continue listening

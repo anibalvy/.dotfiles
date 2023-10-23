@@ -2,3 +2,17 @@
 perf record <program> # give us an assemby print that report percent of time taken by instructions (color coded by how hot they are)
 
 perf stat <program>   # give us performance counter data
+
+perf record -g -F 999 -p <pid>                      # To attach to an existing process with PID <pid>
+
+perf record -g -F 999 program options               # To launch a new process under the profiler
+
+perf record -g -F 999 firefox -P profile -no-remote # Example, for Firefox
+
+# Stop with Ctrl+C once you've collected enough
+
+# Convert the profile
+perf script -F +pid > /tmp/test.perf
+# After exiting perf, convert the perf data into something that for example Firefox Profiler can read; The perf script command takes the perf.data file that was written by the perf record command as its implicit input.
+
+# Perf can include kernel callstacks in the profile. They might show up as [unknown] frames from the [kernel.kallsyms] library. Setting /proc/sys/kernel/perf_event_paranoid to 1 or less can potentially help with this

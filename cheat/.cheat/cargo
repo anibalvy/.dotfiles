@@ -1,0 +1,14 @@
+cargo new         # create new project template 
+cargo build       # compile a project
+cargo run         # execute  project
+cargo run -q      # execute  project, don't print cargo logs
+cargo watch -x run 
+cargo test        # test project
+cargo test <str>   # test only the one that have the word <str>
+cargo test -- --test-thread=1   # after '--' are options to cargo test
+cargo check       # Check project types
+cargo doc         # build documentation
+cargo publish     # publish a library to crates.io
+
+cargo add <library>     # install library module
+cargo install <program> # install binary programs 

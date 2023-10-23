@@ -1,0 +1,31 @@
+# ELF: Executable and Linkable Format
+# used for Executable, shared library, object file, core dumps, etc
+# 
+# Segments: Only relevant at runtime, also specify how the should be loaded into virtual or physical memory (how to map ELF file to memory)
+# Sections: Only relevant at link time
+# 
+# A executable containt 2 main segments
+# - Data segment: puts certain byte range from ELF file into memory and add room por uninitialized data
+# - Code segment: contains executable code 
+# then the OS will load the address of the entry-point, where the code will start executing.
+# 
+# In dinamically linked binary will have and addintional segment that specifies which shared libraries needs to be loaded, and the SO will load them as before.
+# 
+# ELF Header: structure that contains the metadata of the file
+# first 2 byte contains the MAGIC NUMBER
+# 
+# 
+# look a header of a file, see for ex. endianess of a exec
+readelf -h /bin/ls
+
+#  program header
+readelf --segments /bin/ls
+
+
+# remove sections from executable
+sstrip ls
+readelf --sections ls
+
+
+# display binary file as plain text
+xxd -g 1 a.out | head -5

@@ -6,23 +6,24 @@
 tmux # Start tmux
 tmux new -s [session_name] # Start new named session
 <prefix> d # Detach from tmux
-tmux attach # Restore tmux session
-tmux attach -d  # Detach an already attached session (great if you are moving devices with different screen resolutions)
 tmux ls # Display session
+tmux attach # Restore tmux session
+tmux attach -t [session_name] # Restore tmux session
+tmux attach -d  # Detach an already attached session (great if you are moving devices with different screen resolutions)
 ### Start a shared session
 tmux -S /tmp/your_shared_session
 chmod 777 /tmp/your_shared_session
 
 ## Sessions
 <prefix> $     # Rename session
-<prefix> s     # Switch session
+<prefix> s     # show/Switch session
 <prefix> ?     # Help screen (Q to quit)
 <prefix> PageUp/PageDown # Scroll in window
 <prefix> : source-file /path/to/file # Reload configuation file
 
 ## Window management
 <prefix> c     # Create window
-<prefix> &     # Destroy window
+<prefix> &     # Destroy/kill window
 <prefix> f     # find a window
 <prefix> w     # list all window
 <prefix> ,     # rename a window
@@ -30,22 +31,31 @@ chmod 777 /tmp/your_shared_session
 <prefix> p     # move to previous window
 <prefix> [0-9] # Switch between windows
 
+# rearrange window
+
+
 ## Pane management
 <prefix> %         # Split pane horizontally
 <prefix> "         # Split pane vertically
-<prefix> x         # destroy pane
-<prefix> q         # show pane number
+<prefix> x         # destroy/kill pane
+<prefix> q         # show pane number and allow to select it
 <prefix> ;         # go to last active pane
 <prefix> o         # go to next pane clockwise
 <prefix> Arrows    # move to ...
 <prefix> {h,j,k,l} # move to left,down,up,right
-<prefix> : set synchronize-panes [on|off] # Sync panes
+<prefix> : set synchronize-panes [on|off] # Sync cursor in panes, <prefix> + a in my config
 
-## rearrange pane
+<prefix> z         # toggle pane to full window
+<prefix> !         # convert pane to window
+
+
+# rearrange pane
 <prefix> Space  # change pane layout
 <prefix> Ctrl+o # swap pane anti-clockwise
 <prefix> {      # move pane to the left
 <prefix> }      # move pane to the right
+<prefix> : break-pane -t : # send pane to a new window
+<prefix> : join-pane -t <new_window_number> # send pane to another window
 
 ## resize
 <prefix> : resize-pane -R 10
@@ -53,3 +63,4 @@ chmod 777 /tmp/your_shared_session
 <prefix> : resize-pane -U 10
 <prefix> : resize-pane -D 10
 
+<prefix> [      # enter copy mode -> select with "ctrl+v Space" -> yank with 'y'

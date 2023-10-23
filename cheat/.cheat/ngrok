@@ -1,0 +1,6 @@
+ngrok tcp 22
+ngrok http 6008
+
+
+# connect by ssh
+ssh user@8.tcp.ngrok.io -p 12345

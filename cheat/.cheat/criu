@@ -1,0 +1,5 @@
+
+
+sudo criu dump -D <process_name> -t `pidof kolourpaint` -vvv --shell-job                   # dump <process_name> to disk
+sudo criu dump -D <process_name> -t `pidof kolourpaint` -vvv --shell-job --leave-running   # dump <process_name> to disk and keep it on
+sudo criu restore --shell-job -v -D <process_name>                                         # dump <process> to disk

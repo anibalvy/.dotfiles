@@ -1,7 +1,12 @@
 # Every command shown here can be used with the `-g` switch for global scope
 
+# initialize project
+npm init
+npm init -y
+
 # Install a package in the current directory
 npm install <package>
+npm install <package> -E # save exact version in package.json
 
 # Install a package, and save it in the `dependencies` section of `package.json`
 npm install --save <package>
@@ -20,3 +25,7 @@ npm install -g npm
 
 # Uninstall a package
 npm uninstall <package>
+
+## autoreload 
+node --watch <app>
+

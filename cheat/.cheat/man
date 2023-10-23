@@ -28,6 +28,7 @@ man '{page_name_here}.(section)'
 man -k keyword
 man -k delete
 man -k printf
+man -s <section_number> -k futex
 apropos printf # equivalent
 
 # brute-force search,

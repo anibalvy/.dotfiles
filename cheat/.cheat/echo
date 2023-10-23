@@ -1,0 +1,9 @@
+echo 'message'
+> message
+
+echo "message and 'single' quotes"
+echo 'message and "double" quotes'
+echo 'message and $PWD variable'
+echo 'message and $(date) output command'
+echo "one\ntwo\nthree" # will print it without new line (normal echo, some shell builtin will assume -e like in zsh)
+echo -e "one\ntwo\nthree" # will print with new line 

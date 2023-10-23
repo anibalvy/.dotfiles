@@ -1,0 +1,3 @@
+sha256sum <filename>
+echo "Hello World!" | sha256sum
+sha256sum -c sha256-checksums.txt

@@ -1,0 +1,12 @@
+terraform init       # Initializes a Terraform working directory. It must be within the same directory as the .tf files or nothing will happen.
+
+terraform validate   # Confirms the Terraform file's syntax is correct
+
+terraform plan       # Generates and shows what will change when you run terraform apply
+
+terraform apply      # Builds or changes infrastructure. It will show the execution plan and requires a yes or no to execute unless you use the --auto-approve flag, which will make it execute automatically.
+
+Terraform refresh    # Updates the local state file against real resources. This ensures Terraform has an accurate view of what is in the current environment.
+
+terraform destroy    # Deletes and removes Terraform-managed infrastructure.This will permanently remove anything created and stored in the state file from the cluster.
+

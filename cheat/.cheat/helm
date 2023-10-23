@@ -59,7 +59,7 @@ Removed smiling-penguin
 
 
 ## status
-helm status smiling-penguin
+helm status smiling-penguin -n <namespace>
 Status: UNINSTALLED
 ...
 

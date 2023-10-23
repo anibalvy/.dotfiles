@@ -1,5 +1,11 @@
 # To sort directories/files by size
 du -sk *| sort -rn
 
-# To show cumulative humanreadable size
+# To show humanreadable size
 du -sh
+
+du -h -s koloupaint  
+
+# To show total size
+du -shc
+du -shc file-2023* | grep total

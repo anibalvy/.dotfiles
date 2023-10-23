@@ -1,0 +1,63 @@
+
+
+# Expose Apps on AWS EKS
+# https://www.youtube.com/watch?v=ePqUq06WoLk
+
+# kube-proxy
+# proxy: enable resources availables locally, only Layer7
+kubectl proxy --port=8080
+# this will allow
+# http://localhost:8080/api/v1/pods  # k8s api to see pods
+# http://localhost:8080/api/v1/namespaces/default/services   # see services on namespace default
+# http://localhost:8080/api/v1/namespaces/<namespace>/services/<protocol>:<srv_name>:<srv_port>/proxy/   # request service
+# http://localhost:8080/api/v1/namespaces/default/services/http:ngix:web/proxy/   # request service
+
+# kubectl port-forward
+# Layer4, only tcp
+kubectl port-forward -n <namespace> svc/mongo 2701   # expose the same port of the pod in the local machine
+kubectl port-forward -n <namespace> svc/mongo :2701   # expose on any available port on localhost
+kubectl port-forward -n <namespace> <pod_id> <local_port>:<pod_port>
+kubectl port-forward -n <namespace> <pod_id> <local_port_1>:<pod_port_1>  <local_port_2>:<pod_port_1> # expose multiple ports
+kubectl port-forward -n <namespace> pods/<pod_id> <local_port>:<pod_port>
+kubectl port-forward -n <namespace> deployment/<deployment_name> <local_port>:<pod_port>
+
+# kubefwd: will expose all services in a namespace on localhost
+# github.com/txn2/kubefwd
+sudo kubefwd services -n <namespace>  # will use /etc/hosts
+
+# hostport: open nodes ports
+# not for productions, recommend use demonsets if still want to use it
+
+# NodePort service: exposes the service on each Node IP addresses using static port; will allocate ports from 30000-32767 (change it with --service-node-port-range=20000-22767)
+# every node will have the same port mapped, ex: 30010:80 in all nodes
+# the nodes will redirect the request to the node that have the service ( this is done automatically by EKS when implement nlb and alb )
+
+# load balancer
+# aws-load-balancer-type: use nlb instead of classic
+# create a CNAME record to lb
+
+# AWS Load Balancer Controller
+# aws-load-balancer-type: external
+# aws-load-balancer-nlb-target-type: ip   # to directly route traffic to the port
+
+# Ingress (3rd party controllers)
+# like Nginx Ingress, Kong Ingress, others
+# - first deploy ingress controller to EKS cluster, that will create a svc of type Load Balancer
+# - this svc will receive all request and route them, allowing to serve metrics directly
+
+# Ingress (AWS Load Balancer controller)
+# pro: no need to run an extra proxy controller in k8s
+# con: will not able to use prometheus to monitor all ingresses unless export from aws
+# con: not allow regex in route-base routing
+# con: as is an Application LB, is more expensive and slower
+# con: hard to manage certs
+# will create a dedicated lb in aws type L7, will route directly to the pod ip address when using ip mode
+
+# AWS API Gateway
+# - first need to create a privete nlb
+# - get the arn from the listener of the lb (not of the lb per se)
+# - set up aws apigateway
+# - integrate the api gw
+
+
+

@@ -6,3 +6,12 @@ echo '42 is the solution' | xxd -p
 # Result: 42 is the solution
 echo '34322069732074686520736f6c7574696f6e0a' | xxd -r -p
 
+# see binary file as text
+xxd -g 1 a.out
+
+# export plain raw binary to file
+xxd -p a.out > a.dmp
+
+# convert plain raw back to binary
+xxd -p -r a.dmp > a.bin
+

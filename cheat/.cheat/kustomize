@@ -1,0 +1,101 @@
+
+# kustomize: templates for kubernetes manifests
+# integrated on kubectl
+# command is now:
+kubectl kustomize
+
+
+# 0 - General - kustomization.yml
+apiVersion: kustomize.config.k9s.io/v1beta1
+kind: Kustomization
+
+resources:   # list that will be handle by kustomnize
+  - deployment.yaml
+  - service-nodeport.yaml
+  - configmap.yaml   # not needed when declared configMapGenerator
+
+commonLabels:
+  author: authorname  # will add this label to all resources
+
+configMapGenerator:
+- name: index-html   # this till replace in deployment the use of configMap named index-html making configmap.yaml not needed anymore
+  files:
+  - index.html      # this file can change and kustomize will create another version in k8s and replace them
+- name: config   # list with kubectl get cm
+  literals:      # see with kubectl get cm config-ssfdssf4 -o yaml
+  - env=qa
+
+patchesStrategicMerge: # if we need to generate variables custom by a condition, like different env; ex. different limits for prod, dev or qa
+  - resource-patch.yaml # this file must have the section that we want to change
+
+images:
+  - name: nginx
+    newTag: 1.16-alpine  # will change the image from deployment
+
+# build command
+kustomize build .  # will concatenate this files
+
+# 1 - convert Deployment
+# make a base manifest folder and have a deployment.yaml and kustomization.yaml, this with:
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: arbitrary
+resources:
+- deployment.yaml
+
+# make folder by env: like enviroment/qa ; to this add deployment.yaml and namespace.yaml
+# deployment.yaml will have changes specific to the environment
+# namespace.yaml will have namespace definition, like this:
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa 
+
+# and finally add kustomization.yaml with:
+---
+# Kustomize Feature List
+# https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/#kustomize-feature-list
+
+namespace: qa
+namePrefix: qa-
+resources:
+  - ../../base # point to directory
+  - namespace.yaml
+patchesStrategicMerge:
+  - deployment.yaml
+
+# to run, using -k for kustomize flag
+kubectl apply -k environment/qa
+
+# to delete
+kubectl delete -k environment/qa
+
+# 2 - configMapGenerator
+# in kustomization.yaml add:
+
+configMapGenerator:
+- name: config   # list with kubectl get cm
+  literals:      # see with kubectl get cm config-ssfdssf4 -o yaml
+  - env=qa
+
+# 3 - Secrets
+secretGenerator:
+- name: username # list with kubectl get pods and see env for the pod 
+  literals:      # see with kubectl exec <pod_name> -- env
+  - username=admin
+- name: loadenv
+  envs:
+  - .env         # will load .env file in enviroment directory
+
+# 4 - Update Image/Tag
+
+images:
+  - name: nginx
+    newName: my-nginx
+    newTag: 1.16-alpine  # will change the image from deployment
+
+
+

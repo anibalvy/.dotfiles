@@ -1,5 +1,5 @@
 # Job control consists of the following commands:
-# 
+#
 # - The fg command moves a background job into the foreground.
 # - The bg command moves a suspended foreground job into the background.
 # - The jobs command shows the current list of jobs.
@@ -23,6 +23,7 @@ $ bg 3
 [3]+ kate &
 $ # and now the bash prompt returns
 
+$ fg 3 # go to process
 
 $ jobs
 [1]+  Stopped                 vi somefile

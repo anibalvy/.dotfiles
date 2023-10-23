@@ -1,0 +1,5 @@
+
+
+kwin_wayland --replace   &restart
+qdbus org.kde.kwin /KWin compositingActive
+

@@ -1,6 +1,13 @@
 # Actively follow log (like tail -f)
 journalctl -f
 
+# Display log from boot
+journalctl -b
+# Display log from boot previous boot (0 is current boot)
+journalctl -b -1
+# display boot numbers
+journalctl --list-boots
+
 # Display all errors since last boot
 journalctl -b -p err
 
@@ -11,7 +18,7 @@ journalctl --since=2012-10-15 --until="2011-10-16 23:59:59"
 journalctl -F _SYSTEMD_UNIT
 
 # Filter by specific unit
-journalctl -u dbus
+journalctl -u dbus.service
 
 # Filter by executable name
 journalctl /usr/bin/dbus-daemon
@@ -30,3 +37,10 @@ journalctl --list-boots
 
 # Filter by specific User ID e.g., user id 1000 
 journalctl _UID=1000
+
+# Clean logs - Retain only the past two days 
+journalctl --vacuum-time=2d
+
+# Clean logs - Retain only the past 500 MB
+journalctl --vacuum-size=500M
+

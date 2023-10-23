@@ -41,6 +41,7 @@ awk -F: '/^g/ && $3 >= 1000 {print $1,$6}' /etc/passwd
 
 # Built-in Functions
 awk 'BEGIN { print sqrt(625)}'
+awk '{sum+=$3} END {print "Average:", sum/NR}'}   <file>.txt  # give average of values on col #3 
 
 # external script examble
 

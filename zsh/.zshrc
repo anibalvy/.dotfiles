@@ -8,6 +8,9 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 
 
+# BUN version manager
+eval "$(bvm env)"
+
 # I commented pyenv virtualenv because is 100% better to manage them with ****pipenv****.
 #eval "$(pyenv virtualenv-init -)"
 # *** use pipenv for virtualenv
@@ -47,8 +50,8 @@ export ZSH=~/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="honukai"
-##kanibal- Install powerlevel10k
-#https://github.com/romkatv/powerlevel10k
+##kanibal- Install powerlevel11k
+#https://github.com/romkatv/powerlevel11k
 if [ $USER = 'root' ]; then
 	ZSH_THEME="honukai"
         echo "Theme: Honukai"
@@ -96,7 +99,7 @@ COMPLETION_WAITING_DOTS="true"
 # HIST_STAMPS="mm/dd/yyyy"
 HIST_STAMPS="yyyy-mm-dd"
 
-# for ignore in the history when a command start with a " " (space) - 
+# for ignore in the history when a command start with a " " (space) -
 # this commands will not show in other sessions
 HIST_IGNORE_SPACE="true"
 # Would you like to use another custom folder than $ZSH/custom?
@@ -120,7 +123,7 @@ export NVM_AUTO_USE=true # load version .nvmrc file
 ###[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 #####nvm use latest
 ####nvm use --lts
-###nvm use stable 
+###nvm use stable
 
 
 
@@ -128,7 +131,7 @@ export NVM_AUTO_USE=true # load version .nvmrc file
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(adb aws git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap zsh-nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
+plugins=(adb aws bun git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap zsh-nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
 fpath+=~/.zfunc
 autoload -U compinit && compinit
 source $ZSH/oh-my-zsh.sh
@@ -212,6 +215,19 @@ neofetch
 ## GOLANG setup version
 #gvm use go1.18.1
 
+_change_go_version() {
+  if [ -f "go.mod" ]; then
+    local version=(`grep -Po "^go \K([0-9\.]*)$" go.mod`)
+    gvm use ${version}
+  fi
+}
+
+chpwd()
+{
+  _change_go_version
+}
+
+
 ## Colour to less command
 export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
@@ -245,7 +261,7 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
         if [ -n "$TMUX" ]; then
             #echo "\nTmux pane $TMUX_PANE....\n"
             #tmux list-sessions
-            if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -gt 1 ]; then 
+            if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -gt 1 ]; then
             tmux choose-session
             fi
             #tmux a
@@ -260,24 +276,24 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
         else
             if read -q "load_tmux? Do you want to load TMUX [Y/n]"; then
                 echo '\n'
-                if [ $(tmux ls 2>&1 | grep -v 'no server running' | grep -v 'error connecting' | wc -l) -gt 0 ]; then 
+                if [ $(tmux ls 2>&1 | grep -v 'no server running' | grep -v 'error connecting' | wc -l) -gt 0 ]; then
                     echo '\nTMUX current sessions: '
                     tmux ls
                     echo '\n'
                     if read -q "new_session? Tmux new session [Y/n]: "; then
                         tmux new-session
                     else
-                        if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -eq 1 ]; then 
+                        if [ $(tmux ls 2>&1 | grep -v 'no server running' | wc -l) -eq 1 ]; then
                             tmux a
                         else
                             echo '\n'
                             if read -r "session_number? Insert session number: "; then
                                 tmux a -t $session_number
-                                while [ $? -eq 1 ] 
+                                while [ $? -eq 1 ]
                                 do
                                     echo '\nTMUX current sessions: '
                                     tmux ls
-                                    
+
                                     if read -r "session_number? Insert session number: "; then
                                         tmux a -t $session_number
                                     fi
@@ -285,9 +301,9 @@ if [  -z "$PIPENV_ACTIVE" ] ; then
                             fi
                         fi
                     fi
-                else 
+                else
                     tmux new-session
-                fi 
+                fi
             fi
         fi
     else
@@ -336,7 +352,7 @@ source ~/.yq-shell-completion-zsh
 eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
 #PATH="/home/kanibal/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PATH="/home/kanibal/perl5/bin:$PATH"; 
+PATH="/home/kanibal/perl5/bin:$PATH";
 PERL5LIB="/home/kanibal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/home/kanibal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/kanibal/perl5\""; export PERL_MB_OPT;

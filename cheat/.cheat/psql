@@ -1,5 +1,16 @@
-# setup password
-sudo -u postgres psql -h <port>
+# setup initial DB admin password (postgres user) 
+sudo -u postgres psql 
+
+# if fail, or for multiple versions installed, change in pg_hba.conf the 'Database admin login by Unix domain socket'
+# - from peer to trust (change it back later, cause 'trust' remove security)
+#local   all             postgres                                peer # to trust (change back later)
+# (also, check IP connections to allow for example all sources with 0.0.0.0/0 )
+# - enter with: 
+sudo -u postgres psql -p <port>  # if multiples versions of PG are installed
+# - set/change postgres database admin password or add a new user with:
+# # \password
+# - try to login again
+
 
 # psql is the PostgreSQL terminal interface. The following commands were tested on version 9.5.
 # Connection options:
@@ -8,32 +19,86 @@ sudo -u postgres psql -h <port>
 # -h server hostname/address.
 
 # Connect to a specific database:
-psql -U postgres -h serverAddress -d dbName
+psql -U postgres -h server_address -p 5432 -U postgres -d db_name
+psql -d postgres://server_address
+psql postgres://username@server_address:5432/db_name
+psql "user=username host=server_address port=5432 dbname=db_name"
+
+psql   -- use when env are set
+       -- PGHOST=server_address
+       -- PGPORT=5432
+       -- PGUSER=postgres
+       -- PGDATABASE=db_name
+
+# use ~/.pg_service.conf
+[db_name]
+host=server_address
+port=5432
+user=username
+dbname=db_name
+
+# connect using ~/.pg_service.conf
+psql service=db_name
 
 # Get databases on a server:
-psql -U postgres -h serverAddress --list
+psql -U postgres -h server_address --list
 
 # Execute sql query and save output to file:
-psql -U postgres -d dbName -c 'select * from tableName;' -o fileName
+psql -U postgres -d db_name -c 'select * from tableName;' -o fileName
+psql -c 'select * from tableName;' -o fileName
 
 # Execute query and get tabular html output:
-psql -U postgres -d dbName -H -c 'select * from tableName;'
+psql -U postgres -d db_name -H -c 'select * from tableName;'
+psql -H -c 'select * from tableName;'
 
 # Execute query and save resulting rows to csv file:
-psql -U postgres -d dbName -t -A -P fieldsep=',' -c 'select * from tableName;' -o fileName.csv
+psql -U postgres -d db_name -t -A -P fieldsep=',' -c 'select * from tableName;' -o fileName.csv
 
 # Read commands from file:
-psql -f fileName
+psql -f fileName.sql
 
 # Restore databases from file:
 psql -f fileName.backup postgres
 
+# set variables in shell call and exec from file 
+psql --variable "settingname=wal" -f query.sql
+
 # cli 
-\l  -- list DBs
+\l            -- list DBs
 \c <database> -- connect DB
-\dt *   -- list tables
-\dt+ *  -- list tables
-\dm  *  -- list materialize views
-\dv  *  -- list views
-\dx  *  -- list extensions
-desc <table> -- describe table
+\d <object>   -- describe an object
+\dn           -- describe schema
+\dt *         -- describe tables
+\dt+ *        -- describe tables
+\dm  *        -- describe materialize views
+\dv  *        -- describe views
+\dx  *        -- describe extensions
+desc <table>  -- describe table
+\conninfo     -- show connection info
+\x            -- extended data
+\g            -- repeat last query in the buffer
+\gx           -- repeat query and show in extended format
+CTRL+r        -- search history
+
+\set variables value
+\pset variables value  -- postgres setting
+\setenv variable value
+
+	\set settingname wal
+	># select * from pg_setting where name ~ :'settingname';
+
+\set COMP_KEYWORD_CASE lower; -- make autocomplete in lowercase
+\set ECHO_HIDDEN on/off;      -- show internal query to show queries, like catalog queries on \dt
+\set SHOW_ALL_RESULTS;        -- from PG15, on multiple queries separated by ';' pg will show all the result, this allow to only show the last one 
+\pset pager off               -- turn of pagination in results
+\setenv PSQL_EDITOR vim       -- define editor
+\pset null '-0-'              -- define what to show on null values
+\pset format html             -- format output - csv, html, unaligned 
+\o output_filename.csv        -- send result to file
+\! cat output_filename.csv    -- execute shell commands
+\i output_filename.csv        -- append result to file
+\o                            -- stop sending result to file
+\watch 1                      -- repeate last query ever 1 sec
+\gdesc                        -- describe columns of last query
+
+># select :ROW_COUNT;  -- will output previous query row count

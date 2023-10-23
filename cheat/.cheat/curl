@@ -41,6 +41,15 @@ curl httpbin.org/ip
 # Get only the HTTP status code
 curl -o /dev/null -w '%{http_code}\n' -s -I URL
 
+# get all variables present
+curl -o /dev/null -w '%{json}\n' -s -I URL
+
+# show cookie
+curl -c - 'https://example.com'
+
+# send cookie
+curl 'https://example.com' --cookie "Name=value"
+
 # POST, application/x-www-form-urlencoded is the default:
 curl -d "param1=value1&param2=value2" -X POST http://localhost:3000/data
 #with a data file
@@ -55,4 +64,16 @@ curl -d "@data.json" -X POST http://localhost:3000/data
 # POST with file
 curl -X POST -F 'image=@/path/to/pictures/picture.jpg' http://domain.tld/upload
 
+# basic auth
+curl https://site.com/login -u "login:password"
+curl  site.com/token --header 'Content-Type: application/json' -u 'user':'password'
+
+# JWT request
+curl --request GET site.com/query --header 'Content-Type: application/json' --data-raw '{"param1": "key1", "param2": "key2"}' -H "Authorization: Bearer eyJhbGciOi123456NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0I123456zMTMwNzI5LCJqdGkiOiJhYzVlZTIyOS123456LTRjOTgtYjM0MC0yMzg5NjFkO234256iLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiY29nbml0aXZhX3BhcmFtcyIsIm5iZiI6MTY4MzEzMDcyOSwiZXhwIjoxNjgzMjE3MTI5fQ.f52Ep9b3Lu8AfkrbJs88WKmGrYthymgEF2DzTL-HTmY"
+
+# FTP con Curl
+curl ftp://<server>/<path>
+curl ftp://<username>:<password>@<server>/<path>
+curl -T <filename> -u "<username>:<password>" ftp://<server>/
+curl -u "<username>:<password>" --quote "DELE <filename>" ftp://<server>/
 

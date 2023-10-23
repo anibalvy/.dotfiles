@@ -110,6 +110,10 @@ d$           # delete to the end of the line
 dgg          # delete to the beginning of the file
 dG           # delete to the end of the file
 
+zf           # folding, go to the + sign and press "l" to unfold
+zf}         # fold a function 
+zfat         # html folding, go to the + sign and press "l" to unfold
+
 ## Special Insert:
 :r [filename]  # Insert the file [filename] below the cursor.
 :r ![command]  # Execute [command] and insert the output below the cursor.
@@ -159,8 +163,6 @@ d{motion}      # delete text that {motion} moves over
 :23,$s/<original>/<new>/gc # delete from line  23
 :g/foo/d                 # delete lines
 :%s/\s\+$//g             # delete spaces at the end
-
-
 
 ## Options
 :set option=<value>  # set option
@@ -249,4 +251,8 @@ set nrformats+=hex,alpha
 :set cursorline   # to highlight the current line
 :set cursorcolumn # to highlight the current column
 :set cuc          # highlight line and column
+
+:nmap             # keybindings for normal mode mappings
+:vmap             # keybindings for visual mode mappings
+:imap             # keybindings for insert mode mappings
 

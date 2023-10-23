@@ -1,5 +1,41 @@
+# set profile in ~/.aws/credentials
+[my_profile]
+aws_access_key_id = ABCDEFGHIJK123456789
+aws_secret_access_key = fdsaadsljsdfskd+4aasdfaDzcagc+/1asdfafKx
+region = us-east-1
 
+# configure profile with cli
+aws configure --profile my_new_profile
+
+# using profile
+aws --profile my_profile <command>
+
+# help
+aws ec2 describe-instances help
+
+# IAM
+aws iam list-users
 
 # ECS
- aws --region us-east-2 ecs describe-task-definition --task-definition 'integraciones_devafsd' 2>&1 # find task definitions
+aws --region <aws_region> ecs describe-task-definition --task-definition <task_name> 2>&1 # find task definitions
+
+# EKS
+aws eks update-kubeconfig --profile <profile_name> --name <eks-name> --region <aws_region>   # get kubeconfig
+
+# Session Manager
+aws ssm start-session --target <instance_id> --region <aws_region>
+
+# IMDSv1: endpoint available to all machines that have a metadata file of the current machine
+curl http://169.254.169.254/latest/user-data
+  # in aws is needed to deactivate IMDSv1 and activate IMDSv2 that uses token
+# IMDSv2
+TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` && curl -H "X-aws-ec2-metadata-token: $TOKEN"-v http://169.254.169.254/latest/metadata
+
+# endpoint security credentials
+curl http://169.254.169.254/latest/iam/security-credentials/
+<node_rol>
+curl http://169.254.169.254/latest/metadata/iam/sls/<node_rol>
+
+# S3
+aws --profile my_profile S3 ls
 

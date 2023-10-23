@@ -9,3 +9,7 @@ screen -r session_name
 
 # List all screen sessions:
 screen -ls
+
+# connect to tty uart (usb dongle)
+screen <dev/tty> <baud_rate>
+screen /dev/ttyUSB0 9600 

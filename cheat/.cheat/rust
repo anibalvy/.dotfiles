@@ -1365,3 +1365,58 @@ fn make_tester(answer: &str) -> impl Fn(&str) -> bool + '_ {
         challenge == answer
     }
 }
+
+
+# macros
+println!('hello world!')
+todo!('this will make the compilation to stop and print message')
+
+# variables
+let a_number;
+let a_number = 100;
+let a_word = "One";
+let a_shadow_var; let a_shadow_var = a_shadow_var + 1; # shadow variables
+
+# Built-in Data types
+# Integer
+lenght    | signed  | unsigned | comment
+8-bit     | i8      | u8       | 
+16-bit    | i16     | u16      | 
+32-bit    | i32     | u32      | i32 is assign by default
+64-bit    | i64     | u64      | 
+128-bit   | i128    | u128     | 
+arch depen| isize   | usize    |
+
+
+# Floating Point  
+f32, f64 (default)
+
+# Booleans
+bool: true or false
+
+# Character 
+ all text type are valid UTF-8
+char    : must be declared with single quotes ''
+&string : also know string slice, a pointer to immutable string data, use double quotes ""
+String  : used to allocate in the heap, this are used in ex. to save input from terminal
+
+# Data collections: tuples and structs
+let a_tuple = ('A', 5.0f32, true);
+let a_tuple:(char, f33, bool) = ('A', 5.0f32, true);
+  # structs: elements in a struct are called fields
+struct Student { name: String, level: u8, remote: bool); // Classic with named fields
+struct Grades(char, char, char, f32);                    // Tuple struct with data types only, fields don't have names
+struct Unit;                                             // Unit structs: commonly used as markers.
+  # strucs assigs
+let student_1:Student = Student {name: String::from("Francis Drake"), level: 8, remote: true};
+
+
+# Data types Smart Pointers: dictates that the data will be store in the heap instead of the stack
+# Box<T>: 
+# 	  - when we have a trail that can't be computed at compile time
+# 	  - on recursive data time, if we have a struct that contains a field of the same struct type
+# Rc<T>: Reference Counter, if a variable needs to be use in more than 1 place at the same time
+# Arc<T>: Atomic Reference Counter, if needed to use Send Trait to send it to a thread (is thread safe)
+# RefCell<T>
+# 
+

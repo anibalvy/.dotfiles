@@ -1,0 +1,72 @@
+
+# source: 
+# - https://www.youtube.com/watch?v=GIU4yJn2-2A
+# - https://www.youtube.com/watch?v=hV8W4o-Mu2o
+# get firmware.bin
+
+# check type
+file firmware.bin
+
+# check for printable characters
+strings firmaware.bin
+
+# check content
+binwalk firmaware.bin
+
+# see where the kernel is to extract (in this ex. a lzma compressed file)
+# extract it with dd
+dd if=firmware.bin skip=<start_address> bs=1 of=kernel.lzma
+
+# ckeck file
+file kernel.lzma
+
+# uncompress lzma file
+unlzma kernel.lzma
+
+# uncompress squahfs (will create folder)
+unsquashfs -d <squash_file_output> squash_file_input
+
+# uncompress jffs2 FS (will create folder)
+jefferson -d  <jffs2_file_output> jffs2_file_input
+
+# check file
+file kernel
+
+# see content
+binwalk kernel
+
+# extract
+dd if=kernel skip=<star_address> bs=1 of=kernel_file.lzma
+
+
+# check file
+file kernel_file.lzma
+# looking a ascii cpio archive, meaning probably a file system
+
+# uncoompress lzma file
+unlzma kernel_file.lzma
+
+# uncompress FS
+# create a folder to uncompress content to
+mkdir cpio_fs
+cd cpio_fs
+# uncompress
+cpio -idm --no-absolute_filenames  < ../kernel_file
+
+
+# pack squashfs
+# check content
+unsquashfs -s squashfs_file_input
+# from before check compression type, block size, 
+mksquashfs <folder>/ squashfs_file_new -comp xz -b 131072
+# repack
+  # produce: firmware_new.bin
+
+# make header
+# see params (from extracted header)
+binwalk -t uimage_header
+# make it
+mkimage -A MIPS -O linux -T firmware -C none -a 0 -e 0 -n jz_fw -d firmware_new.bin firmware_out.bin
+# check the new image
+binwalk -t firmware_out.bin
+

@@ -1,0 +1,4 @@
+# check for printable caracters in binary
+strings <file>.bin
+strings -10 <file>.bin # if see 10 or more printable caracters in a row
+

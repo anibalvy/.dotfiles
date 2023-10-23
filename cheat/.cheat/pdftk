@@ -1,9 +1,34 @@
+# Repair a PDF's corrupted XREF table and stream lengths, if possible
+pdftk broken.pdf output fixed.pdf
+
+# Burst a single PDF document into pages and dump its data to doc_data.txt
+pdftk in.pdf burst
+
+# Rotate the first PDF page to 90 degrees clockwise
+pdftk in.pdf cat 1east 2-end output out.pdf
+
+# Rotate an entire PDF document to 180 degrees
+pdftk in.pdf cat 1-endsouth output out.pdf
+
 # Concatenate all pdf files into one:
 pdftk *.pdf cat output all.pdf
 
 # Concatenate specific pdf files into one:
 pdftk 1.pdf 2.pdf 3.pdf cat output 123.pdf
 
-# Concatenate pages 1 to 5 of first.pdf with page 3 of second.pdf
+# Concatenate pages 1 to 5 of first.pdf with page 3 of second.pdf (A= and B= are called handles)
 pdftk A=fist.pdf B=second.pdf cat A1-5 B3 output new.pdf
+
+# Remove page 13
+pdftk in.pdf cat 1-12 14-end output out1.pdf
+pdftk A=in1.pdf cat A1-12 A14-end output out1.pdf
+
+# get range of pages (from page 6 to 17)
+pdftk <input>.pdf cat 6-17 output <output>.pdf
+
+# reverse pages
+pdftk <input>.pdf cat end-1 output <output>.pdf
+
+# convert images to pdf
+convert 01.jpg 02.jpg out.pdf
 

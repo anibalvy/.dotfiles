@@ -1,0 +1,39 @@
+
+
+
+
+# change in riqht panel - Scene Properties - Units - Unit Scale -> 0.001 --> en milimetros
+# change in show overlays (up of coordinates) - Scale -> 0.001
+
+
+1-9 # change view
+
+mouse-left + g                          # grab
+mouse-left + r                          # rotate
+mouse-left + s                          # scale
+mouse-left + [r,s] + [x,y,z]            # action on axis
+mouse-left + [r,s] + shift + [xy,zy,xz] # action on 2 axis
+mouse-left + r + Ctrl                   # rotate on precise
+mouse-left + r + Ctrl + Shift           # rotate on precise more granuraly
+mouse-Right                             # release selection 
+
+To change an object, we need to enter Edit mode
+mouse-left + Tab                        # enter Edit mode
+select editing mode (icons beside Edit mode dropdown) between Vertex, Edge and Face.
+mouse-left + E + [x,y,z]                # modify
+
+merge... 
+select + m
+
+wireframe: see all edges
+z + 4
+a   # select all
+a+a # deselect all
+
+shift + d # duplicate selection, in edit mode, are the same object
+shift + d # duplicate selection, in object mode, are the different object
+ctrl + j  # merge selected object
+
+to make face, select vertices or edges and press 'f'
+
+# modifiers

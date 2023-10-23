@@ -10,6 +10,9 @@ convert original-image.jpg -resize 100x100 converted-image.jpg
 # To resize an image and simultaneously change its file type:
 convert original-image.jpg -resize 100x converted-image.png
 
+# convert images to pdf
+convert 01.jpg 02.jpg out.pdf
+
 # To resize all of the images within a directory:
 # To implement a for loop:
 for file in `ls original/image/path/`;

@@ -31,3 +31,6 @@ find -name "*.pdf" | xargs --no-run-if-empty rm
 ```sh
 cat file.txt | xargs -t
 ```
+
+cat urls.txt | xargs -P 4 -n 1 wget  # exec command in parallel
+

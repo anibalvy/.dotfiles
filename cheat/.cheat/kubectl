@@ -9,6 +9,7 @@ kubectl create deployment hello-minikube --replicas=5 --image=k8s.gcr.io/echoser
 
 # ussing apply
 kubectl apply -f <manifest>
+kubectl apply -k <folder> # for kustomize
 
 # using run, like docker
 kubectl run --rm -it --image=alpine -- sh
@@ -42,8 +43,41 @@ kubectl get pods --sort-by=metadata.creationTimestamp
 kubectl exec -it <pod name> -- <command>
 kubectl exec -it nginx -- sh
 
+# execute command in pod 
+kubectl exec <pod_name> -- cat /etc/password
+
 #Get components of a namespace
 kubectl get all -n <namespace>
+
+# Get ingress info
+kubectl get ing
+kubectl describe ing ingress
+
+# EXPOSE APPs
+# proxy: enable resources availables locally, only Layer7
+kubectl proxy --port=8080
+# this will allow
+# http://localhost:8080/api/v1/pods  # k8s api to see pods
+# http://localhost:8080/api/v1/namespaces/default/services   # see services on namespace default
+# http://localhost:8080/api/v1/namespaces/<namespace>/services/<protocol>:<srv_name>:<srv_port>/proxy/   # request service
+# http://localhost:8080/api/v1/namespaces/default/services/http:ngix:web/proxy/   # request service
+
+# kubectl port-forward
+# Layer4, only tcp
+kubectl port-forward -n <namespace> svc/mongo 2701   # expose the same port of the pod in the local machine
+kubectl port-forward -n <namespace> svc/mongo :2701   # expose on any available port on localhost
+kubectl port-forward -n <namespace> <pod_id> <local_port>:<pod_port>
+kubectl port-forward -n <namespace> <pod_id> <local_port_1>:<pod_port_1>  <local_port_2>:<pod_port_1> # expose multiple ports
+kubectl port-forward -n <namespace> pods/<pod_id> <local_port>:<pod_port>
+kubectl port-forward -n <namespace> deployment/<deployment_name> <local_port>:<pod_port>
+
+# kubefwd: will expose all services in a namespace on localhost
+# github.com/txn2/kubefwd
+sudo kubefwd services -n <namespace>  # will use /etc/hosts
+
+# NodePort service: exposes the service on each Node IP addresses using static port; will allocate ports from 30000-32767 (change it with --service-node-port-range=20000-22767)
+# every node will have the same port mapped, ex: 30010:80 in all nodes
+# the nodes will redirect the request to the node that have the service ( this is done automatically by EKS when implement nlb and alb )
 
 #delete service
 kubectl delete services hello-minikube
@@ -95,11 +129,15 @@ kubectl create deploy --image=nginx --dry-run=client -o yaml > my_deployment.yam
 kubectl create deploy --image=nginx --restart=Never --limits='cpu=300m,memory=512Mi' --dry-run=client -o yaml > my_deployment.yaml
 
 # secrets
+k auth can-i --list
 k auth can-i list secrets --as gianna
 yes
 
 k auth can-i get secrets --as gianna
 no
+
+# decrypt secret one-line
+kubectl get secret argocd-initial-admin-secret -n argocd -o yaml | yq e '.data.password' - | base64 -d
 
 # Use nginx:alpine and curl to check if one Pod is accessible on port 80:
 k run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.12.2.15 # this use a temporary pod

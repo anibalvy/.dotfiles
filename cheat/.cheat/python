@@ -9,6 +9,10 @@ python -m SimpleHTTPServer
 # Python 3
 python -m http.server 8000
 
+# dir() to get functions in a module 
+import time
+dir(time)
+
 # SMTP-Server for debugging, messages will be discarded, and printed on stdout.
 python -m smtpd -n -c DebuggingServer localhost:1025
 
@@ -18,3 +22,26 @@ python -mjson.tool
 # SimpleHttpServer
 python  -m SimpleHTTPServer [port]
 python3 -m http.server 9000
+
+# digits
+print(int("0xdeadbeef", 0))
+  3735928559
+print(int("10", 0))
+   10
+
+# copy object (different id)
+dictvar = dict(dict_var)  # make copy of dict, method 1
+dictvar = dict_var.copy() # make copy of dict, method 2
+# shallow copys
+new_listvar = list(list_var)  # make copy of list, method 1 
+new_listvar = list_var[:]     # make copy of list, method 2
+new_listvar = list_var.copy() # make copy of list, method 3
+# deep copy
+import copy
+new_listvar = copy.deepcopy(listvar)
+
+# merge dicts
+x.update(y)               # modify x and add/update values from y
+z = x.copy(); z.update(y) # < python 3.5, create a new dict
+z = {**x, **y}            # since python 3.5, create a new dict
+z = x | y                 # since python 3.9, create a new dict

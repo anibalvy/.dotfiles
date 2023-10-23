@@ -1,0 +1,25 @@
+
+
+go mod init <name>   # init project, will create go.mod to manage deps
+# make a main.go 
+go mod tidy          # update go.mod and crate go.sum, file that ensures that future downloads of these modules retrieve the same bits as the first download
+                     # will download packages listed.
+
+go run main.go       # run project
+go run main.go helper.go # run multiple files
+go run .             # run all go files in the folder
+
+go env               # show go env
+go env GOPATH        # show PATH for go exec
+
+# hot reload: install air
+
+go install github.com/cosmtrek/air@latest
+cd <go_project>
+air -c .air.toml # firstly find `.air.toml` in current directory, if not found, use defaults
+air init         # apply config
+air              # will run it
+air -d           # debug, prints all logs
+air bench        # Will run ./tmp/main bench
+air server --port 8080 # Will run ./tmp/main server --port 8080
+air -c .air.toml -- -h # Will run air with custom config and pass -h argument to the built binary

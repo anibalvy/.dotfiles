@@ -4,6 +4,7 @@ xclip -sel clip <filename>
 
 # from output
 <command> | xclip -sel clip
+<command> | xclip -i -sel clip
 
 
 

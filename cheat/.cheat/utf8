@@ -1,0 +1,12 @@
+
+
+
+# Code point <-> UTF-8 conversion
+
+First code point | last code point | Byte 1   | Byte 2    | Byte 3    | Byte 4
+----------------:|:---------------:|:--------:|:---------:|:---------:|:------:
+0                | 127             | 0xxxxxxx |           |           |
+128              | 2047            | 110xxxxx | 10xxxxxxx |           |
+2048             | 65535           | 1110xxxx | 10xxxxxxx | 10xxxxxxx |
+65536            | 114111          | 11110xxx | 10xxxxxxx | 10xxxxxxx |10xxxxxxx 
+

@@ -8,7 +8,7 @@ nc -zv 127.0.0.1 22 80 8080
 nc -zv 127.0.0.1 20-30
 
 # Will output 0 if port 123 is open, and 1 if it's closed
- nc 127.0.0.1 123 &> /dev/null; echo $?
+nc 127.0.0.1 123 &> /dev/null; echo $?
 
 # To open a TCP connection to port 42 of host.example.com, using port 31337 as the source port, with a timeout of 5 seconds:
 nc -p 31337 -w 5 host.example.com 42
@@ -30,6 +30,12 @@ nc -x10.2.3.4:8080 -Xconnect -Pruser host.example.com 42
 
 # To choose the source IP for the testing using the -s option
 nc -zv -s source_IP target_IP Port
+#  example check mysql connectivity
+nc -zv <mysql_server> 3306
+Connection to <mysql_server> (<server_ip>) 3306 port [tcp/mysql] succeeded!
+#  example check postgres connectivity
+nc -zv <postgres_server> 5342 
+Connection to <postgres_server> (<server_ip>) 5432 port [tcp/postgresql] succeeded!
 
 # listen
 nc -nlvp <port>
