@@ -1,0 +1,8 @@
+
+
+pwgen --secure     # (or -s for short) followed by the character length you need
+pwgen –symbols     # (or -y for short) followed by the desired character length to generate a password that has special characters
+pwgen --capitalize # (or -c for short) followed by the character length to generate a password with at least one capital letter
+
+
+pwgen -c -s -1  10  2>&1 |DISPLAY=:0 xclip -i -sel clip
