@@ -1,0 +1,45 @@
+
+heroku login
+heroku login -i
+heroku regions    # list regions
+
+heroku create --region <region> <app_name>         # create app
+
+heroku authorization:create                        # create token
+heroku authorizations:create --description my-app
+
+# create Terraform backend in heroku
+export APP_NAME=my-terraform-backend   # Pick a unique app name
+heroku create $APP_NAME                # Create the database
+heroku addons:create heroku-postgresql:mini --app $APP_NAME
+# On each machine where it's used, initialize Terraform with the database credentials
+export DATABASE_URL=`heroku config:get DATABASE_URL --app $APP_NAME`
+terraform init -backend-config="conn_str=$DATABASE_URL"
+
+# ENVs
+HEROKU_DEBUG=1          # Shows debugging information mostly related to Heroku API interactions
+HEROKU_DEBUG_HEADERS=1  # Alongside HEROKU_DEBUG=1, shows HTTP headers
+DEBUG=*                 # Shows verbose debugging information
+
+# plugins
+heroku plugins:install heroku-pg-extras      # install plugins
+
+## pg-extras CLI Plugin
+heroku pg:cache-hit            # provides information on the efficiency of the buffer cache, for both index reads (index hit rate) as well as table reads (table hit rate)
+heroku pg:index-usage          # provides information on the efficiency of indexes, represented as what percentage of total scans were index scans. A low percentage can indicate under indexing, or wrong data being indexed.
+heroku pg:locks                # displays queries that have taken out an exlusive lock on a relation. Exclusive locks typically prevent other operations on that relation from taking place, and can be a cause of "hung" queries that are waiting for a lock to be granted.
+heroku pg:outliers             # displays statements, obtained from pg_stat_statements, ordered by the amount of time to execute in aggregate
+heroku pg:calls                # much like pg:outliers, but ordered by the number of times a statement has been called.
+heroku pg:blocking             # displays statements that are currently holding locks that other statements are waiting to be released.
+heroku pg:index-size           # displays the size of each each index in the database, in MB.
+heroku pg:table-size           # displays the size of each table in the database, in MB. It is calculated by using the system administration function pg_table_size()
+heroku pg:table-indexes-size   # displays the total size of indexes for each table, in MB. It is calculates by using the system administration function pg_indexes_size()
+heroku pg:total-table-size     # displays the total size of each table in the database, in MB. It is calculated by using the system administration function pg_total_relation_size(), which includes table size, total index size and TOAST data.
+heroku pg:unused-indexes       # displays indexes that have < 50 scans recorded against them, and are greater than 5 pages in size, ordered by size relative to the number of index scans.
+heroku pg:seq-scans            # displays the number of sequential scans recorded against all tables, descending by count of sequential scans.
+heroku pg:long-running-queries # displays currently running queries, that have been running for longer than 5 minutes, descending by duration.
+heroku pg:bloat                # displays an estimation of table "bloat" – space allocated to a relation that is full of dead tuples, that has yet to be reclaimed. Tables that have a high bloat ratio, typically 10 or greater, should be investigated to see if vacuuming is aggressive enough, and can be a sign of high table churn.
+heroku pg:vacuum-stats         # displays statistics related to vacuum operations for each table, including an estimation of dead rows, last autovacuum and the current autovacuum threshold.
+heroku pg:user-connections     # displays the number of open connections for each role.
+heroku pg:mandelbrot           # outputs the Mandelbrot set, calculated through SQL.
+

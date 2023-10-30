@@ -100,7 +100,7 @@ kubectl cluster-info
 kubectl cluster-info dump
 
 #check config (cluster, context...)
-kubectl config view
+kubectl config view --minify
 kubectl config current-context
 
 #If we need to set minikube context, we can do as the following:
@@ -135,6 +135,8 @@ yes
 
 k auth can-i get secrets --as gianna
 no
+
+k auth can-i "*" "*" # check admin
 
 # decrypt secret one-line
 kubectl get secret argocd-initial-admin-secret -n argocd -o yaml | yq e '.data.password' - | base64 -d

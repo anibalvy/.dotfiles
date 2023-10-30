@@ -22,9 +22,22 @@ docker build --rm -f Dockerfile -t <image_name_given> .
 
 # start a container with an interactive shell
 docker run -ti <image_name> /bin/bash
+docker run -ti --rm <image_name> /bin/bash     # delete container on exit
 docker run -ti --entrypoint=bash <image_name>  # change entrypoint for debug
 docker run -ti --name <custom_name> <image_name> # rename container
 docker run -ti -p <machine_port>:<container_port> --name <custom_name> <image_name> # open and mapping a port from container
+
+# start a container detached
+docker run -d <image_name> /bin/bash
+
+# add files and directories
+# –mount and–volume (–v) flags with the same functionality. BUT, the syntax is completely different
+docker run -d -it --mount type=bind,source="$(pwd)"/file.txt,target=/file.txt,readonly alpine:latest  # mount file
+docker run -d -it -v "$(pwd)"/file.txt:/file.txt:ro  alpine:latest  # mount using volume
+
+# mount .env
+docker run -it --rm --env-file ./.env alpine:latest          # mount .env using flag
+docker run -it --rm -v "$(pwd)"/.env:/.env:ro alpine:latest  # mount .env using volume, useful for distroless images
 
 # Set CPU affinity (see cheat numbactl)
 docker run --cpuset-cpus=0,4,8,12,16,20,24,28 --name test
@@ -44,10 +57,10 @@ docker exec -ti <container_name> bash
 # update to update restart policy.
 docker update --restart=always <container_id>
 
-# pause / unpause container 
+# pause / unpause container
 docker pause <container_id>
 docker unpause <container_id>
- 
+
 # inspect a running container
 docker inspect <container_name> (or <container_id>)
 

@@ -1,7 +1,7 @@
 
 
 go mod init <name>   # init project, will create go.mod to manage deps
-# make a main.go 
+# make a main.go
 go mod tidy          # update go.mod and crate go.sum, file that ensures that future downloads of these modules retrieve the same bits as the first download
                      # will download packages listed.
 
@@ -11,6 +11,12 @@ go run .             # run all go files in the folder
 
 go env               # show go env
 go env GOPATH        # show PATH for go exec
+
+go build             # build
+go fmt               # format
+go get               # install package
+go mod               # module management
+go work              # workspace management
 
 # hot reload: install air
 

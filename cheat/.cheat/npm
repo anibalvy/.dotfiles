@@ -29,3 +29,12 @@ npm uninstall <package>
 ## autoreload 
 node --watch <app>
 
+## config
+npm config get audit
+npm config set audit false
+
+## disable audit, fund and optional packages
+npm install --no-audit --no-fund --no-optional
+
+## CI optimized installation 
+npm ci

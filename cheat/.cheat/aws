@@ -39,3 +39,6 @@ curl http://169.254.169.254/latest/metadata/iam/sls/<node_rol>
 # S3
 aws --profile my_profile S3 ls
 
+# STS - aas security token service
+# enables to request limited-privileges for IAM users
+aws sts assume-role --role-arn <arn>:role/<rol_name> --role-session-name <give_a_name> --profile <which profile that is assume>
