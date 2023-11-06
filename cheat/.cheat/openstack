@@ -1,0 +1,6 @@
+openstack --help
+openstack help server
+openstack server list
+openstack server show <server_name>
+
+

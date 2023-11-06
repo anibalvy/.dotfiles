@@ -1,18 +1,29 @@
-tsc file.ts          # compile ts to js
-tsc --watch file.ts  # watch and compile ts to js
+/*
+tsc file.ts            // compile ts to js
+tsc --watch file.ts    // watch and compile ts to js
 
-tsc --init          # create tsconfig.json configuration file
+tsc --init             // create tsconfig.json configuration file
+*/
 
-
-let id = 5         # js
-let id: number = 5 # ts
-id = '5'    # error
+let id = 5             // js
+let id: number = 5     // ts
+id = '5'               // error
 
 let age: number
 age = 5
 
+// types
+let a = 'hello'
+let b:number = 1
+let aaa = null
+let abc = undefined
+let abc = undefined
+let abd:undefined = undefined
+let cid: any = 1       // inferred ANY, here we are telling that no use a type... so, if we put a string, later we cannout use by ex: cid.toLower()
+                       // as telling, please ignore TS types
+
 let ids: number[] = [1,2,3,4,5]
-ids.push('hello')  # error
+ids.push('hello')  // error
 
 let person: [number, string, boolean] = [1, 'hello', true] //tuple
 
@@ -20,15 +31,59 @@ let employee = [number, string][] // typle array
 employee = [[1, 'one'],[2, 'two']]
 
 
-let id: string | number = 5 # Union: value can be a string or a number
+let id: string | number = 5 // Union: value can be a string or a number
 
-enum Direction1 {
-    Up=1,          // default: 0
-    Down,
-    Left,
-    Right
+// Type Assertion: telling compiler that we want to treat an entity as a different type
+let cid: any = 1           // here we are telling that no use a type... so, if we put a string, later we cannout use by ex: cid.toLower()
+let customerId = <number>cid // now customerId should be a number
+let customerId = cid ad number // idem (another notation)
+customerId = true // error
+
+// Functions
+function addNum(x, y) {...  // implicit ANY, which is not good
+function addNum(x: nubmer, y: number): number {...  // correct way
+function log(message: string | number): void {...  // void -> there is no return value. is like saying that I don't care what the function returns
+function greet({name, age}) {console.log('hi ${name}, age: ${age}')}  // bad. name and age are ANY
+function greet({name:string, age:number}) {console.log('hi ${name}, age: ${age}')}  // also, bad because is bad syntax {name: string} is for rename "name" to "string"
+function greet({name, age}:{name:string, age:number}) {console.log('hi ${name}, age: ${age}')}  // good..
+// 2nd method:
+function greet(person: {name:string, age:number}): string {
+    const {name, string} = person
+    console.log('hi ${name}, age: ${age}')
+    return name
+    }  // second method
+
+// assign functions
+//const sayHiFromFunction = (fn: Function) => {  // is bad to assign as :Function (is the ANY of functions)
+//const sayHiFromFunction = (fn: (params) => "return type") => {  // good definition
+//const sayHiFromFunction = (fn: (params) ) => {  // if not return type, will assign undefined
+const sayHiFromFunction = (fn: (name: string) => void ) => {  // good definition, as a example
+    return fn('mikel')
 }
-console.log(Direction1.Left) // gives: 3
+sayHiFromFunction((name) => {
+            console.log('hi ${name}')
+        })
+
+// type arrow functions 1 option
+const add = (a: number, b: number): number => {
+    return a + b
+}
+// type arrow functions 2 option
+const rest: (a: number, b: number) => number = (a,b) => {
+    return a - b
+}
+
+// never ... to funtions that never return something
+function throwError(message: string): never {
+    throw new Error(message);
+}
+
+// sometimes types are inferred by context
+const avengers = ['SPidey', 'Hulk', 'Thor']
+avengers.forEach(avenger => {
+            console.log(avenger.toUpperCase()) // it knows is strinG
+        })
+
 
 // Objects
 const user: {
@@ -50,15 +105,150 @@ const user: User = {
     name: 'John'
 }
 
-// Type Assertion: telling compiler that we want to treat an entity as a different type
-let cid: any = 1
-let customerId = <number>cid // now customerId should be a number
-let customerId = cid ad number // idem (another notation)
-customerId = true // error
+// template union types
+type HexadecimalColor = `#${string}`
+const color: HexadecimalColor = '#0033ff'
 
-// Functions
-function addNum(x, y) {...  // implicitamente ANY
-function addNum(x: nubmer, y: number): number {...  // correct way
-function log(message: string | number): void {...  // no return value -> void
+type HeroId = `${string}-${string}-${string}-${string}-${string}`
 
+// union types
+let something: number | string | false  // it can be number, a string or false.
+something = 1 // ok
+something = 'hi' // ok
+something = true // NOK
+something = false // ok
+const enableAnimationDuration: boolean | number = 200 // example
+
+type HeroPowerScale = 'planet' | 'galactic' | 'universe' | 'multiverse'
+
+// Type alias
+type Hero = { // always Upper Case
+    // id ?: string, // optional
+    // readonly id ?: number, // optional and now writable after assign
+    readonly id?: HeroId,
+    name: string,
+    age: number
+    isActive ?: boolean, // optional property
+    powerScale ?: HeroPowerScale,
+}
+
+// intersection types
+type HeroExtraProperties = {
+    advancePower: string
+    address: {
+        planet: string,
+        city: string
+
+    }
+}
+type HeroExtra = Hero & HeroExtraProperties
+// let hero: Hero = {
+//     name: 'thor',
+//     age: 1500
+// }
+//function createHero(name: string, age: number): Hero { // good
+function createHero(hero: Hero): Hero { // better
+    const {name, age} = hero
+    return {id: crypto.randomUUID(), name, age, isActive: true}
+}
+
+// const thor = createHero('Thor', 1500)
+const thor = createHero({ name: 'Thor', age: 1500})
+thor.id?.toString()  // if is defined optional like:   id ?: string
+
+// to make now writable element using javascript
+const thor = Object.freeze( createHero({ name: 'Thor', age: 1500}) ) // will make readonly element
+
+// type indexing
+const addressHero: HeroExtraProperties['address'] = {
+    plante: 'earth',
+    city: 'New York'
+}
+
+// type from value
+const address = {
+    planet: 'Earth',
+    city: 'New York'
+}
+type Address = typeof adress
+const addressTwitch: Adress = {
+    planet: 'Mars',
+    city: 'Twitch'
+}
+// type from function return
+function createAddress() {
+    return {
+                planet: 'Mars',
+                city: 'Twitch'
+            }
+}
+type Address = ReturnType<typeof createAddress>
+
+// Arrays
+// bad
+const language = [] // this means that language will always will be empty, so:
+language.push('js') // error
+// good
+const language: string[] = [] // good
+language.push('js') // good
+language.push(2) // error
+// another option for declare
+const language: Array<string> = [] // good
+// multiple types
+const language: string[] | number[] = [] // bad: here we are saying that the array will be all of string or all of numbers
+const language: (string | number)[] = [] // good: elements can be strings or numbers
+// array of types
+const heroes: Hero[] = []
+
+// matrices
+/*
+[
+['X','O', 'X'],  // string[]
+['O','X', 'O'],  // string[]
+['X','',  'O']   // string
+]
+*/
+const gameBoard: string[][] = [
+['X','O', 'X'],  // string[]
+['O','X', 'O'],  // string[]
+['X','',  'O']   // string
+]
+gameBoard[0][1] = '235432' /// we don't want this
+//better
+type CellValue = 'X' | 'O' | ''
+const gameBoard: CellValue[][] = [
+['X','O', 'X'],  // string[]
+['O','X', 'O'],  // string[]
+['X','',  'O']   // string
+]
+gameBoard[0][4] = 'X' /// also, we don't want this
+// Optimal, use type tuples
+type CellValue = 'X' | 'O' | ''
+type gameBoard = [   // create a Tuple (array fixed lenght)
+                    [CellValue ,CellValue, CellValue],
+                    [CellValue ,CellValue, CellValue],
+                    [CellValue ,CellValue, CellValue],
+                ]
+const gameBoard: gameBoard = [
+['X','O', 'X'],  // string[]
+['O','X', 'O'],  // string[]
+['X','',  'O']   // string
+]
+gameBoard[0][4] = 'X' /// error
+
+// tuples
+type State = [ string, (newName: string) => void ]
+const [hero, setHero]: State = useState('thor')
+
+type RGB = [number, number, number]
+const rgb: RGB = ['red', 4, 4] // error
+
+
+enum Direction1 {
+    Up=1,          // default: 0
+    Down,
+    Left,
+    Right
+}
+console.log(Direction1.Left) // gives: 3
 // Interfaces: like a custom type or a specific structure to an object

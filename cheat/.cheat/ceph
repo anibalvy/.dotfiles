@@ -1,0 +1,3 @@
+
+ceph status
+ceph df      # check space
