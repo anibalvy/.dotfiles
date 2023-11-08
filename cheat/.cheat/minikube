@@ -1,7 +1,10 @@
 # Kubernetes, kubectl and minikube
 
 # Minikube
-# start minikube with custom driver docker, kvm2, virtualbox,  
+# check latest version
+minikube update-check
+
+# start minikube with custom driver docker, kvm2, virtualbox,
 minikube start --driver=<driver_name>
 
 # set default driver
@@ -14,8 +17,14 @@ minikube config set memory 16384
 # Options available are: containerd, cri-o, docker
 minikube start --container-runtime=docker
 
+# Options available of k8s versions
+minikube config defaults kubernetes-version
+
+# specify Kubernetes version
+minikube start --kubernetes-version v1.19.0
+
 # start with a custom profile (a cluster defined by <name>)
-minikube start -p <name> # (*) 
+minikube start -p <name> # (*)
 # (*): if defined, all command in the cluster must start with -p <name>
 
 # kvm2 also accept extra flags
@@ -31,9 +40,6 @@ minikube start -p <name> # (*)
 
 # podman is recommended with cri-o
 minikube start --driver=podman --container-runtime=cri-o
-
-# specify Kubernetes version
-minikube start --kubernetes-version v1.19.0
 
 #  start example
 minikube start --nodes 3 -p kasa-k8s-cluster --driver=kvm2 --cpus=4 --memory='4g' --disk-size='50g'
@@ -67,6 +73,9 @@ minikube dashboard
 # get ip
 minikube ip
 
+# get logs
+minikube logs
+
 # status of the cluster
 minikube status
 
@@ -90,8 +99,8 @@ kubectl expose deployment hello-minikube --type=NodePort --port=8080
 
 #Get the URL of the exposed Service to view the Service details:
 minikube service hello-minikube --url
-this result can be accesed outside k8s cluster.
- 
+#this result can be accesed outside k8s cluster.
+
 #get pods
 kubectl get pods
 

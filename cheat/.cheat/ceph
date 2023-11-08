@@ -1,3 +1,9 @@
 
 ceph status
+ceph -s      # short for status
 ceph df      # check space
+ceph health detail
+ceph osd pool ls
+ceph osd pool images
+
+

@@ -5,8 +5,21 @@ terraform validate   # Confirms the Terraform file's syntax is correct
 terraform plan       # Generates and shows what will change when you run terraform apply
 
 terraform apply      # Builds or changes infrastructure. It will show the execution plan and requires a yes or no to execute unless you use the --auto-approve flag, which will make it execute automatically.
+terraform apply -replace="<resource>"
 
 Terraform refresh    # Updates the local state file against real resources. This ensures Terraform has an accurate view of what is in the current environment.
 
 terraform destroy    # Deletes and removes Terraform-managed infrastructure.This will permanently remove anything created and stored in the state file from the cluster.
 
+
+terraform -version
+
+terraform show           # show current state or saved plan
+
+terraform workspace list
+terraform workspace show
+
+terraform workspace new <workspace_name>
+
+terraform workspace select <workspace_name>
+terraform workspace delete <workspace_name>
