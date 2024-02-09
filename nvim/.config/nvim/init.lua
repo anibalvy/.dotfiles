@@ -62,11 +62,32 @@ require('lazy').setup({
             'saadparwaiz1/cmp_luasnip',
             'hrsh7th/cmp-nvim-lsp',         -- Adds LSP completion capabilities
             'rafamadriz/friendly-snippets', -- Adds a number of user-friendly snippets
+            'hrsh7th/cmp-emoji',
+            {'roobert/tailwindcss-colorizer-cmp.nvim', config = true},
+            'amarakon/nvim-cmp-fonts',
         },
+        -- opts = function (_, opts)
+        --     local format_kinds = opts.formatting.format
+        --     opts.formatting.format = function(entry, item)
+        --         format_kinds(entry, item)
+        --         return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+        --     end
+        -- end,
+        -- opts = function(_, opts)
+        --     local cmp = require("cmp")
+        --     opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" } }))
+        --   end,
     },
 
     -- Useful plugin to show you keybinds. show with <leader>
     { 'folke/which-key.nvim',  opts = {} },
+    {
+      "aurum77/live-server.nvim",
+        run = function()
+          require"live_server.util".install()
+        end,
+        cmd = { "LiveServer", "LiveServerStart", "LiveServerStop" },
+      },
 
     -- gitsigns
     {
@@ -108,6 +129,7 @@ require('lazy').setup({
             end,
         },
     },
+    {'joerdav/templ.vim'},
 
     -- Theme
     {
@@ -196,6 +218,17 @@ require('lazy').setup({
 
     -- "gc" to comment visual regions/lines
     { 'numToStr/Comment.nvim', opts = {} },
+
+    -- TODO highlight
+    {
+      "folke/todo-comments.nvim",
+      dependencies = { "nvim-lua/plenary.nvim" },
+      -- opts = {
+      --   -- your configuration comes here
+      --   -- or leave it empty to use the default settings
+      --   -- refer to the configuration section below
+      -- }
+    },
 
     -- Fuzzy Finder (files, lsp, etc)
     {
@@ -305,10 +338,36 @@ require('lazy').setup({
             }
         end,
     },
+
+    {
+        "windwp/nvim-autopairs",
+        -- Optional dependency
+        dependencies = { 'hrsh7th/nvim-cmp' },
+        config = function()
+            require("nvim-autopairs").setup {}
+            -- If you want to automatically add `(` after selecting a function or method
+            local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+            local cmp = require('cmp')
+            cmp.event:on(
+                'confirm_done',
+                cmp_autopairs.on_confirm_done()
+            )
+        end,
+    },
     -- The interactive scratchpad
     {
-      "metakirby5/codi.vim",
-      cmd = "Codi",
+        "metakirby5/codi.vim",
+        cmd = "Codi",
+    },
+    {
+        "olexsmir/gopher.nvim",
+        ft = "go",
+        config = function (_, opts)
+            require("gopher").setup(opts)
+        end,
+        build = function ()
+           vim.cmd [[silent! GoInstallDeps]]
+        end,
     },
 
     -- Terminal
@@ -415,8 +474,7 @@ vim.o.shiftwidth = 4                   -- Number of space characters inserted fo
 vim.o.expandtab = true                 -- Insert space characters whenever the tab key is pressed
 vim.o.scrolloff = 10                   -- window scroll before bottom or top
 vim.o.sidescrolloff = 5                -- window scroll before getting to the side
-vim.o.signcolumn =
-"yes"                                  -- always show the sign column otherwise it would shift the text each time
+vim.o.signcolumn = "yes"               -- always show the sign column otherwise it would shift the text each time
 vim.o.splitbelow = true                -- force all horizontal splits to go below current window
 vim.o.splitright = true                -- force all vertical splits to go to the right of current window
 vim.o.cursorline = true                -- highlight current line
@@ -595,6 +653,13 @@ vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by 
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
+
+vim.filetype.add({
+    extension = {
+        templ = "templ",
+    },
+})
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
@@ -608,6 +673,7 @@ vim.defer_fn(function()
             'lua',
             'python',
             'rust',
+            'templ',
             'tsx',
             'javascript',
             'typescript',
@@ -676,8 +742,8 @@ vim.defer_fn(function()
         },
         rainbow = {
             enable = true,
-            disable = {}, -- 'jsx', 'cpp' }, -- list of languages you want to disable the plugin for
-            query = 'rainbow-parens', -- Which query to use for finding delimiters
+            disable = {},                                     -- 'jsx', 'cpp' }, -- list of languages you want to disable the plugin for
+            query = 'rainbow-parens',                         -- Which query to use for finding delimiters
             strategy = require('ts-rainbow').strategy.global, -- Highlight the entire buffer all at once
         }
     }
@@ -730,7 +796,7 @@ end
 
 -- document existing key chains
 require('which-key').register {
-    ['<leadeR>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+    ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
     ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
     ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
     ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
@@ -739,8 +805,7 @@ require('which-key').register {
     ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
 }
 
--- mason-lspconfig requires that these setup functions are called in this order
--- before setting up the servers.
+-- mason-lspconfig requires that these setup functions are called in this order before setting up the servers.
 require('mason').setup()
 require('mason-lspconfig').setup()
 
@@ -754,11 +819,29 @@ require('mason-lspconfig').setup()
 --  define the property 'filetypes' to the map in question.
 local servers = {
     -- clangd = {},
-    -- gopls = {},
+    gopls = {
+        gopls = {
+            usePlaceholders = true
+        },
+    },
+    templ = {
+        filetypes = { 'templ'},
+        templ = {
+            usePlaceholders = true
+        },
+    },
     -- pyright = {},
     -- rust_analyzer = {},
     -- tsserver = {},
     -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+    tailwindcss = {
+        filetypes = { 'templ', 'html'},
+        init_options = {
+            userLanguages = {
+                templ = "html"
+            }
+        }
+    },
 
     lua_ls = {
         Lua = {
@@ -766,6 +849,10 @@ local servers = {
             telemetry = { enable = false },
         },
     },
+
+    emmet_ls = {
+        filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "templ", "vue" }
+    }
 }
 
 -- Setup neovim lua configuration
@@ -791,6 +878,209 @@ mason_lspconfig.setup_handlers {
             filetypes = (servers[server_name] or {}).filetypes,
         }
     end,
+}
+
+local icons = {
+    Array = " ",
+    Boolean = " ",
+    Class = " ",
+    Color = "🎨 ", -- 
+    Constant = " ",
+    Constructor = " ",
+    Copilot = " ",
+    Enum = " ",
+    EnumMember = " ",
+    Event = " ",
+    Field = " ",
+    File = " ",
+    Folder = " ",
+    Function = " ",
+    Interface = " ",
+    Key = " ",
+    Keyword = " ",
+    Method = " ",
+    Module = " ",
+    Namespace = " ",
+    Null = " ",
+    Number = " ",
+    Object = " ",
+    Operator = " ",
+    Package = " ",
+    Property = " ",
+    Reference = " ",
+    Snippet = " ",
+    String = " ",
+    Struct = " ",
+    Text = " ",
+    TypeParameter = " ",
+    Unit = " ",
+    Value = " ",
+    Variable = "",
+  kind = {
+    Array = " ",
+    Boolean = " ",
+    Class = " ",
+    Color = "🎨 ", -- 
+    Constant = " ",
+    Constructor = " ",
+    Copilot = " ",
+    Enum = " ",
+    EnumMember = " ",
+    Event = " ",
+    Field = " ",
+    File = " ",
+    Folder = " ",
+    Function = " ",
+    Interface = " ",
+    Key = " ",
+    Keyword = " ",
+    Method = " ",
+    Module = " ",
+    Namespace = " ",
+    Null = " ",
+    Number = " ",
+    Object = " ",
+    Operator = " ",
+    Package = " ",
+    Property = " ",
+    Reference = " ",
+    Snippet = " ",
+    String = " ",
+    Struct = " ",
+    Text = " ",
+    TypeParameter = " ",
+    Unit = " ",
+    Value = " ",
+    Variable = "",
+  },
+  git = {
+    LineAdded = "",
+    LineModified = "",
+    LineRemoved = "",
+    FileDeleted = "",
+    FileIgnored = "◌",
+    FileRenamed = "",
+    FileStaged = "S",
+    FileUnmerged = "",
+    FileUnstaged = "",
+    FileUntracked = "U",
+    Diff = "",
+    Repo = "",
+    Octoface = "",
+    Branch = "",
+  },
+  ui = {
+    ArrowCircleDown = "",
+    ArrowCircleLeft = "",
+    ArrowCircleRight = "",
+    ArrowCircleUp = "",
+    BoldArrowDown = "",
+    BoldArrowLeft = "",
+    BoldArrowRight = "",
+    BoldArrowUp = "",
+    BoldClose = "",
+    BoldDividerLeft = "",
+    BoldDividerRight = "",
+    BoldLineLeft = "▎",
+    BookMark = "",
+    BoxChecked = "",
+    Bug = "",
+    Stacks = "",
+    Scopes = "",
+    Watches = "",
+    DebugConsole = "",
+    Calendar = "",
+    Check = "",
+    ChevronRight = ">",
+    ChevronShortDown = "",
+    ChevronShortLeft = "",
+    ChevronShortRight = "",
+    ChevronShortUp = "",
+    Circle = "",
+    Close = "",
+    CloudDownload = "",
+    Code = "",
+    Comment = "",
+    Dashboard = "",
+    DividerLeft = "",
+    DividerRight = "",
+    DoubleChevronRight = "»",
+    Ellipsis = "",
+    EmptyFolder = "",
+    EmptyFolderOpen = "",
+    File = "",
+    FileSymlink = "",
+    Files = "",
+    FindFile = "",
+    FindText = "",
+    Fire = "",
+    Folder = "",
+    FolderOpen = "",
+    FolderSymlink = "",
+    Forward = "",
+    Gear = "",
+    History = "",
+    Lightbulb = "",
+    LineLeft = "▏",
+    LineMiddle = "│",
+    List = "",
+    Lock = "",
+    NewFile = "",
+    Note = "",
+    Package = "",
+    Pencil = "✏️",
+    Plus = "",
+    Project = "",
+    Search = "",
+    SignIn = "",
+    SignOut = "",
+    Tab = "",
+    Table = "",
+    Target = "",
+    Telescope = "",
+    Text = "",
+    Tree = "",
+    Triangle = "契",
+    TriangleShortArrowDown = "",
+    TriangleShortArrowLeft = "",
+    TriangleShortArrowRight = "",
+    TriangleShortArrowUp = "",
+  },
+  diagnostics = {
+    BoldError = "",
+    Error = "",
+    BoldWarning = "",
+    Warning = "",
+    BoldInformation = "",
+    Information = "",
+    BoldQuestion = "",
+    Question = "",
+    BoldHint = "",
+    Hint = "",
+    Debug = "",
+    Trace = "✎",
+  },
+  misc = {
+    Robot = "ﮧ",
+    Squirrel = "",
+    Tag = "",
+    Watch = "",
+    Smiley = "",
+    Package = "",
+    CircuitBoard = "",
+  },
+  dap = {
+    Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+    Breakpoint = " ",
+    BreakpointCondition = " ",
+    BreakpointRejected = { " ", "DiagnosticError" },
+    LogPoint = ".>",
+  },
+  source = {
+        nvim_lsp = '🚀',
+        luasnip = '🔎',
+        fonts = '',
+    }
 }
 
 -- [[ Configure nvim-cmp ]]
@@ -838,7 +1128,40 @@ cmp.setup {
     sources = {
         { name = 'nvim_lsp' },
         { name = 'luasnip' },
+        { name = 'emoji' },
+        -- { name = "fonts", option = { space_filter = "-" } },
     },
+    -- formatting = {
+    --     format = require( "tailwindcss-colorizer-cmp").formatter,
+    -- },
+    -- formatting = function (_, formatting)
+    --     local format_kinds = formatting.format
+    --     formatting.format = function(entry, item)
+    --             format_kinds(entry, item)
+    --             return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+    --     end
+    -- end,
+    -- formatting = {
+    --     format = function (_, format)
+    --         local format_kinds = format
+    --         format = function(entry, item)
+    --                 format_kinds(entry, item)
+    --                 return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+    --         end
+    --     end,
+    -- }
+    -- working
+    formatting = {
+        format = function (entry, vim_item) --, sources)
+            local kind = vim_item.kind --> Class, variables,method...
+            local source = entry.source.name
+            vim_item.kind = ( icons.kind[kind] or "?") .. " " .. kind
+            vim_item.menu = "[" .. (icons.source[source] or "?") .. "]" -- .. source
+            return require("tailwindcss-colorizer-cmp").formatter(entry, vim_item)
+            -- return vim_item
+
+        end
+    }
 }
 
 -- [[ set colorscheme ]]
@@ -874,11 +1197,11 @@ require('Comment').setup({
     ignore = '^$',
     toggler = {
         line = '<leader>/',
-        -- block = '<leader>bc',
+        block = '<leader>bc',
     },
     opleader = {
         line = '<leader>/', -- to work in visual mode
-        -- block = '<leader>b',
+        block = '<leader>b',
     },
 })
 

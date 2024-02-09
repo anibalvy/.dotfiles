@@ -18,7 +18,12 @@ docker build --rm -f Dockerfile -t <image_name_given> .
 # - none: desactiva networking
 
 # Registry
-
+docker login
+docker login <repo>
+docker logout
+docker push
+docker search
+docker tag
 
 # start a container with an interactive shell
 docker run -ti <image_name> /bin/bash
@@ -61,6 +66,8 @@ docker update --restart=always <container_id>
 docker pause <container_id>
 docker unpause <container_id>
 
+docker wait
+
 # inspect a running container
 docker inspect <container_name> (or <container_id>)
 
@@ -88,6 +95,12 @@ docker top <container_id>
 
 # list all images
 docker images
+
+docker image rm
+
+docker commit
+docker import
+docker history <image>
 
 # See stats of containers
 docker stats
@@ -136,11 +149,22 @@ docker update --restart=unless-stopped <container_id>
 # show the exit output of a container (useful in script)
 docker wait <container_id>
 
-# list networks
-docker network ls
+# Network
+docker network create
+docker network ls # list networks
+docker network rm # rm network
+docker network connect
+docker network disconnect
+docker network inspect
 
 # add network to container
 docker network connect <id or name of the network> <id or name of the container>
+
+# clean Up
+docker rm
+docker rmi
+docker kill
+docker prune
 
 ## Dockerfile has their own cheat (cheat dockerfile)
 

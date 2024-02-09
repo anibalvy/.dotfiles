@@ -1,10 +1,10 @@
 set autocalc
 set numeric
 set numeric_decimal=0
-set ignorecase   
+set ignorecase
 
 # [default 3000 milli seconds] the time sc-im waits for a valid command to be entered (the time it stays in '?')
-set command_timeout=1000 
+set command_timeout=1000
 
 set overlap
 # set overlap  # show content of the cell overlap adjacent column
@@ -16,9 +16,9 @@ set XLSX_READFORMULAS
 # set import_delimited_as_text # import numbers as text
 
 # set half_page_scroll=1 # 1: half screen, 0: full page (default)
-set half_page_scroll=1 
+set half_page_scroll=1
 
-# set default_copy_to_clipboard_cmd=<command> # setting default, This process will export content as plain text. It will not delimit columns with '\t' chars. 
+# set default_copy_to_clipboard_cmd=<command> # setting default, This process will export content as plain text. It will not delimit columns with '\t' chars.
 # set copy_to_clipboard_delimited_tab=1 # when copy to clipboard, use tabs
 set copy_to_clipboard_delimited_tab=1
 
@@ -33,6 +33,7 @@ REDEFINE_COLOR "RED"       231 130 132
 REDEFINE_COLOR "BLUE"      140 170 238
 REDEFINE_COLOR "YELLOW"    229 200 144
 REDEFINE_COLOR "GREEN"     166 209 137
+DEFINE_COLOR   "GRAY"       90  90  90
 DEFINE_COLOR   "ROSEWATER" 242 213 207
 DEFINE_COLOR   "FLAMINGO"  238 190 190
 DEFINE_COLOR   "PINK"      244 184 228
@@ -65,7 +66,7 @@ color "type=DATEF fg=ROSEWATER bg=BLACK"
 color "type=CELL_SELECTION fg=TEXT bg=OVERLAY0"
 color "type=CELL_SELECTION_SC fg=BLACK bg=ROSEWATER"
 color "type=GRID_EVEN fg=TEXT bg=BLACK"
-color "type=GRID_ODD fg=TEXT bg=MANTLE"
+color "type=GRID_ODD fg=TEXT bg=GRAY"
 color "type=EXPRESSION fg=SKY bg=BLACK"
 color "type=CELL_ERROR fg=BLACK bg=RED"
 color "type=CELL_NEGATIVE fg=RED bg=BLACK"

@@ -2,7 +2,7 @@
 ^          # Start of the string or start of the line in multiple lines
 $          # End of the string or End of the line in multiple lines
 \A         # Start of a string
-\Z         # End of a string 
+\Z         # End of a string
 \b         # Word boundary
 \B         # not Word boundary
 \<         # Start of Word
@@ -52,6 +52,7 @@ $&         # Entire matched string
 (?:...)    # Passive (non-c-apt-uring) group
 [abc]      # Range (a or b or c)
 [^abc]     # Not a or b or c
+[!abc]     # matches one character that is not given in the bracket. Ex. [!C] matches Bat, bat, or cat but not Cat (in vim check case insensity search is set will not work)
 [a-q]      # Letter from a to q
 [A-Q]      # Upper case letter from A to Q
 [0-7]      # Digits from 0 to 7
@@ -79,7 +80,7 @@ U          # Ungreedy pattern
 ## Examples Metacharacter
 ^abc      # abc, abcdefg, abc123
 abc$      # abc, endinabc, 123abc
-a.c       # abc, aac, acc, adc,... 
+a.c       # abc, aac, acc, adc,...
 bill|ted  # ted, bill
 ab{2}c    # abbc
 a[bB]c    # abc, aBc

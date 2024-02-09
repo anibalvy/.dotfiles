@@ -1,8 +1,10 @@
 # [in machine1]
 # run iperf in remote in machine1
-❯ iperf3 -s
+node1❯ iperf3 -s
+node1> iperf3 -s -w 130k  # listening adn TCP window size 130K
 
 # [in machine2]
 # run the client to the remote machine
-❯ iperf3 -c <ip_of_machine1>
+node2❯ iperf3 -c node1
+node2❯ iperf3 -c <ip_of_machine1>
 

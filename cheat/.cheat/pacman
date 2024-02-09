@@ -6,6 +6,9 @@ pacman -Ss <package name>
 # To update the local package base and upgrade all out of date packages
 pacman -Suy
 
+# To Sync the local package base
+pacman -Sy
+
 # To install a package
 pacman -S <package name>
 

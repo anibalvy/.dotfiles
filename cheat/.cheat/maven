@@ -1,0 +1,23 @@
+
+# mvn
+
+mvn archetype:generate -DgroupId=org.yourcompany.project -DartifactId=application    # Creating a Project in MVN
+
+mvn archetype:create-from-project
+
+mvn clean    # Delete target directory.
+
+nvm validate # Validate if the project is correct.
+
+mvn compile  # Compile source code, classes stored in target/classes.
+
+mvn test  # Run tests.
+
+mvn package # Take the compiled code and package it in its distributable format, e.g. JAR, WAR.
+
+mvn verify # Run any checks to verify the MVN package is valid and meets quality criteria.
+
+mvn install # Install the package into the local repository.
+
+mvn deploy # Copies the final MVN package to the remote repository.
+

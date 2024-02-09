@@ -1,0 +1,6 @@
+create extension citus;
+select citus_add_node(....);
+select citus_add_node(....);
+select citus_add_node(....);
+
+

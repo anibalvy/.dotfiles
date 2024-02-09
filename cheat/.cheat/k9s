@@ -1,0 +1,36 @@
+# k9s: Kubernetes CLI To Manage Your Clusters In Style!
+
+# K9s CLI comes with a view arguments that you can use to launch the tool with different configuration.
+
+k9s help                # List all available CLI options
+k9s info                # Get info about K9s runtime (logs, configs, etc..)
+k9s -n mycoolns         # Run K9s in a given namespace.
+k9s -c pod              # Run K9s and launch in pod view via the pod command.
+k9s --context coolCtx   # Start K9s in a non default KubeConfig context
+k9s --readonly          # Start K9s in readonly mode - with all modification commands disabled
+
+
+Key Bindings
+Command                      Action || Comment
+?                            Show active keyboard mnemonics and help
+ctrl-a or :alias             Show all available aliases and resources on the cluster
+:q, ctrl-c                   To bail out of K9s
+:po⏎                         View a Kubernetes resource using singular/plural or short-name || accepts singular, plural, short-name or alias ie pod or pods
+:alias namespace⏎            View a Kubernetes resource in a given namespace
+/filter⏎                     Filter out a resource view given a filter || Regex2 supported ie fred|blee to filter resources named fred or blee
+/! filter⏎                   Inverse regex filer || Keep everything that doesn’t match. Not implemented for logs.
+/-l label-selector⏎          Filter resource view by labels
+/-f filter⏎                  Fuzzy find a resource given a filter
+<esc>                        Bails out of view/command/filter mode
+d,v, e, l,…                  Key mapping to describe, view, edit, view logs,…
+:ctx⏎                        To view and switch to another Kubernetes context
+:ctx context-name⏎           To view and switch to another Kubernetes context
+:ns⏎                         To view and switch to another Kubernetes namespace
+:screendump or sd⏎           To view all saved resources
+ctrl-d                       To delete a resource (TAB and ENTER to confirm)
+ctrl-k                       To kill a resource (no confirmation dialog!)
+ctrl-w                       Toggle Wide Columns || Equivalent to kubectl ... -o wide
+ctrl-z                       Toggle Error State || View resources in error condition
+:pulses or pu⏎               Launch pulses view
+:xray RESOURCE [NAMESPACE]⏎  Launch XRay view  ||  RESOURCE can be one of po, svc, dp, rs, sts, ds, NAMESPACE is optional
+:popeye or pop⏎              Launch Popeye view || See https://popeyecli.io

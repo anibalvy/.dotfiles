@@ -1,0 +1,5 @@
+
+
+# send file
+netcat -l  <port> > file.txt  # server
+cat file.txt | netcat <remote_ip> <port> -q 0    # client, -q 0 close connection when transfer is complete

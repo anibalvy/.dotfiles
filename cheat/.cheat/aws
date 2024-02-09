@@ -5,6 +5,7 @@ aws_secret_access_key = fdsaadsljsdfskd+4aasdfaDzcagc+/1asdfafKx
 region = us-east-1
 
 # configure profile with cli
+aws configure  # with no profile
 aws configure --profile my_new_profile
 
 # using profile
@@ -14,13 +15,35 @@ aws --profile my_profile <command>
 aws ec2 describe-instances help
 
 # IAM
+# Roles have policies that have actions
 aws iam list-users
+aws iam create-role --role-name <role_name> --assume-role-policy-document file://test-role-policy.json
+
+# EC2
+aws --region <aws_region> ec2 create-vpc-endpoint --vpc-id <vpc-id> --service-name com.amazonaws.<aws-region>.s3 --route-table-ids <route_table_id> # create vpc endpoint for S3 buckets
+aws --region <aws_region> ec2 describe-vpc-endpoint --query 'VpcEndpoints[*].ServiceName' # get VPC endpoints names.
 
 # ECS
+aws --region <aws_region> ecs create-cluster --cluster-name <name>
 aws --region <aws_region> ecs describe-task-definition --task-definition <task_name> 2>&1 # find task definitions
+aws --region <aws_region> ecs register-task-definition --cli-input-json file://<task_definition>.json
+aws --region <aws_region> ecs create-service --cli-input-json file://<service_definition>.json
+aws --region <aws_region> ecs describe-clusters --cluster <name>
 
+# ECR
+aws --region <aws_region> ecs create-repository --repository-name <name>
+aws --region <aws_region> ecs describe-repository --query 'repositories[].[repositoryName, repositoryUri]' --output table  # get repos urls
+aws --region <aws_region> ecs describe-repository --query 'repositories[].[repositoryUri]' --output text # get repo urls
+aws --region <aws_region> ecs describe-images  --repository-name <name>
+aws --region <aws_region> ecs get-login-password | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_region).amazonaws.com # login docker daemon to ECR
 # EKS
 aws eks update-kubeconfig --profile <profile_name> --name <eks-name> --region <aws_region>   # get kubeconfig
+
+# lambda
+aws lambda create-function --function-name <my_function> --runtime nodejs10.x --zip-file fileb://my_function.zip --handler <my_function>.handler --role <arn>:<role>/service-role/<role-name>
+
+# CloudFormation
+aws cloudformation deploy --template-file "$path" --stack-name WorkshopStack --capabilities CAPABILITY_IAM
 
 # Session Manager
 aws ssm start-session --target <instance_id> --region <aws_region>
@@ -37,8 +60,39 @@ curl http://169.254.169.254/latest/iam/security-credentials/
 curl http://169.254.169.254/latest/metadata/iam/sls/<node_rol>
 
 # S3
-aws --profile my_profile S3 ls
+# bucket name are global and must be unique
+aws --profile my_profile S3 ls # list buckets
+aws --profile my_profile S3 ls s3://<bucket> # list files in bucket
+aws --profile my_profile S3 cp s3://<bucket>/<file> <local_path_destination> # copy from S3 bucket
+aws --profile my_profile S3 cp <local_path_destination>/<file> s3://<bucket> # copy to S3 bucket
+
 
 # STS - aas security token service
 # enables to request limited-privileges for IAM users
 aws sts assume-role --role-arn <arn>:role/<rol_name> --role-session-name <give_a_name> --profile <which profile that is assume>
+
+# AWS SAM - Serveless Application Model
+# check cheat sam
+
+
+# KMS - Key Management System
+# after create a key, taking file db-creds.yaml to be encripted
+aws kms encrypt --region <aws-region> --key-id <key-id> --plaintext fileb://db-creds.yaml --output text --query CiphertextBlob > db-creds.yaml.encrypted
+# in Terraform can be read using data "aws_kms_secrets"
+
+
+# CDK
+npm i -g aws-cdk
+mkdir <project> && cd <project>
+cdk init --language=python
+ckd bootstrap  # create an S3 bucket to store all the assets and artifacts
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cdk deploy --all
+cdk ls     # list all stack in the app
+cdk synth  # emit the synthesized CloudFormation template
+ckd diff   # compare deployed stack with the current state
+cdk docs   # open documentation
+
+

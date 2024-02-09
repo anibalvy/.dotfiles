@@ -7,7 +7,7 @@ git init                                           # Initialize a local Git repo
 git clone ssh://git@<repository-server.com>/[username]/[repository-name].git # Clone a repository
 git clone --bare ssh://git@<repository-server.com>/[username]/[repository-name].git # Clone a repository in bare, needed for worktrees
 
-git remote add upstream git@github.com:name/repo.git # To sync a fork with the master repo - Set a new remote repo 
+git remote add upstream git@github.com:name/repo.git # To sync a fork with the master repo - Set a new remote repo
 git remote -v # Confirm new remote repo
 git clone --depth 1 <remote-url> # Perform a shallow clone to only get latest commits (helps save data when cloning large repos)
 git pull --unshallow # To unshallow a clone
@@ -20,9 +20,9 @@ git fetch --all --prune              # To pull changes and delete local branches
 git branch                           # To list branches
 git branch -va                       # List local - remote branches
 git branch branch_name               # To create branch "branch_name"
-git branch -d branch_name            # To delete the branch "branch_name" 
-git branch -D branch_name            # To force delete the branch "branch_name" 
-git branch -m master main            # To rename 
+git branch -d branch_name            # To delete the branch "branch_name"
+git branch -D branch_name            # To force delete the branch "branch_name"
+git branch -m master main            # To rename
 git push origin --delete branch_name # git branch delete remote To delete/remove a remote branch
 git branch -u upstream/foo           # To make an exisiting branch track a remote branch
 
@@ -40,12 +40,12 @@ git tag <name> # create tag
 git tag -a <tag_name> -m "message"
 git tag <tag_name> <commit_sha> # Tag a specific commit
 git tag -a <tag_name> <commit_sha> -m "message" # create an annotated tag
-git tag <tag_name> HEAD    # for the last commit 
-git tag <tag_name> HEAD~1  # for the commit before HEAD 
-git tag <tag_name> HEAD~1  # for two commits before HEAD 
+git tag <tag_name> HEAD    # for the last commit
+git tag <tag_name> HEAD~1  # for the commit before HEAD
+git tag <tag_name> HEAD~1  # for two commits before HEAD
 git tag -d <tag_name> # Detele tag
 
-git push --delete origin <tag_name> # delete remote tag 
+git push --delete origin <tag_name> # delete remote tag
 git push origin :refs/tags/<tag>    # same using push
 git push --tags
 git push -f # push changes if I rewritten history
@@ -63,13 +63,13 @@ git checkout <branch_name> <file_name> # bring in a specific file from a differe
 
 git merge upstream/master  # Merge remote into local repo
 git merge --squash feat    # git merge and squash all commits from a feature branch together when merging
-git commit 
+git commit
 
 # Interactive rebase for the last 7 commits
   # pick: use this commit
   # rework: use the commit, but edit the commit message
   # edit: use the commit, but stop for amending
-  # squash: Combining Multiple Commits Into One 
+  # squash: Combining Multiple Commits Into One
   # drop: remove commit
 git rebase master                # take the commits from master and add to the current branch
 git rebase -i @~7                # Interactive rebase for the last 7 commits, see above for options
@@ -81,11 +81,11 @@ git status # Show the changes from last commit
 git add --all           # To stage all changes for commit:
 git add [filename]      # To stage a file change for commit:
 git rm --cached <file>  # To unstage file (stop tracking a file)
-git restore <file>      # To reset file back to how it was - new syntax 
+git restore <file>      # To reset file back to how it was - new syntax
 git rn -r [name]        # Remove a file or folder
 git checkout -- <file>  # get specific file
 
-git commit -m "Your commit message" # add insitu commit message 
+git commit -m "Your commit message" # add insitu commit message
 git commit -am "message"            # add changes and commit
 git commit --amend # To edit previous commit message, To add more changes to the last commit
 git commit --date="`date --date='2 day ago'`" # Git commit in the past, more recent versions of Git also support --date="2 days ago" directly
@@ -158,14 +158,14 @@ git ls-tree --full-tree --name-only -r HEAD #  To show all of the tracked files 
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" # WORKTREE enable remotes
 git worktree add <name>
 
-### in config of bare it must seen 
+### in config of bare it must seen
 [remote "origin"]
 	url = <remote-repo-url>.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
   ## then
   git fetch origin
 # The “fatal: refusing to merge unrelated histories” Git error:
-git pull origin master --allow-unrelated-histories # 
+git pull origin master --allow-unrelated-histories #
 git merge --no-ff --allow-unrelated-histories <source branch with changes> # positioned at br target
 
 
@@ -192,8 +192,8 @@ git push -u origin main
 cd existing_repo
 git remote rename origin old-origin
 git remote add origin git@git.<server>:<path>/<repo>.git
-git push -u origin --all ci.skip
-git push -u origin --tags ci.skip
+git push -u origin --all  -o ci.skip   # to skip ci in Gitlab  (on github, commit message must carry: git commit -m "my cm  [ci skip]")
+git push -u origin --tags -o ci.skip  # to skip ci in Gitlab
 
 # FROM Detached-head to branch
  # git add and commit changes

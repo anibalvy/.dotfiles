@@ -3,23 +3,51 @@ h1 header
 =========
 h2 header
 ---------
+### header leve 3
+
+# Emphasis formatting
+*italic* _italic_
+**strong** __strong__
+~~strikethrough~~ # some implementations
+I need to highlight these ==very important words==. # some implementations
+H~2~O # some implementations, Subscript The rendered output allow small '2' in H2O
+X^2^  # some implementations, Superscript allow x²
+
+text is the *italic cat's meow*.
+text is the _italic cat's meow_.
+A*italiccat*meow  # in the middle of a word
+
+I just love **bold text**.
+I just love __bold text__.
+Love**is**bold # in the middle of a word
+
+This text is ***bold and italic***.
+This text is ___bold and italic___.
+This text is __*bold and italic*__.
+This text is **_bold and italic**_
+This is really***very***important text # in the middle of a word
 
 # blockquotes
 > first level and paragraph
->> second level and first paragraph
+>> second level or nested block and first paragraph
 >
 > first level and second paragraph
 
 # lists
+# To add another element in a list while preserving the continuity of the list, indent the element four spaces or one tab.
 ## unordered - use *, +, or -
-        * Red
-        * Green
-        * Blue
+* Red
+* Green
+
+    I need to add another paragraph below the second list item.
+
+* Blue
 
 ## ordered
-        1. First
-        2. Second
-        3. Third
+1. First
+2. Second
+3. Third
+4. 1968\. A great year! # If you need to start an unordered list item with a number followed by a period, you can use a backslash (\) to escape the period.
 
 # code - use 4 spaces/1 tab
 regular text
@@ -27,18 +55,86 @@ regular text
 or:
 Use the `printf()` function
 
-# hr's - three or more of the following
+# Horizontal Rules - three or more of the following
 ***
 ---
 ___
 
 # links
-This is [an example](http://example.com "Title") inline link.
+This is [an example](http://example.com/an%20example "Title") inline link.
+
+# links with references
+this is a reference [hobbit-hole][1]
+
+(at the end)
+[1]: https://en.wikipedia.org/wiki/Hobbit#Lifestyle "Hobbit lifestyles"
 
 # image
 ![Alt Text](/path/to/file.png)
 
-# formatting
-*em* _em_
-**strong** __strong__
-~~strikethrough~~
+# image with link
+[![An old rock in the desert](/assets/images/shiprock.jpg "Shiprock, New Mexico by Beau Rogers")](https://www.flickr.com/photos/beaurogers/31833779864)
+# quick URLs and Email Addresses
+<https://www.markdownguide.org>
+<fake@example.com>
+
+# Escaping Characters
+\* Without the backslash, this would be a bullet in an unordered list.
+Character Name
+\         backslash
+`         backtick (see also escaping backticks in code)
+*         asterisk
+_         underscore
+{ }       curly braces
+[ ]       brackets
+< >       angle brackets
+( )       parentheses
+#         pound sign
++         plus sign
+-         minus sign (hyphen)
+.         dot
+!         exclamation mark
+|         pipe (see also escaping pipe in tables)
+
+# Tables
+| Syntax      | Description | Test Text     |
+| :---        |    :----:   |          ---: |
+| Header      | Title       | Here's this   |
+| Paragraph   | Text        | And code `{ my code }`|
+
+    The pipe (|) character using its HTML character code (&#124;).
+
+# footnotes
+#
+A simple footnote,[^1] and here's a longer one.[^bignote]
+
+[^1]: This is the first footnote.
+
+[^bignote]: Here's one with multiple paragraphs and code.
+
+    Indent paragraphs to include them in the footnote.
+
+    `{ my code }`
+
+    Add as many paragraphs as you like.
+
+
+# Heading ID
+
+### My Great Heading {#custom-id}
+
+The HTML looks like this:
+<h3 id="custom-id">My Great Heading</h3>
+
+# Linking to heading id
+[custom ID](#custom-id)
+The HTML looks like this:
+<a href="#custom-id">Heading IDs</a>
+
+# Task Lists
+To create a task list, add dashes (-) and brackets with a space ([ ]) in front of task list items. To select a checkbox, add an x in between the brackets ([x]).
+
+- [x] Write the press release
+- [ ] Update the website
+- [ ] Contact the media
+

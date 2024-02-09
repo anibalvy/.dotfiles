@@ -102,6 +102,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # for ignore in the history when a command start with a " " (space) -
 # this commands will not show in other sessions
 HIST_IGNORE_SPACE="true"
+
+# ignore duplicate commands
+HIST_IGNORE_DUP="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 

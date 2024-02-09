@@ -1,68 +1,269 @@
 
+
+/etc/nginx
+
+sites-available  # where sites are configures. files names inside have no meaning
+sites-enabled    # is where the are given permission
+   # to enable it is possible to add a simbolic link.
+   # ln -s /etc/nginx/site-available/nmysite.com.conf /etc/nginx/site-enabled/
+
+
+# commands
+nginx -t   # check configuration syntax
+nginx -T   # dump configuration
+nginx -v   # check version
+nginx -V   # check version with more detail info
+nginx -s reload  # check config and reload configuration
+systemctl restart nginx  # restart nginx to apply services.
+
 # nginx.conf
 
+# main global context
+# Directives: key-value, define behavior of the server
+
+# user user [group];
 user nginx;
-worker_processes auto;
+# user nobody;
+worker_processes auto;  # auto means one worker per core.
+# worker_processes 1; # number of worker processes.
+# worker_cpu_auto;
+# worker_cpu_affinity auto [cpumask];
+# worker_cpu_affinity auto 01010101; # ex. indicating allowed cores.
+# worker_cpu_affinity 0001 0010 0100 1000;  # ex in 4 cores
+# worker_priority number; # niceness -20 to 20
+# worker_priority 0;
 
 error_log /var/log/nginx/error.log notice;
+error_log /var/log/nginx/error_notice.log notice;
+error_log /var/log/nginx/error_info.log info;
+
 pid /var/run/nginx.pid;
 
+# include /etc/nginx/modules-enabled/*.conf;
 
+
+# Context: use { more directives }
 events {
     worker_connections 1024;
+    # multi_accept on; # if multi_accept is disabled, a worker process will accept one new connection at a time. Otherwise, a worker process will accept all new connections at a time
+}
+
+stream {
+    # tcp/udp
+}
+
+http {
+    server {
+        # virtual server
+        location <params> {
+            # routing
+        }
+    }
+    upstream {
+        # lb
+    }
 }
 
 
 http {
-    include /etc/nginx/mime.types;
-    default_type application/octet-stream;
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
 
+    charset koi8-n;
+
+    # log_format main   '$remote_addr - $remote_user [$time_local] '
     log_format custom '$remote_addr - $remote_user [$time_local] '
-    '"$request" $status $body_bytes_sent '
-    '"$http_referer" "$http_user_agent" '
-    '$upstream_response_time';
+                       '"$request" $status $body_bytes_sent '
+                       '"$http_referer" "$http_user_agent" '
+                       '$upstream_response_time';
 
     access_log /var/log/nginx/access.log custom;
 
+    error_page 404     /404.html;
+
+    # redirect server error pages to the static page
+    error_page 505 502 503 504    /50x.html;
+    location = /50x.html {
+        root html;
+    }
+
     sendfile on;
     #tcp_nopush     on;
+    #types_hash_max_size 2048;
+    #server_tokens off;
+
+    #server_names_hash_bucket_size 64;
+    #server_name_in_redirect off;
 
     keepalive_timeout 65;
+    keepalive_requests 100000;
 
     #gzip  on;
 
+    # add modular config
     include /etc/nginx/conf.d/*.conf;
 }
 
+# location
+http {
+    server {
+        listen 80 default server;
+        server_name mysite.com;
+
+        location /basis_status {
+            stub_status;   # provides aggregated nginx statistics
+        }
+
+        location /path2 {
+            root /var/www/mysite.com/html; # this assume that the page is in /var/www/mysite.com/html/path2/
+        }
+
+        # alias path3 = path2
+        location /path3 {
+            alias /var/www/mysite.com/html/path2; # this will NOT assume that the page is in /var/www/mysite.com/html/path2/ we must tell it
+        }
+
+        # if I don't have an index.html we can tell it to try_files and try specific file, in this case mypage.html
+        location /path4 {
+            root /var/www/mysite.com/html/; # this will NOT assume that the page is in /var/www/mysite.com/html/path2/ we must tell it
+            # try_files $uri  /$uri /index.html; #
+            try_files /path4/mypage.html /index.html; # if mypage.html doesn't exist. will use index.html
+        }
+
+        location ~* /count/[0-9] { # ~* as a regular expression
+            root /var/www/mysite.com/html;
+            try_files /index.html =404; # every time we go to count/4 it will redirect to index.
+        }
+
+        location /video/ {
+            aio            on;     # Enables or disables the use of asynchronous file I/O (AIO)
+            # sendfile       on;    # files can be read and sent using multi-threading (1.7.11), without blocking a worker process
+            # aio            threads;
+            directio       512;    # On Linux, AIO can be used starting from kernel version 2.6.22. Also, it is necessary to enable directio, or otherwise reading will be blocking
+            output_buffers 1 128k;
+        }
+
+    }
+}
+
+# redirect and rewrites
+http {
+    server {
+        listen 80
+        server_name mysite.com;
+
+        location /path2 {
+            root /var/www/mysite.com/html; # this assume that the page is in /var/www/mysite.com/html/path2/
+        }
+
+        # redirect path3 to path2
+        location /path3 {
+            return 307 /path2;
+        }
+
+        # rewrite
+        rewrite ^/number/(\w+) /count/$1;  # will route to count
+        # callint mysite.com/number/4 will server mysite.com/ as is the redirection for count
+        location ~* /count/[0-9] { # ~* as a regular expression
+            root /var/www/mysite.com/html;
+            try_files /index.html =404; # every time we go to count/4 it will redirect to index.
+        }
+}
 
 # myapp.conf
 
-### HTTP
+## http
 server {
-    listen 80;    
-    server_name api.nginx.antonputra.pvt;
+    listen 80;
+    listen [::]:80; # for ipv6
+    root /var/www/mysite/html
+    index index.html index.htm; # default file
+    server_name myserver.com
 
+    # tell the server where to find the raw Iles
+    location / {
+        root /app/www;
+    }
+
+    # re-define Content-type header (redefining include mime.types)
+    types {
+        text/css         css;  # something that is text/css is going to have the css extension.
+        text/html        html;  # something that is text/css is going to have the css extension.
+    }
+
+
+
+    # location to match image pattern.
+    location ~ \.(gif|jpg|png)$ {
+        root /app/images;
+    }
+}
+
+### routing to a proxy server
+server {
+    listen 80;
+    server_name api.nginx.myservice.pvt;
+
+    # tell the server where to find the raw files
     location / {
         proxy_pass http://10.0.32.200:8080/;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Port $remote_port;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Forwarded "by=$server_addr;for=$proxy_add_x_forwarded_for";
+
     }
 }
 
 ### HTTPS, HTTP2
+# make redirect to https if needed
+server {
+    listen 80;
+    # server_name _; # for all sites
+    server_name api.nginx.mysecureserver.com; # for specific site
+    return 301 https://$host$request_uri; # 301 is permanent redirect; 302 is temporary
+}
+# config https site
 server {
     listen 443 ssl http2;
-    server_name api.nginx.antonputra.pvt;
+    server_name api.nginx.mysecureserver.com;
 
-    ssl_certificate /etc/ssl/certs/nginx-antonputra-pvt.cert;
-    ssl_certificate_key /etc/ssl/private/nginx-antonputra-pvt.cert;
+    ssl_certificate /etc/ssl/certs/nginx-mysecureserver-com.cert;
+    ssl_certificate_key /etc/ssl/private/nginx-mysecureserver-com.key;
+
+    ssl_session_cache    shared:SSL:1m; # 1 MB session cache can store about 4000 sessions. Cache shared across all nginx workers.
+    ssl_session_timeout  5m;
+
+    ssl_ciphers   HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
 
     location / {
+        # route reverse proxy
         proxy_pass http://10.0.32.200:8080/;
+
+        ### set Active health check (nginx Plus) - (open only passive checks)
+        health_check uri=/healthcheck
+                     match=statusok
+                     interval=10s # polls every 10s
+                     fails=3
+                     passes=2;   # number of passes that have to do before start routing traffic to it.
+
+
     }
+}
+
+match statusok {
+    # Used for /healthcheck path chech configured above
+    status 200;
+    header Content-Type = text/html;
+    body ~ "Server[0-9]+ is alive"  # /healthcheck must response in the body "ServerN is alive", if not the server is marked as failed.
 }
 
 ### gRPC
 server {
-    listen 8443 ssl http2;
+    listen 443 ssl http2;
     server_name grpc.nginx.antonputra.pvt;
 
     ssl_certificate /etc/ssl/certs/nginx-antonputra-pvt.cert;
@@ -70,5 +271,203 @@ server {
 
     location / {
         grpc_pass 10.0.32.200:8082;  ## to send info in plain and not with TLS
+        grpc_pass grpc://localhost:50051;  #
     }
+}
+
+
+## load balancer
+http {
+    upstream stream_backend {
+        least_conn;  # Specifies that a group should use a load balancing method where a request is passed to the server with the least number of active connections, taking into account weights of servers. If there are several such servers, they are tried in turn using a weighted round-robin balancing method.
+        ip_hash;     # Specifies that a group should use a load balancing method where requests are distributed between servers based on client IP addresses.
+        least_time;  # factors connection count and server response time. (nginx Plus only)
+        random [two [method]]; # Specifies that a group should use a load balancing method where a request is passed to a randomly selected server, taking into account weights of servers.
+
+        server backend1:3000 weight=5;
+        server backend2:3000;
+        server backend3:3000;
+
+        # sticky cookie ( nginx Plus)
+        # will insert cookie using name, nginx will send client to the same server that was sent before.
+        sticky cookie name expires=1h
+                           domain=.example.com
+                           path=/;
+    }
+
+    server {
+        listen 80
+        server_name mylbsite.com;
+
+        location /path2 {
+            root /var/www/mylbsite.com/html; # this assume that the page is in /var/www/mylbsite.com/html/path2/
+        }
+
+        # alias path3 = path2
+        location /path3 {
+            alias /var/www/mylbsite.com/html/path2; # this will NOT assume that the page is in /var/www/mylbsite.com/html/path2/ we must tell it
+        }
+
+        # if I don't have an index.html we can tell it to try_files and try specific file, in this case mypage.html
+        location /path4 {
+            root /var/www/mylbsite.com/html/; # this will NOT assume that the page is in /var/www/mylbsite.com/html/path2/ we must tell it
+            try_files /path4/mypage.html /index.html; # if mypage.html doesn't exist. will use index.html
+        }
+
+        location ~* /count/[0-9] { # ~* as a regular expression
+            root /var/www/mylbsite.com/html;
+            try_files /index.html =404; # every time we go to count/4 it will redirect to index.
+        }
+
+        location /lbsite {
+            proxy_pass stream_backen;
+        }
+    }
+}
+
+# auth module
+# When you use the auth_request directive, requests are sent to the defined endpoint.
+# This is commonly some type of authentication service that may ask for a username and password, or it may check for the presence of an authentication token.
+# In either case, the cool part here is that nginx doesn't care what the auth mechanism is.
+# It sends the request to that auth endpoint. If the auth endpoint returns an HTTP 200, the request is routed to the destination (in this case, our stream_backend).
+# Any request response other than HTTP 200 will prevent the request from being routed to the final destination
+http {
+    server {
+        listen 80
+        server_name mylbsite.com;
+
+        location / {
+            root /data/www;
+        }
+
+        location /admin {
+            auth_request /auth;
+            proxy_pass stream_backen;
+
+        }
+
+        location /auth {
+            proxy_pass http://loginserver;
+
+        }
+    }
+}
+
+# Cache
+proxy_cache_path /path/to/cache levels=1:2  # defines params of cache
+                                key_zone=my_cache:10m  # size of memory to store cache keys in. A 1MB zone can store data about 8000 keys.
+                                max_size=10g   # sets upper limit of cache size. Optional
+                                inactive=60m   # how long an object can stay in cache without being accessed. Default 10m
+                                use_temp_path=off;
+server {
+    location / {
+        proxy_cache my_cache;   # enable caching for the context it is in.
+        proxy_set_header Host $host;
+        proxy_pass http://my_upstream;
+    }
+}
+
+
+
+# media
+# stream encoder (FFmpeg) -> RTMP Ingest (nginx) -> Media Worker (multiple nginx) -> Media Load Balancer (nginx)  -> Stream playback (vlc)
+# https://www.youtube.com/watch?v=xbFBjvUT-k0&list=PLGz_X9w9raXdrLO0BcndgHJf9Hdy7M_OX
+# RTMP: Real Time Message Protocol
+# HLS: HTTP Live Streaming
+# nginx ingest
+load_module modules/ngx_rtmp_module.so;
+rtmp {
+    server {
+        access_log /var/log/nginx/access.log;
+
+        listen 1935;
+        chunk_size 4000;
+
+        application live {
+
+            live on;
+            %{ for node in jsondecode(worker_nodes) ~}
+            push ${node.ipv4_address_private};
+            ${endOr ~}
+
+            allow publish ${my_ip};
+            deny publish all;
+
+            deny play all;
+        }
+    }
+}
+# nginx worker nodes
+load_module modules/ngx_rtmp_module.so;
+rtmp {
+    server {
+        access_log /var/log/nginx/access.log;
+
+        listen 1935;
+        chunk_size 4000;
+
+        application live {
+
+            live on;
+            %{ for node in jsondecode(worker_nodes) ~}
+            allow publish ${node.ipv4_address_private};
+            ${endOr ~}
+            deny publish all;
+
+            %{ for node in jsondecode(worker_nodes) ~}
+            allow play ${node.ipv4_address_private};
+            ${endOr ~}
+            deny play all;
+
+        }
+    }
+}
+
+http {
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+    include /etc/nginx/conf.d/*.conf
+}
+# nginx lb
+#
+stream {
+    upstream workers {
+        zone rtmp_workers 64k;
+        hash $remote_addr$remote_port;
+        # state /var/lib/nginx/state/http_backend.state
+        %{ for node in jsonodecode(worker_nodes) ~}
+        server ${node.ipv4_address_private}:1945;
+        %{end ~}
+
+    }
+
+    server {
+        listen 1935;
+        proxy_connect_timeout 1s;
+        proxy_pass workers;
+        health_check;
+
+    }
+}
+
+
+# php
+# install php-fpm package
+
+server {
+.
+.
+.
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sick;  # check version by checking file
+
+        # deny access to .htaccess files not supported by nginx.
+        location ~ /\.ht {
+            deny all;
+        }
+    }
+
+
 }

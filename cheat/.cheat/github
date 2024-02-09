@@ -1,8 +1,8 @@
 
 #    Create Personal Access Token on Github
-        From your Github account, go to Settings 
-         => Developer Settings 
-          => Personal Access Token 
+        From your Github account, go to Settings
+         => Developer Settings
+          => Personal Access Token
            => Generate New Token (Give your password)
             => Fillup the form
              => click Generate token
@@ -10,4 +10,9 @@
 
 # to add a token to a current repo
 git remote set-url origin https://<githubtoken>@github.com/<username>/<repositoryname>.git
+
+## skip CI
+git commit -m "wip [ci skip]"
+git push
+
 

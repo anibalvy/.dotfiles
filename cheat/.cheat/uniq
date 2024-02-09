@@ -1,18 +1,11 @@
-# show all lines without duplication
-# `sort -u` and `uniq` is the same effect.
-sort file | uniq
+sort file | uniq      # show all lines without duplication, `sort -u` and `uniq` is the same effect.
 
-# show not duplicated lines
-sort file | uniq -u
+sort file | uniq -u   # show not duplicated lines
 
-# show duplicated lines only
-sort file | uniq -d
+sort file | uniq -d   # show duplicated lines only
 
-# count all lines
-sort file | uniq -c
+sort file | uniq -c   # count all lines
 
-# count not duplicated lines
-sort file | uniq -uc
+sort file | uniq -uc  # count not duplicated lines
 
-# count only duplicated lines
-sort file | uniq -dc
+sort file | uniq -dc  # count only duplicated lines

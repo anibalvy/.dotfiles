@@ -1,0 +1,5 @@
+
+
+timeout 3 while.sh
+
+timeout 2h rsync /data/* remote:/data

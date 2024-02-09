@@ -251,4 +251,27 @@ enum Direction1 {
     Right
 }
 console.log(Direction1.Left) // gives: 3
+// const enum will make better compilation at replace values (to be check further)
+const enum Direction1 {
+    Up=1,          // default: 0
+    Down,
+    Left,
+    Right
+}
+console.log(Direction1.Left) // gives: 3
+
+// assertions
+// typeof     -> for types
+// instanceof -> for instances
+
+
+// instancesof htmlElements
+const canvas = document.getElementById('canvas')
+if (canvas instanceof HTMLCanvasElement) { // telling that canvas is a HTMLCanvasElement
+    const ctx = canvas.getContext('2d')
+}
+
+
 // Interfaces: like a custom type or a specific structure to an object
+
+

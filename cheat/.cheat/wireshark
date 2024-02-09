@@ -1,0 +1,13 @@
+# Wireshark/Tshark
+
+tshark -i <interface> -x -f "host myhost.com and port 80 and tcp[((tcp[12:1] & 0xf0) >> 2:4] = 0x504f5354"  > capture.pcap
+# -x: output of hex and ascii dump packet bytes
+# -f: params to save:
+#     - host myhost.com  -> where
+#     - and port 80 and  -> on ports 80
+#     - tcp[((tcp[12:1] & 0xf0) >> 2:4] -> It extracts the 4-bit Data Offset field from the TCP header, multiplies it by 4 to compute the size of the header in bytes (which is also the offset to the data), then extracts 4 bytes at this offset to get the first 4 bytes of the data,
+#     - 0x504f5354 -> identify if is Post requests when packets arrives, it's POST in ascii hex (P=50, O=4f, S=53, T=54)
+
+tshark -i <interface> -x -f "port 443" # capture all https (it will be encrypted)
+
+

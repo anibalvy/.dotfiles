@@ -1,0 +1,16 @@
+
+auto lo
+iface lo inet loopback
+
+# Primary network interface with bridge
+auto br0
+iface br0 inet static
+    address 192.168.10.8
+    broadcast 192.168.10.255
+    netmask 255.255.255.0
+    gateway 192.168.10.1
+    bridge_ports enp1s0 # to the main physical interface
+    bridge_stp off
+    bridge_waitport 0
+    bridge fd 0
+

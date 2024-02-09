@@ -470,7 +470,7 @@ func main(){
     fmt.Printf("Total execution time is: %v", time.Since(t0))
 
     // break for, give a labes (best practice)
-    loop:
+    // loop:
       for {
           // do something()
 	  if condition:

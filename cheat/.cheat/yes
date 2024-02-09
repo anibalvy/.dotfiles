@@ -1,0 +1,8 @@
+
+# print letter "y" until CTR+C
+yes
+# help to test CPU load
+
+# avoid confirmation
+yes | rm <file_to_delete>
+

@@ -7,6 +7,7 @@ alias suod="sudo"
 alias ls="lsd  "  # PACKAGE: is needed to install lsd package from https://github.com/Peltoche/lsd
 alias ll="lsd -lh --group-dirs=first"
 alias la="lsd -lah --group-dirs=first"
+alias lstree="tree"
 alias isntall="install"
 alias info='pinfo'
 alias rm='rm -i'
@@ -25,6 +26,11 @@ alias tmux-resurrect-session='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scri
 alias sc-im='TERM=xterm-256color sc-im'
 alias excel='TERM=xterm-256color sc-im'
 
+# terraform
+alias tf='terraform'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfaa='terraform apply -auto-approve'
 ###
 if command -v pinfo > /dev/null 2>&1  ; then
 	alias info='pinfo'
@@ -32,7 +38,7 @@ else
 	echo 'pinfo not installed, please install.'
 fi
 
-### fix: for autocorrect works with alias that have 'nocorrect' 
-unsetopt correct_all  
+### fix: for autocorrect works with alias that have 'nocorrect'
+unsetopt correct_all
 setopt correct
 ###

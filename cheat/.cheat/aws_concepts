@@ -13,14 +13,162 @@ Managed Service = S3 for data storage, Lambda for computing, Aurora for RDS andD
 
 Use AWS Network = usually, these keywords are related to communication between VPC instances and AWS services. Use VPC gateways and endpoints to connect to these services.
 
-VPC Gateway = enables connection to your On-Prem network via the public internet.
 
-NAT Gateway = enables internet connection from instances in a private subnet (i.e. for software updates). Some exam questions may give you a choice between NAT Gateway and NAT Instance. Generally, NAT Gateway is the right answer, as NAT instance needs to be managed by the user and doesn’t scale automatically. NAT Gateway on the other hand is an AWS managed service and can scale automatically based on demand. A question may come up in the exam asking for high availability of NAT Gateways if your VPC spans across multiple AZs. The right answer is to use individual NAT Gateways in each AZ.
+# elastic ip:
+- static ip that are assign to To use an Elastic IP address, you first allocate it for use in your account.
+- Then, you can associate it with an instance or network interface in your VPC.
+- Your Elastic IP address remains allocated to your AWS account until you explicitly release it.
+- With an Elastic IP address, you can mask the failure of an instance by rapidly remapping the address to another instance in your VPC.
+Name                             | Default | Adjustable | Comments
+:--------------------------------|:-------:|:----------:|:-------------
+addresses per Region             | 5       |	Yes     | This quota applies to individual AWS account VPCs and shared VPCs.
+addresses per public NAT gateway | 2       |    Yes     | You can request a quota increase up to 8.
+
+
+### What are the components of Amazon VPC?
+
+Amazon VPC comprises a variety of objects that will be familiar to customers with existing networks:
+
+Menu     | item                          | description
+:--------|:-----------------------------:|:-----------
+VPC      |                               |
+         | A Virtual Private Cloud       | A logically isolated virtual network in the AWS cloud. You define a VPC’s IP address space from ranges you select.
+         | Subnet                        | A segment of a VPC’s IP address range where you can place groups of isolated resources.
+         | Route tables                  | contains a set of rules, called routes, that are used to determine where network traffic from your subnet or gateway is directed.
+         | Internet Gateway              | The Amazon VPC side of a connection to the public Internet.
+         | Egress-only Internet Gateway  | A stateful gateway to provide egress only access for IPv6 traffic from the VPC to the Internet.
+         | Carrier Gateway               | provides connectivity to the carrier network for resources in a Wavelength VPC.
+         | DHCP option sets              | The Dynamic Host Configuration Protocol (DHCP) provides a standard for passing configuration information to hosts on a TCP/IP network. The options field of a DHCP message contains the configuration parameters. Some of those parameters are the domain name, domain name server, and the netbios-node-type.
+         | Elastic IPs                   | static ip that are assign to To use an Elastic IP address, you first allocate it for use in your account.
+         | Managed prefix lists          | A prefix list is a set of IPv4 or IPv6 address ranges. You can view AWS-managed prefix lists, or you can create and manage your own managed prefix lists. You can reference a prefix list in your resources, such as VPC security group rules and subnet route table entries. This enables you to manage the IP addresses that you frequently reuse for these resources in a single group. You can share your managed prefix list with other AWS accounts, enabling those accounts to reference the prefix list in their own resources.
+         | VPC Endpoints                 | Enables private connectivity to services hosted in AWS, from within your VPC without using an Internet Gateway, VPN, Network Address Translation (NAT) devices, or firewall proxies.
+         | VPC endpoint services         | You can create your own application in your VPC and configure it as an AWS PrivateLink-powered service (referred to as an endpoint service).
+         | NAT Gateway                   | A highly available, managed Network Address Translation (NAT) service for your resources in a private subnet to access the Internet.
+         | Virtual private gateway       | The Amazon VPC side of a VPN connection.
+         | Peering Connection            | A peering connection enables you to route traffic via private IP addresses between two peered VPCs.
+Security |                               |
+         | Network ACLs                  | A network access control list (ACL) is an optional layer of security for your VPC that acts as a firewall for controlling traffic in and out of one or more subnets.
+         | Security Groups               | acts as a virtual firewall that controls the traffic for one or more instances. When you launch an instance, you can specify one or more security groups.
+
+VPC Gateway: enables connection to your On-Prem network via the public internet.
+igw: A VPC component that is a horizontally scaled, redundant, and highly available that allows communication between your VPC and the internet. It supports IPv4 and IPv6 traffic. Only need one Internet Gateway per VPC
+
+VPC Reserverd address:
+ - 10.0.0.0: Network address.
+ - 10.0.0.1: Reserved by AWS for the VPC router.
+ - 10.0.0.2: Reserved by AWS for DNS
+ - 10.0.0.3: Reserved by AWS for future use.
+ - 10.0.0.255: Network broadcast address- Broadcast is not supported in VPC but, AWS reserves this IP address.
+
+VPC peering vs Transit Gateway: both are used to connect multiple VPCs. VPC Peering provides Full-mesh architecture while Transit Gateway provides hub-and-spoke architecture. Transit Gateway gives VPC connectivity at scale and simplifies VPC-to-VPC communication management over VPC Peering with a large number of VPCs.
+
+## VPC
+### What is Amazon Virtual Private Cloud?
+Amazon VPC lets you provision a logically isolated section of the Amazon Web Services (AWS) cloud where you can launch AWS resources in a virtual network that you define.
+You have complete control over your virtual networking environment, including selection of your own IP address ranges, creation of subnets, and configuration of route tables and network gateways.
+You can also create a hardware Virtual Private Network (VPN) connection between your corporate datacenter and your VPC and leverage the AWS cloud as an extension of your corporate datacenter.
+
+You can easily customize the network configuration for your Amazon VPC.
+For example, you can create a public-facing subnet for your web servers that have access to the Internet, and place your backend systems
+such as databases or application servers in a private-facing subnet with no Internet access. You can leverage multiple layers of security,
+including security groups and network access control lists, to help control access to Amazon EC2 instances in each subnet.
+
+Your default VPCs and any VPCs that you create come with a default security group. The name of the default security group is "default".
+We recommend that you create security groups for specific resources or groups of resources instead of using the default security group.
+However, if you don't associate a security group with some resources at creation time, we associate them with the default security group.
+For example, if you don't specify a security group when you launch an EC2 instance, we associate the instance with the default security group for its VPC.
+
+# Default VPC (and subnet)
+- is created automatically
+- all instances will be created in this vpc by default
+- if DELETED, you must explicitly specify the subnet or vpc.
+
+## VPC quotas
+
+Name                             | Default | Adjustable    | Comments
+:--------------------------------|:-------:|:-------------:|:-------------
+VPCs per Region                  |  5      |Yes            | Increasing this quota increases the quota on internet gateways per Region by the same amount. You can increase this limit so that you can have hundreds of VPCs per Region.
+Subnets per VPC                  |  200    |Yes            |
+IPv4 CIDR blocks per VPC         |  5      |Yes (up to 50) | This primary CIDR block and all secondary CIDR blocks count toward this quota.
+IPv6 CIDR blocks per VPC         |  5      |Yes (up to 50) | The number of /56 CIDRs you can allocate to a single VPC.
+
+
+- VPC tenancy:
+    - Default tenancy is shared. You and other customers all have VM's on the same hypervisor, and the separation is programmatic.
+    - Dedicated tenancy means you're the only customer running anything on that host. Which is more expensive. Are primarily used for compliance or software licensing purposes.
+
+NAT Gateway: enables internet connection from instances in a private subnet (i.e. for software updates). Only need one NAT Gateway per Availability Zone (AZ). Some exam questions may give you a choice between NAT Gateway and NAT Instance. Generally, NAT Gateway is the right answer, as NAT instance needs to be managed by the user and doesn’t scale automatically. NAT Gateway on the other hand is an AWS managed service and can scale automatically based on demand. A question may come up in the exam asking for high availability of NAT Gateways if your VPC spans across multiple AZs. The right answer is to use individual NAT Gateways in each AZ.
 
 VPC peering = enables you to establish connection between different VPCs. You can connect to your own VPC as well to other accounts/users VPCs (with their permission). Important to remember that the CIDR-range of connected VPCs shouldn’t overlap. VPC peering doesn't work as transconnectivity tool. For instance if you have 3 VPCs (A, B and C) and create peering between A and B, and between B and C, the instances in VPC A are not able to connect to instances in VPC C, you have to peer VPC A with VPC B if you need to establish connection.
 
-AWS Transit Gateway = acts as VPC hub and connects multiple VPC as a giant VPC web. You can connect AWS VPCs and your on-premises VPCs. Here is also important to remember that CIDR ranges shouldn't overlap.
+VPC VPN site to site, Virtual Private Gateway, ipsec con PSK (usuario y contraseñá) y con certificado (con AWS Certificate Manager Private Certificate Authority, para flexibilidad de conexiones IP)
+usos VPC - VPN - customer Gateway
+usos TG - VPN - customer Gateway
 
+
+## Transit Gateway
+
+Transit Gateway = acts as VPC hub (or Regional Virtual Router) and connects multiple VPC as a giant VPC web. You can connect AWS VPCs and your on-premises VPCs. Here is also important to remember that CIDR ranges shouldn't overlap.
+tgw = AWS Transit Gateway connects your Amazon Virtual Private Clouds (VPCs) and on-premises networks through a central hub. This connection simplifies your network and puts an end to complex peering relationships.
+
+Steps:
+- after the TG is created,
+- create attachments.
+- create Route table (Transit Gateway Route Table)
+    - to this add Associations (and add the attachments).
+    - create propagations: (and add the attachments).
+- to every VPC Route Tables (and attachments in general) add to routes to the TG, destination ex. 10.0.0.0/8, Target TG id.
+- in Peering attachments, el remoto tiene que aceptar (in TGW attachment, the pending acceptance item, select, Actions "Accept transit gateway attachment") .
+    - in that zone, add the tgw-attachemnt peering to the TG routing table.
+    - if we need that this zone route to that zone.. we need to change route 0.0.0.0/0 to target the other TGWattachment.
+    - to every VPC Route Tables (and attachments in general) add to routes to the TG, destination 0.0.0.0/8, Target TG id of the local TG.
+    - in the primary create in tgw route table, attach the tgw-attachment of the remote.
+    - in the primary create in tgw route table, add the route of the remote TG.
+
+Transit Gateway Attachment: connections.
+    - VPC
+    - VPN
+    - Peering: Connect TG's, both intra-Region and inter-Region transit gateways.
+    - Connect: to a Direct Connect gateway
+
+AS: Autonomous System
+
+AS routing policy: is a list of the IP address space that the AS controls, plus a list of the other ASes to which it connects. This information is necessary for routing packets to the correct networks. ASes announce this information to the Internet using the Border Gateway Protocol (BGP).
+
+ASN: Autonomous System Number. Are unique 16 bit numbers between 1 and 65534 or 32 bit numbers between 131072 and 4294967294. They are presented in this format: AS(number). For instance, Cloudflare's ASN is AS13335. According to some estimates, there are over 90,000 ASNs in use worldwide. ASNs are only required for external communications with inter-network routers (with BGP) - range 0 to 65535 and 64512-65534 are private and reserved.
+
+BGP: ASes announce their routing policy to other ASes and routers via the Border Gateway Protocol (BGP). Each AS uses BGP to announce which IP addresses they are responsible for and which other ASes they connect to. BGP routers take all this information from ASes around the world and put it into databases called routing tables to determine the fastest paths from AS to AS. When packets arrive, BGP routers refer to their routing tables to determine which AS the packet should go to next
+    - iBGP: interior Border Gateway Protocol, used for routing within an AS.
+    - eBGP: exterior Border Gateway Protocol, used for routing between an AS.
+
+peering: ASes connect with each other and exchange network traffic (data packets) through a process called peering. One way ASes peer with each other is by connecting at physical locations called Internet Exchange Points (IXPs).
+
+IXP: is a large local area network (LAN) with lots of routers, switches, and cable connections.
+
+route blackhole: allow to block communications to networks.
+
+# Direct Connect: a dedicated network connection to AWS
+
+Is a networking service that provides an alternative to using the internet to connect to AWS. Using AWS Direct Connect, data that would have previously been transported over the internet is delivered through a private network connection between your facilities and AWS. Uses BGP to exchange and influence routes between AWS and your devices.
+
+Direct connect locations: these are special services in multiples places that allows connect directly to AWS. (115 locations as april 2023)
+
+can connect bussiness/Data Centers/Branch Office/MPLS connectionis to AWS Partner to AWS Services
+or
+can connect bussiness/Data Centers/Branch Office/MPLS connectionis to AWS Partner
+      to AWS Services to (Using Site Link connectio between locations)
+      to AWS Services to AWS Partner to bussiness/Data Centers/Branch Office/MPLS connectionis
+
+Direct connect Virtual Interfaces (VIF): is a configuration that has all the BGP and the Vlan information. 2 types, public and private.
+    - Public VIF: S3, sqs. Can access all AWS public services using public IP address.
+    - Private VIF: access a VPC, using private IP; are attached to VGW.
+    - Transit: transport traffic Rom a Direct Connect gateway to one or more transit gateways.
+
+Direct connect gateway (VGW):
+    - lets you combine private VIF's with multiple VGW.
+    - lest you connect from AWS Direct connect location in one region to any AWS region.
+
+# EC2
 EC2 instances = That is your computing resource and data storage
 
 Network Access Control List (NACL) = defines rules for incoming and outgoing traffic for your subnet. Important to remember are 2 things.
@@ -28,10 +176,16 @@ Network Access Control List (NACL) = defines rules for incoming and outgoing tra
 - NACL can block traffic (explicit Deny), for instance, you can block particular IP or IP range from accessing your subnet.
 
 Route Tables = define network traffic paths through your VPC. Route tables are attached to each subnet
+
 VPC Endpoints = Access to all AWS services which are not part of the VPC. Important to remember that there a 2 types of Endpoints:
-Gateway Endpoint = enables use of S3 and DynamoDB services
-Interface Endpoint = enables use of all other AWS services
+    - Gateway Endpoint = enables use of S3 and DynamoDB services
+    - Interface Endpoint = enables use of all other AWS services
+
 CIDR = stands for Classless Inter-Domain Routing (you don't need to remember it), but what you need to understand is how CIDR range is defined.
 
-WAF (Web Application Firewall) = is used to protect against attacks like cross-site scripting, while Shield
+AWS WAF (Web Application Firewall) = is used to protect against attacks like cross-site scripting, while Shield
 AWS Shield = is offering protection against DDOS attacks.
+AWS Firewall
+
+
+

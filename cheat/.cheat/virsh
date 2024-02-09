@@ -1,0 +1,13 @@
+virsh   # enter console
+sudo virsh net-list --all  # list networks
+virsh start win10
+virsh sysinfo
+virsh list --all
+sudo virsh list --all
+watch -n 1 virsh net-list --all
+virsh net-create "kasa-k8s-cluster"
+virsh domcapabilities --virttype="kvm"
+
+sudo virsh net-start default
+sudo virsh net-autostart default
+

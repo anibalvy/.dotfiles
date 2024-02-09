@@ -1,0 +1,60 @@
+
+# create a sequence of numbers
+
+seq [initial_number] [increment_value] <end_number>
+seq 3
+1
+2
+3
+
+seq 3 7
+3
+4
+5
+6
+7
+
+seq 3 3 7
+3
+6
+
+seq 1 0.2 2
+1.0
+1.2
+1.4
+1.6
+1.8
+2.0
+
+seq -s ':' 1 5
+1:2:3:4:5
+
+
+❯ seq -w 98 102 # equal width
+098
+099
+100
+101
+102
+
+# use printf style format
+❯ seq -f 'Lowercasecase Float %f' 0.5 0.1 0.7
+Lowercasecase Float 0.500000
+Lowercasecase Float 0.600000
+Lowercasecase Float 0.700000
+
+❯ seq -f 'Lowercasecase Hexadecimal Float %.7a' -1 0.4 1
+Lowercasecase Hexadecimal Float -0x8.0000000p-3
+Lowercasecase Hexadecimal Float -0x9.999999ap-4
+Lowercasecase Hexadecimal Float -0xc.ccccccdp-6
+Lowercasecase Hexadecimal Float 0xc.ccccccdp-6
+Lowercasecase Hexadecimal Float 0x9.999999ap-4
+Lowercasecase Hexadecimal Float 0x8.0000000p-3
+
+❮ seq -f 'Uppercasecase Hexadecimal Float %.7A' -1 0.4 1
+Uppercasecase Hexadecimal Float -0X8.0000000P-3
+Uppercasecase Hexadecimal Float -0X9.999999AP-4
+Uppercasecase Hexadecimal Float -0XC.CCCCCCDP-6
+Uppercasecase Hexadecimal Float 0XC.CCCCCCDP-6
+Uppercasecase Hexadecimal Float 0X9.999999AP-4
+Uppercasecase Hexadecimal Float 0X8.0000000P-3

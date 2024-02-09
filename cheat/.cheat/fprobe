@@ -1,0 +1,7 @@
+export captured traffic to remote NetFlow Collector
+
+Incoming
+probe -x1:2 -ieth0 -B4096 -r2 -q10000 -t10000.1000000 -a <Linux Host IP> <Flow Collector IP>:<Flow Collector Port>
+
+Outgoing
+probe -x2:1 -ieth0 -B4096 -r2 -q10000 -t10000.1000000 -a <Linux Host IP> <Flow Collector IP>:<Flow Collector Port>

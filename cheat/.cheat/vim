@@ -1,5 +1,8 @@
 # VIM
 
+# open remote file
+vim /ssh:name@server:/path/to/file
+
 ## File management
 :e           # reload file
 :q           # quit
@@ -14,10 +17,12 @@ d            # Create a new directory
 
 ##  Navigation
 h/j/k/l      # Left/Down/Up/Right
-^ / $        # move to the beginning/end of line
+0 / $        # move to the beginning(position 0)/end of line
+^ + space    # go to first character
+_            # go to first character, good to start any macro
 I / A        # move to the beginning/end of line and insert
 o / O        # insert new line above/below current line and insert
-
+             iadsfafasdf  asdfasf
 ( / )        # jump to the previous/next sentence
 { / }        # jump to the previous/next paragraph
 [[ / ]]      # jump previous/next section
@@ -44,7 +49,7 @@ t            # tags[^1]
 # go to lines and columns
 :<line_number>      # go to line
 <column_number>|    # go to column (in NORMAL MODE)
-:call cursor(<line_number>,<column_number>) # go to column  
+:call cursor(<line_number>,<column_number>) # go to column
 
 # Preceding a motion or edition with a number repeats it 'n' times, Examples:
 50k          # moves 50 lines up
@@ -111,7 +116,7 @@ dgg          # delete to the beginning of the file
 dG           # delete to the end of the file
 
 zf           # folding, go to the + sign and press "l" to unfold
-zf}         # fold a function 
+zf}         # fold a function
 zfat         # html folding, go to the + sign and press "l" to unfold
 
 ## Special Insert:
@@ -152,6 +157,7 @@ d{motion}      # delete text that {motion} moves over
 ## Search
 /<pattern>     # Search in file
 /<pattern>\c   # Search in file case insensitive
+?<pattern>     # Search backwards
 
 ## Search and replace with the `:substitute` (aka `:s`) command
 :s/foo/bar/	         #replace the first match of 'foo' with 'bar' on the current line only
@@ -159,10 +165,14 @@ d{motion}      # delete text that {motion} moves over
 :%s/foo/bar/g	         #replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
 :%s/foo/bar/gc	         #ask to manually confirm (`c` flag) each replacement
 :s/\Cfoo/bar/g	         # replacement all match CASE-SENSITIVE
-:,$s/<original>/<new>/gc # delete from current line 
+:,$s/<original>/<new>/gc # delete from current line
 :23,$s/<original>/<new>/gc # delete from line  23
 :g/foo/d                 # delete lines
 :%s/\s\+$//g             # delete spaces at the end
+
+# replace from visual
+:'<,'>s/\(.*\)/new_text\1new_text # \(.*\)  : is the text that will replaced to be pasted later.
+                                  # \1      : is the selected text that will be inserted.
 
 ## Options
 :set option=<value>  # set option
@@ -226,13 +236,13 @@ vimdiff <file1> <file2>
 
 ## Sessions
 :mksession ~/.vim/sessions/<name>.session    # save session
-:source                                      # load session  
+:source                                      # load session
 :so                                          # load session short
 
 # format json
 :%!python -m jsontool
 :% | jq .
-:% ! jq 
+:% ! jq
 
 ## Generate Sequence
 vector[0] = 1;       vector[0] = A;
@@ -255,4 +265,8 @@ set nrformats+=hex,alpha
 :nmap             # keybindings for normal mode mappings
 :vmap             # keybindings for visual mode mappings
 :imap             # keybindings for insert mode mappings
+:set list         # show-hidden-invisible-characters
+:set nolist       # hide-hidden-invisible-characters
+
+%                # go to the end of the bracket
 

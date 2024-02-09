@@ -1,5 +1,7 @@
 terraform init       # Initializes a Terraform working directory. It must be within the same directory as the .tf files or nothing will happen.
 
+terraform get -update # get the latest version from example a module
+
 terraform validate   # Confirms the Terraform file's syntax is correct
 
 terraform plan       # Generates and shows what will change when you run terraform apply
@@ -11,8 +13,13 @@ Terraform refresh    # Updates the local state file against real resources. This
 
 terraform destroy    # Deletes and removes Terraform-managed infrastructure.This will permanently remove anything created and stored in the state file from the cluster.
 
+terraform plan    --var-file="./environment/develop/env.develop.tfvars"
+terraform apply   --var-file="./environment/develop/env.develop.tfvars"
+terraform destroy --var-file="./environment/develop/env.develop.tfvars"
 
 terraform -version
+
+terraform fmt     # format code
 
 terraform show           # show current state or saved plan
 

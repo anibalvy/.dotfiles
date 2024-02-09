@@ -1,0 +1,26 @@
+
+# monitoring traffic
+sudo iftop -n # no resolv
+bmon
+nethogs
+nload
+iptraf
+ifstat -t -i eth0 0.5
+cmb
+slurm
+tcptrack
+vnstat  # run as a service
+bwm-ng
+speedometer -r eth0 -t eth0
+netwatch  # part of netdiag package
+collectl -sn -oT -i0.5
+sudo trafshow -i eth0 tcp
+netload
+btop # process and network monitor
+
+
+# Network Bandwidth Measurement Tool
+iperf/iperf3
+netperf
+
+

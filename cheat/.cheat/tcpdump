@@ -15,6 +15,9 @@ tcpdump -nn -i any host 173.194.40.120 and port 80
 # -nnvvX => X display data of the package
 tcpdump -i eth0 -nnvvX tcp port 23 # check data for telnet
 
+# catch all port 8080
+tcpdump -i any -nn port 8080
+
 # Make a grep on tcpdump (ASCII)
 # -A  => Show only ASCII in packets.
 # -s0 => By default, tcpdump only captures 68 bytes.

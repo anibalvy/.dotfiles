@@ -1,9 +1,12 @@
+#
+echo 4 * 4 | bc
+#
 # cli
 bc
 bc 1.06.95
 Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006 Free Software Foundation, Inc.
 This is free software with ABSOLUTELY NO WARRANTY.
-For details type `warranty'. 
+For details type `warranty'.
 236-192
 44
 quit
@@ -21,7 +24,7 @@ echo '22*333' | bc
 7326
 
 # in zsh
- <<< $(( 236 / 128 )) 
+ <<< $(( 236 / 128 ))
 1
  <<< $(( 236. / 128 ))
 1.84375
