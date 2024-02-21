@@ -1,0 +1,57 @@
+# CHEF Configuration Management
+
+Push Configuration: Server pushes configuration to the nodes.
+Pull Configuration: Nodes checks with the Server periodically and fetches configuration from it.
+
+Chef follow Pull Configuration.
+
+# Flavours of Chef
+CHEF SOLO: has no remote server. The cookbooks are located at the local site itself.
+CHEF SERVER: is provided as a service on the cloud.
+CHEF CLIENT/SERVER: traditional arch, where remote server is hosted between workstation and nodes.
+PRIVATE CHEF: Enterprise version where the server is hosted within the enterprise infrastructure.
+
+# Components
+
+Workstation: where admin task are created.
+             store code for configuring and manage the infrastructure,
+Recipe:      The code that have the configuration to manage the infraesturcture.
+Cookbook:    A collection of Recipes.
+Knife:       cli that uploads the cookbook to the server.
+Server:      Where the cookbooks are store.
+             Provides tools required to drive the node configurations.
+             Can be local or remote.
+Nodes:       Are the systems that require the configuration.
+             OHAI is a serveice that fetch the current state of the node.
+             Chef Client is responsable for the communication with the server.
+             Each node can have a different configurationi requirement.
+
+
+# Chef cli
+chef generate repo <repo_name>           # Create repo.
+chef generate cookbook <cookbook_name>   # Create cookbook structure.
+
+# Recipes
+template '<path>/<file>'
+do
+    source "my_file.erb"
+    owner "root"
+    group "root"
+    mode "0755"
+end
+
+cookbook_file "/var/chef-package-cache/glusterfs_3.2.1-1_amd64.deb"
+do
+    source "glusterfs_3.2.1-1_amd64.deb"
+    owner "root"
+    group "root"
+    mode "0444"
+end
+
+# Knife
+knife cookbook upload <cookbook_name>
+knife upload template
+knife client list
+knife bootstrap <node_ip_address> -U root -P <password> --node-name <nodename>   # add machine as root
+knife bootstrap <node_ip_address> -U <username> -P <password> --sudo --use-sudo-password --node-name <nodename>   # add machine to use sudo
+knife ssh 'name:nodename' 'sudo chef-client' -x username

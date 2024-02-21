@@ -1,6 +1,10 @@
+# How to get source code of package using the apt-get/apt command
+# see
+cheat apt
+
 # How To Create Debian Packages
 
-Note: Commands here are just for examples. They will NOT run as they are shown here. You have to adapt them to your own needs and system. 
+Note: Commands here are just for examples. They will NOT run as they are shown here. You have to adapt them to your own needs and system.
 
 1. Create the directory to hold the project:
 ```sh
@@ -29,7 +33,7 @@ Essential: no
 Priority: optional
 Depends: packages;my-program;needs;to;run
 Maintainer: Your Name
-Description: A short description of my-program that will be displayed when the package is being selected for installation. 
+Description: A short description of my-program that will be displayed when the package is being selected for installation.
 ```
 6. If desired a "preinst" and/or "postinst" script can be added that execute before and/or after installation. They must be given proper execute permissions to run:
 ```sh

@@ -1,0 +1,286 @@
+
+
+## Organizations
+
+- "MPEG": are developed by ITU-T, ISO, IEC, licenced by MPEG LA.
+- Alliance for Open Media (AOMedia, AOM).
+- Xiph.Org Foundation (ogg (theora for video, Vorbis for audio, Flacc for lossless audio) OPUS low delay lossy audio)
+
+
+## VIDEO: video coding format or video compression format
+
+### Terms
+
+Acronym   | Description
+:=========|:===============
+ABR       | average bitrate
+CBR       | constant bitrate
+TS        | Transport Stream
+
+### Multimedia container formats
+
+The most popular multi-media containers are:
+
+  - 3GP                     : used by many mobile phones; based on the ISO base media file format
+  - ASF                     : container for Microsoft WMA and WMV, which today usually do not use a container
+  - AVI                     : the standard Microsoft Windows container, also based on RIFF
+  - DVR-MS                  : "Microsoft Digital Video Recording", proprietary video container format developed by Microsoft based on ASF
+  - Flash Video             : (FLV, F4V) container for video and audio from Adobe Systems
+  - IFF                     : first platform-independent container format
+  - Matroska                : (MKV) not limited to any coding format, as it can hold virtually anything; it is an open standard container format
+  - MJ2                     : Motion JPEG 2000 file format, based on the ISO base media file format which is defined in MPEG-4 Part 12 and JPEG 2000 Part 12
+  - QuickTime File Format   : standard QuickTime video container from Apple Inc.
+  - MPEG program stream     : standard container for MPEG-1 and MPEG-2 elementary streams on reasonably reliable media such as disks; used also on DVD-Video discs
+  - MPEG-2 transport stream : (a.k.a. MPEG-TS) standard container for digital broadcasting and for transportation over unreliable media; used also on Blu-ray Disc video; typically contains multiple video and audio streams, and an electronic program guide
+  - MP4                     : standard audio and video container for the MPEG-4 multimedia portfolio, based on the ISO base media file format defined in MPEG-4 Part 12 and JPEG 2000 Part 12) which in turn was based on the QuickTime file format.
+  - Ogg                     : standard container for Xiph.org audio formats Vorbis and Opus and video format Theora
+  - RM                      : RealMedia; standard container for RealVideo and RealAudio
+  - WebM                    : subset of Matroska, used for web-based media distribution on online platforms; container for royalty-free audio formats Vorbis/Opus and video formats VP8/VP9/AV1
+
+
+Containers related by derivation: In many ways, derived containers are similar to those on which they are based, sometimes extending them, sometimes limiting their capabilities:
+
+  QTFF
+    |_ISO BMFF
+        |_MP4
+        |_3GPP, 3GPP2
+        |_F4V
+
+  MPEG-PS
+    |_MPEG-TS
+        |_M2TS
+    |_VOB
+        |_EVOB
+
+  MCF
+    |_Matroska
+        |_WebM
+
+  RIFF
+    |_AVI
+        |_DMF
+
+  RM
+    |_RMVB
+
+## Codecs - video compression
+
+### H.264 and H.265
+
+These are developed by ITU-T, ISO, IEC, licenced by MPEG LA.
+Designed as part of the MPEG-H project.
+The ISO/IEC group refers to it as MPEG-H Part 2 and the ITU-T as H.265.
+
+
+These codecs’ heart lies in their ability to compress video data efficiently.
+H.264:
+  - also known as Advanced Video Coding (AVC) or MPEG-4 Part 10
+  - delivering commendable video quality with moderate compression.
+H.265:
+  - also known as High-Efficiency Video Coding (HEVC) or MPEG-H Part 2
+  - HEVC, the MPEG-designed codec expected to succeed AVC.
+  - smaller files than its predecessor, H.264
+  - maintaining higher video quality at lower bitrates, making it an ideal choice for high-resolution content.
+
+H.265 leaps forward with its enhanced compression algorithms, resulting in significantly smaller file sizes than H.264.
+
+#### Software Implementations
+
+H.264:
+- QuickTime
+- Nero
+- OpenH264
+- x264
+- Main-Concept
+- Elecard
+- TSE
+- Pro-Coder
+- Avivo
+- Elemental
+- IPP
+
+
+H.265:
+- x265
+
+#### Video Quality
+
+While compression is essential for efficient data transmission, it inevitably challenges video quality.
+  - H.264 strikes a balance, delivering commendable video quality with moderate compression.
+  - H.265 further elevates this equilibrium by maintaining higher video quality at lower bitrates, making it an ideal choice for high-resolution content.
+
+H.264 offers commendable video quality with moderate compression, while H.265 maintains higher quality at lower bitrates.
+
+#### Bitrate and Bandwidth
+
+Determining the required bitrate for streaming or downloading videos:
+  - H.265’s superior compression efficiency translates into reduced bitrate demands, ensuring smoother playback even in bandwidth-constrained scenarios.
+
+H.265’s superior compression efficiency translates into reduced bitrate demands for efficient streaming or downloading of videos.
+
+#### Device and Platform Compatibility
+
+Before opting for either of these codecs, it’s important to understand their compatibility across devices and platforms.
+  - H.264 is widely supported by streaming services such as YouTube and Facebook Live, making it the preferred choice for creating videos targeting a wide range of audiences.
+  - H.265 may not be well-supported across some browsers or mobile devices, limiting its usage.
+
+H.264 is widely supported by streaming services such as YouTube and Facebook Live, while H.265 may not be well-supported across some browsers or mobile devices.
+
+#### Encoding and Decoding Complexity
+
+The complexity of encoding and decoding processes influences computational requirements and playback performance.
+  - H.264, with its established presence, boasts broad compatibility and efficient processing.
+  - H.265, while demanding higher processing power, compensates with unmatched compression prowess.
+
+H.264’s established presence ensures broad compatibility and efficient processing, while H.265 demands higher processing power but compensates with unmatched compression prowess.
+
+#### Streaming and Broadcasting
+Regarding streaming and broadcasting,
+  - H.264’s well-rounded compatibility makes it a popular choice for low-latency video delivery. However, with its advanced compression capabilities,
+  - H.265 can reduce bandwidth consumption in high-quality video delivery applications such as UHD TV or 4K/8K broadcasting.
+
+H.264 is a popular choice for low-latency video delivery, while H.265 can reduce bandwidth consumption in high-quality video delivery applications such as UHD TV or 4K/8K broadcasting.
+
+#### libraries
+  - libvpx:
+            - a free software video codec library from Google and the Alliance for Open Media (AOMedia).
+            - commandline tools vpxenc/aomenc and vpxdec/aomdec that build on its functionality.
+
+
+### VC-1
+  - SMPTE 421, informally known as VC-1, is a video coding format.
+  - Most of it was initially developed as Microsoft's proprietary video format Windows Media Video 9 in 2003.
+  - With some enhancements including the development of a new Advanced Profile, it was officially approved as a SMPTE standard on April 3, 2006.
+  - It was primarily marketed as a lower-complexity competitor to the H.264/MPEG-4 AVC standard.
+
+
+### VP9 and VP{1-8}
+
+
+### AV1
+AOMedia Video 1 (AV1) is an open, royalty-free video coding format initially designed for video transmissions over the Internet. It was developed as a successor to VP9 by the Alliance for Open Media (AOMedia).
+
+#### libraries
+  - libaom:
+            - a free software video codec library from Google and the Alliance for Open Media (AOMedia).
+            - A special fork of libvpx named libaom that was stripped of backwards compatibility.
+            - commandline tools vpxenc/aomenc and vpxdec/aomdec that build on its functionality.
+
+## AUDIO
+
+### List of lossy formats
+
+Basic compression algorithm                |  Audio coding standard                        |Abbreviation |   Introduction     | Market share (2019)[15]
+:==========================================|:==============================================|:===========:|===================:|:==============
+Modified discrete cosine transform (MDCT)  |  Dolby Digital (AC-3)                         | AC3         | 1991               | 58%
+                                           |  Adaptive Transform Acoustic Coding           | ATRAC       | 1992               | Unknown
+                                           |  MPEG Layer III                               | MP3         | 1993               | 49%
+                                           |  Advanced Audio Coding (MPEG-2 / MPEG-4)      | AAC         | 1997               | 88%
+                                           |  Windows Media Audio                          | WMA         | 1999               | Unknown
+                                           |  Ogg Vorbis                                   | Ogg         | 2000               | 7%
+                                           |  Constrained Energy Lapped Transform          | CELT        | 2011               | —
+                                           |  Opus                                         | Opus        | 2012               | 8%
+                                           |  LDAC                                         | LDAC        | 2015               | Unknown
+Adaptive differential pulse-code           |  aptX / aptX-HD                               | aptX        | 1989               | Unknown
+modulation (ADPCM)                         |  Digital Theater Systems                      | DTS         | 1990               | 14%
+                                           |  Master Quality Authenticated                 | MQA         | 2014               | Unknown
+Sub-band coding (SBC)                      |  MPEG-1 Audio Layer II                        | MP2         | 1993               | Un­known
+                                           |  Musepack                                     | MPC         | 1997
+
+### List of lossless formats
+
+  - Apple Lossless (ALAC – Apple Lossless Audio Codec)
+  - Adaptive Transform Acoustic Coding (ATRAC)
+  - Audio Lossless Coding (also known as MPEG-4 ALS)
+  - Direct Stream Transfer (DST)
+  - Dolby TrueHD
+  - DTS-HD Master Audio
+  - Free Lossless Audio Codec (FLAC)
+  - Lossless discrete cosine transform (LDCT)
+  - Meridian Lossless Packing (MLP)
+  - Monkey's Audio (Monkey's Audio APE)
+  - MPEG-4 SLS (also known as HD-AAC)
+  - OptimFROG
+  - Original Sound Quality (OSQ)
+  - RealPlayer (RealAudio Lossless)
+  - Shorten (SHN)
+  - TTA (True Audio Lossless)
+  - WavPack (WavPack lossless)
+  - WMA Lossless (Windows Media Lossless)
+
+
+## STREAMING: communication protocol for streaming audio, video, and data over the Internet.
+
+### network protocol
+#### RTP - Real-time Transport Protocol
+  Is a network protocol for delivering audio and video over IP networks.
+  RTP is used in communication and entertainment systems that involve streaming media, such as telephony, video teleconference applications including WebRTC, television services and web-based push-to-talk features.
+  RTP typically runs over User Datagram Protocol (UDP).
+  RTP is used in conjunction with the RTP Control Protocol (RTCP).
+  While RTP carries the media streams (e.g., audio and video), RTCP is used to monitor transmission statistics and quality of service (QoS) and aids synchronization of multiple streams.
+  RTP is one of the technical foundations of Voice over IP and in this context is often used in conjunction with a signaling protocol such as the Session Initiation Protocol (SIP) which establishes connections across the network.
+
+#### SRT - Secure Reliable Transport
+  - Is an open source video transport protocol that utilises the UDP transport protocol. The SRT Protocol specification is available as an Internet Draft from the IETF.
+  - SRT provides connection and control, reliable transmission similar to TCP; however, it does so at the application layer, using UDP protocol as an underlying transport layer.
+  - It supports packet recovery while maintaining low latency (default: 120 ms).
+  - SRT also supports encryption using AES.
+
+### communication protocol
+#### RTMP - Real-Time Messaging Protocol
+  - Real-Time Messaging Protocol (RTMP) is a communication protocol for streaming audio, video, and data over the Internet.
+  - Originally developed as a proprietary protocol by Macromedia for streaming between Flash Player and the Flash Communication Server, Adobe (which acquired Macromedia) has released an incomplete version of the specification of the protocol for public use.
+  - Normally, it can’t be used for streaming HEVC encoded content.
+
+  - RTMP is a TCP-based protocol which maintains persistent connections and allows low-latency communication.
+  - The RTMP defines several virtual channels on which packets may be sent and received, and which operate independently of each other.
+  - For example:
+    - there is a channel for handling RPC requests and responses.
+    - a channel for video stream data.
+    - a channel for audio stream data.
+    - a channel for out-of-band control messages (fragment size negotiation. etc.).
+    - and so on.
+
+  - During a typical RTMP session, several channels may be active simultaneously at any given time.
+    - When RTMP data is encoded, a packet header is generated.
+    - The packet header specifies, amongst other matters, the ID of the channel on which it is to be sent, a timestamp of when it was generated (if necessary), and the size of the packet's payload.
+    - This header is then followed by the actual payload content of the packet, which is fragmented according to the currently agreed-upon fragment size before it is sent over the connection.
+    - The packet header itself is never fragmented, and its size does not count towards the data in the packet's first fragment. In other words, only the actual packet payload (the media data) is subject to fragmentation.
+
+  - At a higher level, the RTMP encapsulates MP3 or AAC audio and FLV1 video multimedia streams, and can make remote procedure calls (RPCs) using the Action Message Format.
+  - Any RPC services required are made asynchronously, using a single client/server request/response model, such that real-time communication is not required.
+
+  - The RTMP protocol has multiple variations:
+
+   - RTMP proper, the "plain" protocol which works on top of Transmission Control Protocol (TCP) and uses port number 1935 by default.
+   - RTMPS, (encrypted) which is RTMP over a Transport Layer Security (TLS/SSL) connection.
+   - RTMPE, (encrypted) which is RTMP encrypted using Adobe's own security mechanism. While the details of the implementation are proprietary, the mechanism uses industry standard cryptographic primitives.[1]
+   - RTMPT, (tunneling) which is encapsulated within HTTP requests to traverse firewalls. RTMPT is frequently found utilizing cleartext requests on TCP ports 80 and 443 to bypass most corporate traffic filtering. The encapsulated session may carry plain RTMP, RTMPS, or RTMPE packets within.
+   - RTMFP, which is RTMP over User Datagram Protocol (UDP) instead of TCP, replacing RTMP Chunk Stream. The Secure Real-Time Media Flow Protocol suite has been developed by Adobe Systems and enables end‐users to connect and communicate directly with each other (P2P).
+
+  While the primary motivation for RTMP was to be a protocol for playing Flash video, it is also used in some other applications, such as the Adobe LiveCycle Data Services ES.
+
+
+### Adaptive bitrate streaming
+Is a technique used in streaming multimedia over computer networks.
+- The concept came from storing MPEG-1 and MPEG-2 DVD TS Sectors into small 2KB files, which will be served using an HTTP server to the player.
+
+#### Dynamic Adaptive Streaming over HTTP (DASH)
+#### Apple HTTP Live Streaming (HLS)
+#### Adobe HTTP Dynamic Streaming (HDS)
+#### Microsoft Smooth Streaming (MSS)
+#### Common Media Application Format (CMAF)
+#### QuavStreams Adaptive Streaming over HTTP
+#### Uplynk
+#### Self-learning clients
+
+
+### streaming media software
+#### VLC
+#### OBS
+#### Nimble Streamer
+#### Icecast
+  - The Icecast server is capable of streaming audio content as Opus or Vorbis[7] over standard HTTP, video as WebM or Theora[7] over HTTP, and MP3,[7] AAC,[6] and NSV[6] over the SHOUTcast protocol.
+  - Theora, AAC, and NSV are only supported in version 2.2.0 and newer.
+
+

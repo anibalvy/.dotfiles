@@ -26,3 +26,7 @@ grep 'install ' /var/log/dpkg.log
 
 # Silently keep old configuration during batch updates
 apt-get update -o DPkg::Options::='--force-confold' ...
+
+# How to get source code of package using the apt-get/apt command
+# see
+cheat apt

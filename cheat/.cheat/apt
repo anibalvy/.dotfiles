@@ -21,3 +21,15 @@ apt install package(s)
 
 # To uninstall package(s)
 apt remove package(s)
+
+# How to get source code of package using the apt-get/apt command
+# in /etc/apt/sources.list the deb-src type references an Ubuntu distribution’s source code as follows:
+## Sources specification for the Ubuntu 20.04 LTS distro #
+deb-src http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse
+
+apt update
+sudo apt-get source <pkg1>
+
+# How To Create Debian Packages
+cheat deb-package
+

@@ -24,3 +24,12 @@ ffmpeg -i video.ext -i audio.ext -c:v copy -c:a copy output.ext
 # -autoexit : closes ffplay as soon as the audio finishes
 ffmpeg -ss 00:34:24.85 -t 10 -i path/to/file.mp4 -f mp3 pipe:play | ffplay -i pipe:play -autoexit
 
+# To check for corruption in the input.ts stream video file and save the errors in log file:
+ffmpeg –v error –i corrupted_input.ts -f null – &> corruptions.log
+
+# To fix the corrupt video file use:
+ffmpeg –i corrupted_input.ts –map –ignore_unknown/-copy_unknown –c copy fixed.ts
+
+# If it’s a corrupt MP4 video:
+ffmpeg -i input.mp4 -c copy output.mp4
+
