@@ -1,0 +1,2 @@
+aplay -L  # see devices
+

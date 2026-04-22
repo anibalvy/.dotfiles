@@ -1,0 +1,15 @@
+
+
+
+## batteries
+            Charging or discharging current (A)
+C-rate(C) = -----------------------------------
+                Rated battery capacity (Ah)
+
+C = capacity
+Ah = the amount if current the battery release an hour
+
+1C => Battery charges fully in 1 hour
+2C => Battery charges fully in 1/2 hour
+3C => Battery charges fully in 12 min
+

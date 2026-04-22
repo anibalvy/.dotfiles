@@ -1,0 +1,13 @@
+# debug in page
+<pre>
+<style
+contenteditable
+style="display: block"
+>
+  body {
+      background: black;
+      color: aqua;
+      font-size: 24px;
+    }
+</style>
+</pre>

@@ -1,0 +1,299 @@
+
+## Comments
+# This is a comment line
+print "Welcome to Ruby!"     # prints the welcome message
+=begin
+This is a comment line
+it explains that the next line of code displays a welcome message
+=end
+
+## Strings
+myString = String.new  # initializate empty var
+myString = String.new("This is my string. Get your own string")
+myString = String("This is also my string")
+myString = "This is also my string"
+myString = "This is also my string.\nGet your own string"
+myString = %&This is "my" String&    # to use quotes
+myString = "This is \"my\" String"   # scaping
+myString = "Welcome " + "to " + "Ruby!"
+myString = "Welcome " "to " "Ruby!"
+myString = "Welcome " << "to " << "Ruby!"
+myString = "Welcome ".concat("to ").concat("Ruby!")
+myString.freeze  # freeze element
+myString[3].chr
+=> "c"
+myString[11, 4]
+=> "Ruby"
+myString[0..6]
+=> "Welcome"
+myString.index("Ruby")
+=> 11
+
+myString["JavaScript"]= "Ruby"
+myString.replace "Goodbye to PHP!"
+
+myString = "Paris in Spring"
+myString.insert 8, " the"
+=> "Paris in the Spring"
+myString.reverse
+=> "gnirpS eht ni siraP"
+
+"John" == "Fred"
+=> false
+
+"John".eql? "John"
+=> true
+
+"Apples" <=> "Apples"
+=> 0
+
+
+"Apples" <=> "Pears"
+=> -1
+
+"Pears" <=> "Apples"
+=> 1
+
+"Apples".casecmp "apples"
+=> 0
+
+myText = <<DOC
+Please Detach and return this coupon with your payment.
+Do not send cash or coins.
+
+        Acme Corporation
+DOC
+
+myString = "Hello"
+myString.empty?
+=> false
+myString.length
+=> 5
+
+
+## Strings Conversions
+myArray = "ABCDEFGHIJKLMNOP".split
+=> ["ABCDEFGHIJKLMNOP"]
+
+myArray = "ABCDEFGHIJKLMNOP".split(//)
+=> ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]
+
+myArray = "Paris in the Spring".split(/ /)
+=> ["Paris", "in", "the", "Spring"]
+
+myArray = "Red, Green, Blue, Indigo, Violet".split(/, /)
+=> ["Red", "Green", "Blue", "Indigo", "Violet"]
+
+"one\ntwo\nthree".each {|word| puts word.capitalize}
+One
+Two
+Three
+=> "one\ntwo\nthree"
+
+"PLEASE DON'T SHOUT!".downcase
+=> "please don't shout!"
+
+"speak up. i can't here you!".upcase
+=> "SPEAK UP. I CAN'T HERE YOU!"
+
+"What the Capital And Lower Case Letters Swap".swapcase
+=> "wHAT THE cAPITAL aND lOWER cASE lETTERS sWAP"
+
+"1000".to_i
+=> 1000
+
+"1000".to_f
+=> 1000.0
+
+"myString".to_sym
+=> :myString       # To convert a String to a Symbol use the to_sym method
+
+
+## Variables
+MYCONSTANT = "hello"
+y = 10  # dynamic Typing
+a, b, c, d = 10, 20, 30, 40
+y.kind_of? Integer
+=> true
+
+## Variable Scope
+x = 10
+=> 10
+defined? x
+=> "local-variable"
+
+loopcounter = 10
+_LoopCounter = 20
+defined? loopcounter
+=> "local-variable"
+defined? _LoopCounter
+=> "local-variable"
+
+$x = 10
+=> 10
+defined? $x
+=> "global-variable"
+Name  Value
+$@	  The location of latest error
+$_	  The string last read by gets
+$.	  The line number last read by interpreter
+$&	  The string last matched by regexp
+$~	  The last regexp match, as an array of subexpressions
+$n	  The nth subexpression in the last match (same as $~[n])
+$=	  The case-insensitivity flag
+$/	  The input record separator
+$\	  The output record separator
+$0	  The name of the ruby script file currently executing
+$*	  The command line arguments used to invoke the script
+$$	  The Ruby interpreter's process ID
+$?	  The exit status of last executed child process
+
+@@total = 0  ## Class Variable: a variable that is shared amongst all instances of a class.
+@total = 0   ## Instance Variable: similar to Class variables except that their values are local to specific instances of an object.
+
+## Variables Convertion
+
+s = "hello"
+s.class
+=> String
+
+y = 20
+=> 20
+y.to_f  # converting to float
+=> 20.0
+
+54321.to_s # converting to string
+=> "54321
+
+54321.to_s(2)  # to binary
+=> "1101010000110001"
+54321.to_s(16) # to hex
+=> "d431"
+54321.to_s(8) # to octal
+=> "152061"
+
+Integer (10.898)     # Convert Floating Point Number to an Integer
+Integer ("10898")    # Convert a String to an Integer
+Integer (0xA4F5D)    # Convert a Hexadecimal Number to an Integer
+Integer (01231)      # Convert an Octal Number to an Integer
+Integer (0b01110101) # Convert a Binary Number to an Integer
+"e".getbyte(0)       # ASCII to Integer
+Float (10)           # Convert an Integer Floating Point
+Float ("10.09889")   # Convert a String to Floating Point
+Float (0xA4F5D)      # Convert a Hexadecimal Number to Floating Point
+Float (01231)        # Convert an Octal Number to a Floating Point
+Float (0b01110101)   # Convert a Binary Number to Floating Point
+"e".getbyte(0)       # Convert a Character to a Floating Point ASCII Character Code
+
+## Ranges
+1..10    # Creates a range from 1 to 10 inclusive
+1...10   # Creates a range from 1 to 9
+(1..10).to_a
+=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+(1...10).to_a
+=> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+('a'..'l').to_a
+=> ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"]
+
+('cab'..'car').to_a
+=> ["cab", "cac", "cad", "cae", "caf", "cag", "cah", "cai", "caj", "cak", "cal", "cam",
+"can", "cao", "cap", "caq", "car"]
+
+(1..20) === 15       # Does the number fit in the range 1 to 20
+=> true
+('k'..'z') === 'm'   # Does the letter fall between the letters 'k' and 'z' in the alphabet?
+=> true
+
+## Methods
+def name( arg1, arg2, arg3, ... )
+   .. ruby code ..
+   return value
+end
+
+def displaystrings( *args )
+      args.each {|string| puts string}
+end
+
+displaystrings("Red")
+displaystrings("Red", "Green")
+
+## Flow Control
+if customerName == "Fred" && age < 10  # and
+      print "Hello Fred!"
+elsif customerName == "John" || age < 10  # or
+      print "Hello John!"
+elsif customername == "Robert"
+      print "Hello Bob!"
+end
+
+## Case  (use : or then in when)
+score = 70
+
+result = case score
+   when 0..40 then "Fail"
+   when 41..60: "Pass"
+   when 61..70: "Pass with Merit"
+   when 71..100: "Pass with Distinction"
+   else "Invalid Score"
+end
+
+puts result
+
+## Operators
+
+Operator	Description
++	        Addition - Adds values on either side of the operator
+-	        Subtraction - Subtracts right hand operand from left hand operand
+*	        Multiplication - Multiplies values on either side of the operator
+/	        Division - Divides left hand operand by right hand operand
+%	        Modulus - Divides left hand operand by right hand operand and returns remainder
+**	        Exponent - Performs exponential (power) calculation on operators
+
+Combined Operator	Equivalent
+x += y	            x = x + y
+x -= y	            x = x - y
+x /= y	            x = x / y
+x *= y	            x = x * y
+x %= y	            x = x % y
+x **= y	            x = x ** y
+
+Comparison  Description
+==	        Tests for equality. Returns true or false
+.eql?	    Same as ==.
+!=	        Tests for inequality. Returns true for inequality or false for equality
+<	        Less than. Returns true if first operand is less than second operand. Otherwise returns false
+>	        Greater than. Returns true if first operand is greater than second operand. Otherwise returns false.
+>=	        Greater than or equal to. Returns true if first operand is greater than or equal to second operand. Otherwise returns false.
+<=	        Less than or equal to. Returns true if first operand is less than or equal to second operand. Otherwise returns false.
+<=>	        Combined comparison operator. Returns 0 if first operand equals second, 1 if first operand is greater than the second and -1 if first operand is less than the second.
+
+Bitwise  Equivalent
+~	     Bitwise NOT (Complement)
+|	     Bitwise OR
+&	     Bitwise AND
+^	     Bitwise Exclusive OR
+<<	     Bitwise Shift Left
+>>	     Bitwise Shift Right
+
+## Datetime
+
+require 'date'
+
+date = Date.new(2008, 12, 22)
+
+date = Date.new(2008, 12, 22)
+=> #<Date: 4909645/2,0,2299161>
+
+date.day
+date.month
+date.year
+date = DateTime.new(2008, 12, 22, 14, 30)
+date = DateTime.now
+today = DateTime.now
+birthday = Date.new(2008, 4, 10)
+time_until = birthday - today
+time_until.to_i             # get the number of days until my birthday
+=> 127
+

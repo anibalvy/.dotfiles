@@ -1,0 +1,12 @@
+Types of Network Bonds in Linux
+
+There are 7 types of network bonds, each denoted using a mode number, i.e. mode=0, mode=1 all the way to mode=7.
+
+mode=0 (Round Robin Policy) – This is the default mode and is based on the Round-robin policy. Data packets are transmitted in sequential order from the first available slave interface to the last. This mode provides load balancing and fault tolerance.
+mode=1 (Active-backup)      – This is based on the Active-backup policy. As the name infers, only one slave is active. The other one is activated when the current slave fails. The mode provides fault tolerance and redundancy.
+mode=2 (Balance-XOR)        – The mode sets an Exclusive OR (XOR) of the source address with the destination MAC address.
+mode=3 (Broadcast)          – In this policy, all packets are transmitted on all slave interfaces.
+mode=4 (802.3ad)            – This is also referred to as the Dynamic Link Aggregation mode. It creates aggregation groups with the same speed. Works on network switches that support the IEEE 802.3ad dynamic link standard.
+mode=5 (Balance-tlb)        – This is also known as Adaptive Transmit Load Balancing. Here, outgoing traffic is transmitted based on the current load on each slave interface, while incoming traffic is received by the current active slave.
+mode=6 (Balance-alb)        – This is also known as Adaptive Load Balancing. Load balancing is done using ARP (Address Resolution Protocol) negotiation.
+

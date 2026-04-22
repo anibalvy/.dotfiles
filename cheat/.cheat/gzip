@@ -1,17 +1,24 @@
-# To create a *.gz compressed file
-gzip test.txt
+# gzip can compress only regular files. Symbolic links are ignored.
+gzip test.txt    # To create a *.gz compressed file
+gzip -v filename # verbose mode
+gzip -k filename # keep the original file
+gzip file1 file2 file3 # compress multiple files
+gzip -9 filename # compress with maximum compression, The default compression level is -6. [1,9] -1 or --fast and -9 or --best
 
-# To create a *.gz compressed file to a specific location using -c option (standard out)
-gzip -c test.txt > test_custom.txt.gz
+gzip -r documents_directory # Recursively compress all the files under a specified directory
+
+gzip < test.txt > test.txt.gz # To create a *.gz compressed file and keep the original
+
+mysqldump database_name | gzip -c > database_name.sql.gz # using stdin
+
+gzip -c test.txt > test_custom.txt.gz # To create a *.gz compressed file to a specific location using -c option (standard out)
 
 # To uncompress a *.gz file
-gzip -d test.txt.gz
+gzip -d test.txt.gz  # is an alias of gunzip filename.gz
+gzip -dr test.txt.gz #  decompresses all files in a given directory recursively
+gzip -dk filename.gz # keep the original file
 
 # Display compression ratio of the compressed file using gzip -l
 gzip -l *.gz
+gzip -lv *.gz
 
-# Recursively compress all the files under a specified directory
-gzip -r documents_directory
-
-# To create a *.gz compressed file and keep the original
-gzip < test.txt > test.txt.gz

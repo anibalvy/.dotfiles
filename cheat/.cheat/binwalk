@@ -20,3 +20,7 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 50688+0 records out
 50688 bytes (51 kB, 50 KiB) copied, 0.0583475 s, 869 kB/s
 
+
+# -M: recursively
+# -e: extract
+binwalk -Me blob.bin

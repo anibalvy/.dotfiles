@@ -7,7 +7,7 @@ ansible-galaxy collection install community.<extension>
 # config files
 mkdir ansible_<env>
 # replace config of /etc/ansible/hosts
-#vim ansible.cfg 
+#vim ansible.cfg
 
 [defaults]
 inventory=inventory
@@ -35,7 +35,9 @@ ansible_sudo_pass=<pass>
 ansible <machine|group> -m ping
 
 # run commands
-ansible -i <inventory_file> <machine|group> -m <module_name> -a "<command>" -u <user> 
+ansible -i <inventory_file> <machine|group> -m <module_name> -a "<command>" -u <user>
+ansible --key-file ~/.ssh/<priv_key> -i <inventory_file> <machine|group> -m <module_name> -a "<command>" -u <user>
+ansible --key-file ~/.ssh/<priv_key> -i <inventory_file> all -m ping
 ansible <machine|group> -m shell "<command>"
 ansible <machine|group> -m command -a "<command>" -u <user>
 ansible -i inventory -m command -a "<command>" -u <user>
@@ -54,33 +56,50 @@ ansible -i inventory -a setup
 
 # backgroud tasks (run dettached)
 ansible -i inventory -B <seconds> -a "date"  # second that will take to see if the task is completed
-ansible -i inventory -B <seconds> -P 0 -a "date"  # -P 0: will dettach, this will output the "ansible_job_id" 
+ansible -i inventory -B <seconds> -P 0 -a "date"  # -P 0: will dettach, this will output the "ansible_job_id"
 # to ckeck status
 ansible -i inventory -m async_status -a "jid=<ansible_job_id>"
 
 # some modules
 ansible <machine|group> -m shell -a "tail /var/log/messages | grep ansible-command | wc -l " # this allows to use pipes
-ansible <machine|group> -m cron -a "name=<name> hour=4 job=<path to script.sh>" 
-ansible <machine|group> -m git -a "repo=<url_repo> dest=/<path> update=yes version=<version>" 
+ansible <machine|group> -m cron -a "name=<name> hour=4 job=<path to script.sh>"
+ansible <machine|group> -m git -a "repo=<url_repo> dest=/<path> update=yes version=<version>"
 
 # Playbooks
 vim package_install.yaml
 ---
 - hosts: node1
-  become: yes
+  become: yes  # sudo (cam be true)
   tasks:
-    - name: install <package>
+    - name: install <package> on Ubuntu
       apt:
         name: <package>
         state: present
         update_cache: yes
         update_cache_retries: 1
         update_cache_retry_max_delay: 5
+      when: ansible_distribution == "Ubuntu"
+
+    - name: install <package> on CentOS
+      become: true
+      yum:
+        name: <package>
+        state: present
+      when: ansible_facts['distribution'] == "CentOS"
+
+    - name: update <package> on Fedora
+      become: yes
+      dnf:
+        update_only: yes
+        update_cache: yes
+      when: ansible_facts['distribution'] == "Fedora"
+
 
 # Execute playbook
 ansible-playbook package_install.yaml
 # Excute playbook and ask for password, will fail if machines have different.
-ansible-playbook package_install.yaml -K 
+ansible-playbook package_install.yaml -K
+ansible-playbook package_install.yaml --ask-become-pass
 # it possible to use ansible bot to avoid passwords.
 # or user authorized_keys (module)
 ansible-galaxy collection install ansible.posix

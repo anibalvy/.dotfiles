@@ -1,3 +1,12 @@
+# -i show response headers
+# -I show only response headers
+# -H set header
+# -v, -vv verbose
+# --data Post data
+# -k don't verify ssl certs
+# --cert, --key use a client cert
+# -X <method, POST,PUT...>
+
 # Download a single file
 curl http://path.to.the/file
 

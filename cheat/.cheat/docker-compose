@@ -1,12 +1,33 @@
 
-## Create an image and run it with docker-compose
+# What are the differences between Compose v1 and Compose v2?
+docker-compose vs docker compose
+Unlike Compose v1, Compose v2 integrates into the Docker CLI platform and the recommended command-line syntax is docker compose.
+V1 is deprecated and no security updates.
+In Compose v1, an underscore (_) was used as the word separator for container name.
+In Compose v2, a hyphen (-) is used as the word separator for container name. (if a current project with V1, running it with V2 will create new containers)
+Install V2 using repo and install plugin. (in Linux, if not using Linux, think were your app will run at the end)
+
+# options 
+Option              Default       Description
+--all-resources                   Include all resources, even those not used by services
+--ansi              auto          Control when to print ANSI control characters ("never"|"always"|"auto")
+--compatibility                   Run compose in backward compatibility mode
+--dry-run                         Execute command in dry run mode
+--env-file                        Specify an alternate environment file
+-f, --file                        Compose configuration file or files
+--parallel          -1            Control max parallelism, -1 for unlimited
+--profile                         Specify a profile to enable
+--progress                        Set type of progress output (auto, tty, plain, json, quiet)
+-p, --project-name                Project name
+--project-directory               Specify an alternate working directory (default: the path of the, first specified, Compose file)
+
+## Create an image and run it with docker compose
 # Folder structure:
 .
 ├── docker-compose.yml
 └── Dockerfile
 
 # Content of Dockerfile:
-
 FROM alpine
 CMD ["echo", "i am groot"]
 
@@ -20,16 +41,32 @@ version: '3.1'
 services:
   groot:
     image: groot:staging
+    context: .  # to compose run and build container
     restart: always # or it ca be "unless-stopped", "on-failure:10"
     ports;
       - 3000:3000
+      - 3030:3030/udp
     networks:
       - <network_name>
     volumes:
       - <local_path>:<container_path>
+    volume:
+      - type: bind
+        source: ${PWD}/database.db
+        targer: /app/database.db
     environment:
+      - BUILD_VERSION=${BUILD_VERSION}
       ENV_VAR1: value1
       ENV_VAR2: value2
+  caddy:
+    image: caddy:2.7-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile   # configuration file
 
 networks:
   <network_name>:
@@ -43,33 +80,62 @@ volumens:
       type: none
       device: <folder_path>
 
-# and start docker-compose:
 
-$ docker-compose up
-Creating groot_groot ... 
-Creating groot_groot_1 ... done
-Attaching to groot_groot_1
-groot_1  | i am groot
-groot_groot_1 exited with code 0
+# build and not up
+docker-compose build   # V1
+docker compose build   # V2
 
-$ docker-compose up -d
+# start docker-compose:
+docker-compose up  # V1
+  Creating groot_groot ...
+  Creating groot_groot_1 ... done
+  Attaching to groot_groot_1
+  groot_1  | i am groot
+  groot_groot_1 exited with code 0
 
-# check 
-docker-compose ps
+docker compose up  # V2
+# build and up
+docker-compose up --build  # V1
+docker compose up --build  # V2
+# start docker-compose detached:
+docker-compose up -d   # V1
+docker compose up -d   # V2
+docker-compose -f 'docker-compose.yaml' up -d --build  # V1
+docker compose -f 'docker-compose.yaml' up -d --build  # V2
+
+# check
+docker-compose ps # V1
+docker compose ps # V2
+
+# pull images
+docker-compose pull # V1
+docker compose pull # V2
 
 # logs
-docker-compose logs
+docker-compose logs  # V1
+docker compose logs  # V2
 
 # to pause the environment execution without changing the current state of your containers
-docker-compose pause
-docker-compose unpause
+docker-compose pause  # V1
+docker compose pause  # V2
+docker-compose unpause  # V1
+docker compose unpause  # V2
 
 # stop command will terminate the container execution, but it won’t destroy any data associated with your containers
-docker-compose stop
+docker-compose stop  # V1
+docker compose stop  # V2
 
 # to remove the containers, networks, and volumes associated with this containerized environment
-docker-compose down
+docker compose down  # V1
+docker-compose down  # V2
+
+docker-compose rm --all  # deprecated in V2
 
 # to remove the base image from your system
 docker image rm <image:tag>
 
+# scale
+docker-compose scale  # V1
+docker compose scale <my-app>=<num_of_instance>  # V1
+docker compose up --scale <my-app>=<num_of_instance> # V2
+docker compose up -d --no-deps --scale server=2 --no-recreate server # V2

@@ -30,3 +30,46 @@ terraform workspace new <workspace_name>
 
 terraform workspace select <workspace_name>
 terraform workspace delete <workspace_name>
+
+terraform output  # list available outputs
+terraform output <name> # list specific output
+
+terraform state list
+terraform state show <resource>
+terraform state mv <source_resource> <destination_resource>  # change name in state
+terraform state import <resource> <id>  # import manually created resource into state
+terraform state pull > terraform.tfstate # pull state and save to file
+terraform state pull <path>  # push state to remote location
+
+terraform taint <resource>  # tail to force redeployment on apply
+terraform untaint <resource>  # untail resource prevoiusly tainted
+
+## modules
+
+First you need a module for your docker Provider with an ip variable:
+
+# File: ./docker/main.tf
+variable "ip" {}
+
+provider "docker" {
+    host = "tcp://${var.ip}:2375/"
+}
+
+resource "docker_container" "www" {
+    provider = "docker"
+    name  = "www"
+}
+
+Next one is to load that module in your root configuration:
+
+# File: .main.tf
+module "docker01" {
+    source = "./docker"
+    ip = "192.169.10.12"
+}
+
+module "docker02" {
+    source = "./docker"
+    ip = "192.169.10.12"
+}
+

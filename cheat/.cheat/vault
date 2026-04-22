@@ -1,0 +1,334 @@
+# Hashicorp Vault
+
+# Types
+- Open Source: self-manage, always free.
+- Cloud: Managed Vault.
+- Enterprice: self-managed with custom deployments.
+
+# Uses
+- Secret Management: Centrally store, Access and deploy secrets across applications, systemas and Infraestructure.
+- Kubernetes Secrets: Can install Vault using Helm and then leverage Vault and K8s to securely inject secrets into your application stack.
+- Dynamic Secrets: Secrets are generated on demand and is unique to a client, instead of static secret, which is defined ahead of time and shared.
+- DB Cred Rotation: Automatically rotate DB passwords.
+- Identity-based Access: Authenticate and access different clouds, systems, and endpoint using trusted identities.
+- Automated PKI Infra: Use Vault to quickly Create X.509 certificates on demand and reduce the manual overhed.
+- Data Encryption & Tokenization: keep application data secure witone centralized workflow Or data that resides in untrusted or semi-trusted systems outside of vault.
+- key Management: Use a standardized management across KMS providers.
+
+# how works
+
+Vaults works primarily with tokens and a token is associated to the client's policy. Each policy is path-based and policy rules contains the actions and accessibility to the paths Or each client. With Vault, you can create tokens manually and assign them to you clients, ot the clients can log in to obtain a token.
+
+- authenticate: Client submits their identity
+- Validate: Vault validate client identity against trusted thrid-party, like AD, AWS, GCP, etc
+- Authorize: client matched against Vault Security Policy.
+
+## policies capabilities
+
+The hcl file contains the path and capabilities mainly. The path is used to mention which capabilities the enclosed ones are applicable to. Paths allow us to use regular expressions in them to match various Vault paths. The capabilities include:
+
+- read: Similar to the GET HTTP method, allows reading the data at the given path.
+- create: Similar to the POST & PUT HTTP Method, allows creating data at the given path. Very few parts of Vault distinguish between create and update, so most operations require both create and update capabilities. Parts of Vault that provide such a distinction are noted in documentation.
+- update: Similar to the POST & PUT HTTP Method, allows changing the data at the given path. In most parts of Vault, this implicitly includes the ability to create the initial value at the path.
+- delete: Similar to the DELETE HTTP Method, allows deleting the data at the given path.
+- list: Allows listing values at the given path.
+- sudo: Allows access to paths that are root-protected. Tokens are not permitted to interact with these paths unless they have the sudo capability
+- deny: Disallows access. This always takes precedence regardless of any other defined capabilities, including sudo.
+
+# SEAL
+ on start, the seals key will give 5 values, the system can be unlocked with 3.
+ the idea is to share these keys between admins so no one can have all of them
+ This happend wnen system is restarted by example
+ to unseal it can be done automatically with by example Google KMS
+
+
+# STORAGE TYPES
+- Integrated storage (Raft) backend
+
+# TOKEN
+ Root token must be short live, because it has all permissions.
+
+# vault.hcl
+ui = true
+disable_mlock = true
+storage "file" {
+  path = "/opt/vault/data"
+}
+api_addr = "http://{ PRIVATE_SERVER_IP }:8200"
+listener "tcp" {
+  address       = "{ PRIVATE_SERVER_IP }:8200"
+  tls_disable   = "false"
+}
+Once it’s done, run the command below to check that the config is fine.
+
+# start server with config
+vault server -config=/etc/vault.d/vault.hcl
+
+
+## cli
+# export variables that will be used by Vault when commands
+# are run in the current terminal session
+export VAULT_ADDR='http://127.0.0.1:8200'
+export VAULT_TOKEN='s.hfAJfADfj...'
+
+# disable cert check for self-sign
+export VAULT_SKIP_VERIFY=true
+
+vault status # check Vault server status
+
+vault login # login into Vault
+vault login -address=https://<redacted>/ -tls-skip-verify -method=cert -client-cert=cert.pem -client-key=key.secure.pename=concourse
+VAULT_SKIP_VERIFY=1 vault login -address=https://<redacted>/ -tls-skip-verify -method=cert -client-cert=cert.pem -client-key=key.secure.pem name=concourse
+vault login -address=https://<redacted>/ -tls-skip-verify -method=cert -client-cert=cert.pem -client-key=key.pem name=concourse
+vault login -method=userpass username=mitchellh password=foo
+
+
+URL: PUT https://<redacted>/v1/auth/cert/login
+Code: 400. Errors:
+
+* client certificate must be supplied
+
+vault auth list  #  auth method. Token is the detault
+
+vault operator init
+vault operator init -key-shares=3 -key-threshold=2 -pgp-keys="keybase:hashicorp,keybase:jefferai,keybase:sethvargo"
+
+vault operator useal
+vault operator useal <unseal_key>
+
+
+vault token lookup # view current logged in token information
+
+# create policies and respective tokens
+vim secret-user-policy.hcl
+path "secret/data/*" {  capabilities = ["read"] }
+
+vim secret-admin-policy.hcl
+path "secret/data/*" {  capabilities = ["read", "create", "update"] }
+
+# list policies
+vault policy list
+
+# command to write policy
+vault policy write secret-user-policy secret-user-policy.hcl
+vault policy write secret-admin-policy secret-admin-policy.hcl
+
+# read policy
+vault policy read secret-user-policy
+vault policy read secret-admin-policy
+
+# create token
+vault token create -format=json -policy="secret-user-policy"
+vault token create -format=json -policy="secret-admin-policy"
+
+# Create custom folder of secrets v2
+vault secrets enable -path="my-secrets-folders" kv-v2
+
+### KV V2
+# add data
+vault kv put -mount=secret creds passcode=my-long-passcode
+vault kv put -mount=secret my-secret foo=a bar=b
+
+#The data can also be consumed from a file on disk by prefixing with the "@" symbol. For example:
+vault kv put -mount=secret foo @data.json
+
+# using path
+vault kv put users/user1/secret1 abc=bfg
+
+# it can be read from stdin using the "-" symbol:
+echo "abcd1234" | vault kv put -mount=secret foo bar=-
+
+# list secrets
+vault kv list -mount="users" "user1"
+
+# get a secret
+vault kv get -mount="users" "user1/secret1"
+vault kv get -mount=secret my-secret
+
+# DB Engine
+#
+vault secrets enable -path=demo-db database   # enable
+# configure
+vault write demo-db/config/demo-db \
+   plugin_name=postgresql-database-plugin \
+   allowed_roles="dev-postgres" \
+   connection_url="postgresql://{{username}}:{{password}}@postgres-postgresql.postgres.svc.cluster.local:5432/postgres?sslmode=disable" \
+   username="postgres" \
+   password="secret-pass"
+# Create DB Role
+vault write demo-db/roles/dev-postgres \
+   db_name=demo-db \
+   creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; \
+      GRANT ALL PRIVILEGES ON DATABASE postgres TO \"{{name}}\";" \
+   backend=demo-db \
+   name=dev-postgres \
+   default_ttl="1m" \
+   max_ttl="1m"
+
+# config AWS IAM users creations
+vault secrets enable aws
+vault write aws/config/root access_key=<aws_account_key> secret_key=<aws_secret_key> regio=us-east-1
+vault write aws/roles/iam-credentials credential_type=iam_user policy_document=-<<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+    {
+    "Effect": "Allow",
+    "Action": [
+        "iam:CreateAccessKey",
+        "iam:DeleteAccessKey",
+        "iam:DeleteUser",
+        "iam:ListAccessKeys",
+        "iam:ListAttachedUserPolicies",
+        "iam:ListGroupsForUser",
+        "iam:ListUserPolicies",
+        "iam:AddUserToGroup",
+        "iam:RemoveUserFromGroup"
+    ],
+    "Resource": ["arn:aws:iam::<ACCOUNT-ID>:user/vault-*"]
+    },
+    {
+    "Effect": "Allow",
+    "Action": [
+        "iam:AttachUserPolicy",
+        "iam:CreateUser",
+        "iam:DeleteUserPolicy",
+        "iam:DetachUserPolicy",
+        "iam:PutUserPolicy"
+    ],
+    "Resource": ["arn:aws:iam::<ACCOUNT-ID>:user/vault-*"],
+    "Condition": {
+        "StringEquals": {
+            "iam:PermissionsBoundary": [
+                "arn:aws:iam::<ACCOUNT-ID>:policy/PolicyName"
+                    ]
+                }
+            }
+        }
+    ]
+}
+EOF
+
+vault read aws/creds/iam-credentials # iam access creation
+
+# Create policy
+vault policy write demo-auth-policy-db - <<EOF
+path "demo-db/creds/dev-postgres" {
+   capabilities = ["read"]
+}
+EOF
+
+
+## SSH Secret Engine
+
+# enable
+vault secrets enable -path=ssh-client-signer ssh
+
+## Signing Keys with CA
+# make vault to gen signing key (it can also be imported from existing one)
+vault write ssh-client-signer/config/ca generate_signing_key=true
+#If you already have a keypair, specify the public and private key parts as part of the payload:
+vault write ssh-client-signer/config/ca private_key="..." public_key="..."
+
+# configure vault sssigning role for superadmin access
+vault write -f ssh-client-signer/roles/usepradmin-role -<<EOF
+{
+  allow_user_certificates: true,
+  allowed_users: superadmin,
+  allowed_extensions: permit-pty,permit-port-forwarding,
+  default_extensions: [
+    {
+      permit-pty:
+    }
+ ],
+  key_type: ca,
+  default_user: superadmin,
+  ttl: 30m0s
+}
+EOF
+
+vault write -f ssh-client-signer/roles/superadmin-role - <<EOF
+{
+  "allow_user_certificates": true,
+  "allowed_users": "superadmin",
+  "allowed_extensions:": "permit-pty,permit-port-forward",
+  "default_extensions": [
+    {
+      "permit-pty": true
+    }
+ ],
+  "key_type": "ca",
+  "default_user": "superadmin",
+  "ttl": "30m0s"
+}
+EOF
+Success! Data written to: ssh-client-signer/roles/superadmin-role
+
+
+# in the server, import CA to /etc/trust
+server$ curl -k -s $VAULT_ADDR/v1/ssh-client-signer/public_key
+
+# copy to /etc/ssh/trusted-CA.pem
+root@server$ curl -k -s $VAULT_ADDR/v1/ssh-client-signer/public_key -o /etc/ssh/Trusted_CA.pem
+
+# add to sshd_config
+TrustedUserCAKeys /etc/ssh/trusted-CA.pem
+
+## restart sshd
+systemctl restart sshd
+
+
+## user machine
+## it is needed to sign the PUBLIC_KEY by Vault ssh-client-signer secret engine
+# vault will return a certificate
+vault write -field=signed_key ssh-client-signer/sign/superadmin-role public_key=@/home/myuser/.ssh/id_ed25518.pub >> ~/.ssh/id_ed25519-signed-key.pub
+>> Cert is returned
+
+# check
+ssh-keygen -Lf ~/.ssh/id_ed25519-signed-key.pub
+
+## user key to login
+ssh -i ~/.ssh/id_ed25519-signed-key.pub -i ~/.ssh/id_ed25519 superadmin@server
+
+## SSH OTP
+# in remote host install Vault ssh helper
+wget https://releases.hashicorp.com/vault-ssh-helper/0.2.1/vault-ssh-helper_0.2.1_linux_amd64.zip
+sudo unzip -q vault-ssh-helper_0.2.1_linux_amd64.zip -d /usr/local/bin
+sudo chmod 0755 /usr/local/bin/vault-ssh-helper
+sudo chown root:root /usr/local/bin/vault-ssh-helper
+sudo mkdir /etc/vault-ssh-helper.d/
+vim /etc/vault-ssh-helper.d/config.hcl
+vault_addr = "https://<VAULT_SERVER_IP>:8200"
+tls_skip_verify = true
+ssh_mount_point = "ssh"
+namespace = ""
+allowed_roles = "*"
+
+# config sshd - vim /etc/ssh/sshd_config
+#
+KbdInteractiveAuthentication yes
+UsePAM yes
+PasswordAuthentication no
+
+# config pam - vim /etc/pam.d/sshd
+# PAM configuration for the Secure Shell service
+# Standard Un*x authentication.
+#@include common-auth
+auth requisite pam_exec.so quiet expose_authtok log=/var/log/vault-ssh.log /usr/local/bin/vault-ssh-helper -config=/etc/vault-ssh-helper.d/config.hcl
+auth optional pam_unix.so not_set_pass use_first_pass nodelay
+
+## chech config
+vault-ssh-helper -verify-only -config /etc/vault-ssh-helper.d/config.hcl
+
+#Get OTP From Vault Server
+vault write ssh/creds/otp-engine ip=<server-to-connect-ip>
+
+
+# python library
+import hvac  # hashcorp vault client
+client = hvac.Client(url='<server>', token="aSDAAasdfasD")
+print(client.is_authenticated())
+read_response = client.secrets.kv.read_secret_version(path='mypath')
+print(read_response['data']['data']['my_pass'])
+
+

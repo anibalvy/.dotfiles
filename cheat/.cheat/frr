@@ -1,0 +1,35 @@
+
+# Free Range Routing (FRR)
+
+/etc/frr/daemons
+zebra=yes  # always must be enabled
+bgpd=yes   # to enable
+ospfd=no   # optional
+...
+..
+.
+
+
+systemctl status frr
+
+vtysh  # enter FRRouting console
+
+server#
+server# show running-config
+server# sh int br
+server# config t
+server(config)# router bgp 1000
+server(config-router)# neighbor 192.168.10.222 remote-as 1000
+server(config-router)# neighbor 192.168.10.222 update-source lo
+server(config-router)# network 192.168.10.0/24
+server(config-router)# end
+server# show ip bgp   # show database table
+server# show ip bgp summary    # neighbors table
+server# show ip bgp neighbors  # neighbors table
+server# show ip bgp neighbors 192.168.1.222 received-routes
+server# show ip routes       # show routes table
+server# show ip routes bgp   # show routes received.
+server#
+server# write memory
+server#
+

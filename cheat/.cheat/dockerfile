@@ -1,4 +1,35 @@
 🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳
+The Dockerfile supports the following instructions:
+
+Instruction | Description
+:===========|:==============================================================
+ADD	        | Add local or remote files and directories.
+ARG	        | Use build-time variables.
+CMD	        | Specify default commands.
+COPY        | Copy files and directories.
+ENTRYPOINT  | Specify default executable.
+ENV	        | Set environment variables.
+EXPOSE      | Describe which ports your application is listening on.
+FROM        | Create a new build stage from a base image.
+HEALTHCHECK	| Check a container's health on startup.
+LABEL       | Add metadata to an image.
+MAINTAINER	| Specify the author of an image.
+ONBUILD	    | Specify instructions for when the image is used as the base for another build.
+RUN	        | Execute build commands.
+SHELL       | Set the default shell of an image.
+STOPSIGNAL  | Specify the system call signal for exiting a container.
+USER        | Set user and group ID.
+VOLUME      | Create volume mounts.
+WORKDIR	    | Change working directory.
+
+## Shell and exec form
+The RUN, CMD, and ENTRYPOINT instructions all have two possible forms:
+
+```dockerfile
+INSTRUCTION ["executable","param1","param2"] (exec form) (exec form doesn't automatically invoke a command shell. For example, RUN [ "echo", "$HOME" ] won't handle variable substitution for $HOME.)
+INSTRUCTION command param1 param2 (shell form) (to use in build process) ( instructions using the shell form always use a command shell.)
+```
+
 # create an Image of Node app
 server.js
 ```js
@@ -11,22 +42,36 @@ response.end('Hello World!');
 var www = http.createServer(handleRequest);
 www.listen(8080);
 ```
+
 Dockerfile
 ```
+# syntax=docker.io/docker/dockerfile:1
 FROM node:6.14.2
 EXPOSE 8080
 WORKDIR /APP
-COPY server.js . 
+COPY server.js .
+SHELL ["/bin/bash", "-c"]  # Use a different shell
+RUN <<EOF
+source $HOME/.bashrc && \
+echo $HOME
+EOF
+# HEALTHCHECK CMD /bin/check-running
+HEALTHCHECK --interval=5m --timeout=3s --retries=5 --start-period=5s --start-interval=15s \
+  CMD curl -f http://localhost/ || exit 1
 CMD [ "node", "server.js" ]
 ```
 
+
+
 # PARAMETERS
 FROM <image>:<TAG>
-RUN # for commands on container initialization -The RUN directive is executed only when you are building the image.  
-CMD ["node", "app.js"] 
+RUN # for commands on container initialization -The RUN directive is executed only when you are building the image.
+CMD ["node", "app.js"]
 
+# CMD: - should be used to run the software contained in your image, along with any arguments
+#      - ignored when a command is given, it must be used to run
 # for commands that will run by default, but can be replaced by adding an argument at run
-#like, if the container is being run with bash, it will not run the CMD
+# like, if the container is being run with bash, it will not run the CMD
 docker run -ti <image_name> /bin/bash
 
 # define working directory, will affect later steps
@@ -36,13 +81,23 @@ ENTRYPOINT ["python"]
 # for command that can call arguments, if I add another argument to the image,
 # the extra argument will be added to the commands in ENTRYPOINT, like, if I add
 # "bash" after the <image> name, it will execute "pyhton bash" at runtime.
-# Useful if I have a script that I want to run by cli, like "server.py" 
+# Useful if I have a script that I want to run by cli, like "server.py"
 
 ## copy of the code must go in the end, because every change, invalidate the rest
 # copy files to the container
 COPY server.js .
 # allow use urls and also decompress file automatically
 ADD <URL>/file .
+
+
+## use arguments for FROM, An ARG declared before a FROM is outside of a build stage, so it can't be used in any instruction after a FROM.
+ARG  CODE_VERSION=latest
+FROM base:${CODE_VERSION}
+# To use the default value of an ARG declared before the first FROM use an ARG instruction without a value inside of a build stage
+ARG CODE_VERSION
+ENV CODE_VERSION=${CODE_VERSION:-v1.0.0} # its value would be v1.0.0 as it is the default set by the ENV instruction.
+RUN echo $CODE_VERSION > code_version
+
 
 # use multi-stages
 FROM mave:3-jdk-8-alpine AS builder

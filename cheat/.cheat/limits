@@ -1,0 +1,28 @@
+
+Raising the Global Limit
+
+Edit /etc/sysctl.conf and add the following line:
+fs.file-max = 65536
+Apply the changes with:
+sudo sysctl -p /etc/sysctl.conf
+Raising the per-User Limit
+
+On some systems it is possible to use the ulimit -Hn 8192 and ulimit -Sn 4096 commands. However most of the time this is forbidden and you will get an error such as:
+ulimit: open files: cannot modify limit: Operation not permitted
+In those cases, you must:
+Edit as root the following system configuration file:
+% sudo vi /etc/security/limits.conf
+Modify the values for nuxeo user (we assume here JBOSS is launched with the sytem user "nuxeo")
+nuxeo           soft    nofile          4096
+nuxeo           hard    nofile          8192
+If you want to raise the limits for all users you can do instead:
+*           soft    nofile          4096
+*           hard    nofile          8192
+To
+
+
+ulimit -Sa ## Show soft limit ##
+ulimit -Ha ## Show hard limit ##
+ulimit -n (límite de descriptores de archivo por proceso):
+
+El comando ulimit -n te muestra el número máximo de descriptores de archivo que un único proceso puede abrir. En tu caso, el valor es 1024, lo que significa que cada proceso en el sistema puede abrir hasta 1024 descriptores de archivo.

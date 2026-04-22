@@ -1,0 +1,5 @@
+
+
+
+# get name that udev will gave it
+udevadm test-builtin net_id /sys/class/net/<interface>

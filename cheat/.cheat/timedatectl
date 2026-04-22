@@ -1,0 +1,4 @@
+timedatectl status
+timedatectl timesync-status
+systemctl status systemd-timesyncd
+

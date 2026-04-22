@@ -1,0 +1,24 @@
+
+
+gsutil
+gsutil -v
+gsutil help mb
+gsutil rsync data gs://mybucket/data
+
+# -n: dry run
+
+gsutil rsync -r data gs://mybucket/data    # -r: recurse into directories
+gsutil -m rsync -r data gs://mybucket/data # -m: perform parallel (multi-threaded/multi-processing) synchronization
+
+# -d: copying all data from the source to the destination and deleting all other data in the destination that is not in the source.
+gsutil rsync -d -r gs://mybucket/data my-data      # make the local directory my-data the same as the contents of gs://mybucket/data and delete objects in the local directory that are not in gs://mybucket/data:
+
+gsutil rsync -d -r gs://mybucket1 gs://mybucket2   # mirror your content across clouds
+
+# Enable object versioning in your bucket, which allows you to restore objects if you accidentally delete them. For more details see `Object Versioning <https://cloud.google.com/storage/docs/object-versioning>`_.
+
+gsutil mb gs://my-bucket   # create bucket
+gsutil du -ch gs://my-bucket/   # size
+
+
+

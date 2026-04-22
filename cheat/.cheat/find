@@ -1,7 +1,12 @@
 ## NOTE: always use '', becase globbing, GLOB(3), check man 7 glob,
 # that will replace * with the file that has the extension we are looking for
 # To find files by case-insensitive extension (ex: .jpg, .JPG, .jpG):
-find . -iname "*.jpg"
+find . -name "*.jpg"
+find . -iname "*.jpg" # case-insensitive  
+
+# Close -exec argument
++  append found files to a list, then runsthe command once.
+/; Execute the command once for each file found. Generally slower, but necessary for some commands.
 
 # To find directories:
 find . -type d
@@ -26,17 +31,28 @@ find . -inum 782263 -exec rm -i {} \;
 # To find files with extension '.txt' and look for a string into them:
 find ./path/ -name '*.txt' | xargs grep 'string'
 
+# find file larger than 1G
+find . -size +1G
+
 # To find files with size bigger than 5 Mebibyte and sort them by size:
 find . -size +5M -type f -print0 | xargs -0 ls -Ssh | sort -z
 
 # To find files bigger than 2 Megabyte and list them:
 find . -type f -size +200000000c -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
 
-# To find files modified more than 7 days ago and list file information
-find . -type f -mtime +7 -ls
-
-# To find modified files between dates
-find ./path/ -type f -newermt '2019-01-01' ! newermt '2019-12-31' 2>/dev/null
+-cmin -> file status last changed
+-mmin -> file data last modified
+find . -type f -mtime +7 -ls     # To find files modified more than 7 days ago and list file information
+find . -type f -mtime +7 -delete # and delete them
+find . -type f -mtime +7 -exec rm {} \; # idem
+find . -type f -mtime +7m -ls # To find files modified more than 7 minutes ago and list file information
+find . -mmin 2    # Find files that are exactly 2 minutes old
+find . -mmin -2   # Find files that are less than 2 minutes old
+find . -mmin +2   # Find files that are more than 2 minutes old
+find . -mmin +120 # Find files that are more than 2 hours old
+find . -mmin -120 # Find files that are less than 2 hours old
+find . -maxdepth 1 -type f ! -newermt 2024-08-01 -exec rm {} \;   # To find files older than a specific date and delete them
+find ./path/ -type f -newermt '2019-01-01' ! newermt '2019-12-31' 2>/dev/null # To find modified files between dates
 
 # To find symlinks owned by a user and list file information
 find . -type l --user=username -ls

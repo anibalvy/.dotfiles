@@ -7,9 +7,9 @@
 # Python v2.7
 python -m SimpleHTTPServer
 # Python 3
-python -m http.server 8000
+python -m http.server 8000 --bind 172.17.0.1
 
-# dir() to get functions in a module 
+# dir() to get functions in a module
 import time
 dir(time)
 
@@ -33,7 +33,7 @@ print(int("10", 0))
 dictvar = dict(dict_var)  # make copy of dict, method 1
 dictvar = dict_var.copy() # make copy of dict, method 2
 # shallow copys
-new_listvar = list(list_var)  # make copy of list, method 1 
+new_listvar = list(list_var)  # make copy of list, method 1
 new_listvar = list_var[:]     # make copy of list, method 2
 new_listvar = list_var.copy() # make copy of list, method 3
 # deep copy

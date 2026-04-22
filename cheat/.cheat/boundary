@@ -1,0 +1,14 @@
+export BOUNDARY_ADDR=https://<cluster_addr>
+export BOUNDARY_AUTH_METHOD_ID=<id>
+boundary authenticate
+boundary authenticate password
+boundary version
+boundary targets list --recursive
+boundary connect ssh --target-id=<target-id>
+boundary connect ssh --target-name=<target-name> --target-scope-id=<target-scope-id>
+boundary connect postgres <target> -dbname <dbname>
+boundary connect ssh <alias.target>
+ssh <alias.target>    # using transparent sessions
+boundary client-agent status
+boundary client-agent resume
+boundary client-agent pause

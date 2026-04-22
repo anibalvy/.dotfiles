@@ -1,9 +1,9 @@
-# CHEF Configuration Management
+# Configuration Management types
 
 Push Configuration: Server pushes configuration to the nodes.
 Pull Configuration: Nodes checks with the Server periodically and fetches configuration from it.
 
-Chef follow Pull Configuration.
+*** Chef follow Pull Configuration. ***
 
 # Flavours of Chef
 CHEF SOLO: has no remote server. The cookbooks are located at the local site itself.
@@ -26,11 +26,6 @@ Nodes:       Are the systems that require the configuration.
              Chef Client is responsable for the communication with the server.
              Each node can have a different configurationi requirement.
 
-
-# Chef cli
-chef generate repo <repo_name>           # Create repo.
-chef generate cookbook <cookbook_name>   # Create cookbook structure.
-
 # Recipes
 template '<path>/<file>'
 do
@@ -48,10 +43,342 @@ do
     mode "0444"
 end
 
-# Knife
-knife cookbook upload <cookbook_name>
+# sever installation
+# get versions from https://docs.chef.io/release_notes_server/
+download: https://packages.chef.io/files/stable/chef-server/<chef-version>/ubuntu/<Ubuntu-version>/chef-server-core_<chef-version>-1_amd64.deb
+
+# chef-workstation
+# get version and download link
+https://chefdownload-community.chef.io/stable/chef-workstation/metadata?p=ubuntu&pv=22.04&m=x86_64
+Example:  https://packages.chef.io/files/stable/chef-workstation/25.2.1075/ubuntu/22.04/
+Versions: https://github.com/chef/chef-workstation/blob/main/CHANGELOG.md
+# run
+sudo chef-server-ctl reconfigure
+#  create an administrator:
+openssl genrsa -out admin_private_key.pem 2048  # create key
+sudo chef-server-ctl user-create <USER_NAME> <FIRST_NAME> <LAST_NAME> EMAIL '<PASSWORD>' --filename  </path/to/janedoe.pem>
+# create organiztion, where user_name is the previous created.
+sudo chef-server-ctl org-create <short_name> '<full organization name>' --association_user <user_name> --filename </path/to/ORGANIZATION-validator.pem>
+chef-server-ctl grant-server-admin-permissions <user>
+chef-server-ctl list-server-admins
+chef-server-ctl remove-server-admin-permissions <user>
+
+# client installation (where user make configs.)
+download: https://packages.chef.io/files/stable/chef-workstation/24.4.1064/ubuntu/22.04/chef-workstation_24.4.1064-1_amd64.deb
+# this will install knife
+# make config
+mkdir ~/.chef/
+touch ~/.chef/credentials
+[default]
+client_name     = 'admin'
+client_key      = '~/.chef/admin.pem'
+#chef_server_url = 'https://chef-server/organizations/<my_organization>'
+chef_server_url = 'http://<ip_server>/organizations/<my_organization>'
+ssl_verify_mode = ':verify_none'
+cookbook_path   = '~/chef/chef-repo/cookbooks'
+[another_chef_server]
+client_name     = 'another_user'
+client_key      = '~/.chef/chef_user_key.pem'
+chef_server_url = 'https://chef-server.mysite.com'
+ssl_verify_mode = ':verify_none'  # if ssl is not needed
+cookbook_path   = '~/chef/chef-repo/cookbooks'
+
+# copy key created from: chef-server-ctl user-create ....
+# done in client
+
+# install chef-workstation
+# check chef-workstation
+ubuntu@chef-workstation:~$ chef -v
+Chef Workstation version: 25.2.1075
+Chef Infra Client version: 18.6.2
+Chef InSpec version: 5.22.65
+Chef CLI version: 5.6.16
+Chef Habitat version: 1.6.1243
+Test Kitchen version: 3.6.0
+Cookstyle version: 7.32.8
+
+
+# template example
+
+## template structure
+<% if @attribute1_property == true -%>
+  # do this
+  <% if @attribute2 == "xx" -%>
+      # do this if both conditions
+  <% else -%>
+     # don't do this
+  <% end -%>
+<% end -%>
+
+## recipe template declaration
+template '</path/name_of_file>' do
+ source '<template_name>'
+ owner 'root'
+ group 'root'
+ mode '0644'
+ variables( ## definitions
+  :attribute1 => node[:attr1][:prop].downcase,
+  :attribute2 => node[:attr2][:prop].downcase,
+ )
+end
+
+
+# recipes modules
+## conditions
+if node[:attr][:prop][:subprop] == true
+  template '/make_file' do
+    owner 'root'
+    mode '755'
+    source 'template_folder/template_file'
+  end
+end
+
+# execute
+execute 'apt update' do
+  command 'find /var/lib/apt/periodic/update-success-stamp -mtime +1 && apt update'
+end
+
+# file
+file '/path/file' do
+    content "line1 \n line2"
+    # content ::File.open("node_system_file").read
+    mode '0644'
+    owner 'root'
+    group 'root'
+    action :create
+end
+
+# file copy
+cookbook_file '/root/nginx_1.12.2-1.deb' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  source 'debs/nginx_1.12.2-1_amd64.deb' # inside folder files
+end
+
+# directory
+directory '/root/.ssh' do
+  owner 'root'
+  group 'root'
+  mode '0700'
+  action :create
+end
+
+# service
+service 'nginx' do
+  action :enable
+  action :start
+  supports :status => true, :start => true, :stop => true, :restart => true, :reload => true
+  subscribes :reload, 'template[/etc/nginx/nginx.conf]', :immediately
+  subscribes :reload, 'template[/etc/nginx/certs/]', :immediately
+  subscribes :reload, 'remote_directory[/etc/nginx/conf.d]', :immediately
+  subscribes :reload, 'template[/etc/nginx/nginx-http-default.conf]', :immediately
+end
+
+# packages
+package %w() do
+  action :upgrade
+end
+
+# user
+user 'a user' do
+  username 'username'
+  comment 'A new user'
+  uid 1234
+  #gid 'usegroup' # if not default
+  home '/home/username'
+  shell '/bin/bash'
+  password '$1$JJsvasdAsdAfaewrADSAHtDi'
+end
+
+# cron
+cron 'chef-client' do
+  minute '*/5'
+  command 'chef-client'
+end
+
+# apt
+apt_repository 'docker' do
+  action :add
+  uri 'https://download.docker.com/linux/ubuntu'
+  arch 'amd64'
+  cache_rebuild true
+  components ['stable']
+  deb_src false
+  distribution 'trusty'
+  key 'https://download.docker.com/linux/ubuntu/gpg'
+  trusted true
+
+apt_package "install docker-ce" do
+  package_name "docker-ce"
+  version "18.06.1~ce~3-0~ubuntu"
+  action :install
+  ignore_failure true
+end
+
+# check cookbook
+cookstyle -a # auto-correct errors
+
+
+
+# Chef cli
+knife config get                         # see current config
+chef generate repo <repo_name>           # Create repo.
+chef generate cookbook <cookbook_name>   # Create cookbook structure.
+chef generate recipe <recipe_name>       # Create recipe structure.
+chef generate policyfile <POLICY_NAME>   # Create policyfile
+
+chef install policies/my_policyfile-qa.rb  # compile Policyfile
+chef push qa policies/my_policyfile-qa.rb  # upload to chef server under Policy Group 'qa'
+
+# Knife commands
 knife upload template
 knife client list
-knife bootstrap <node_ip_address> -U root -P <password> --node-name <nodename>   # add machine as root
+
+# add nodes (bootstrap nodes)
+knife bootstrap <node_ip_address> -U root -P <password> --node-name <nodename>  -y  # add machine as root and auto confirm the bootstrap 
+knife bootstrap <node_ip_address> --node-name <nodename> -U root --sudo -i ~/.ssh/<key.pem>   # add machine as root using key
 knife bootstrap <node_ip_address> -U <username> -P <password> --sudo --use-sudo-password --node-name <nodename>   # add machine to use sudo
-knife ssh 'name:nodename' 'sudo chef-client' -x username
+knife bootstrap -N $fqdn $fqdn --bootstrap-template default                          # configure and execute chef-client
+knife bootstrap -N $fqdn $fqdn --bootstrap-template default -r 'role[chef_client]'   # configure/execute chef-client to use a given role
+
+# check nodes
+knife node list
+knife node list -E <environment_name>
+knife node edit <node_name>
+knife node show <node_name> --long --format [json|yaml]
+knife search node 'name:*' -F j
+knife search node "role:<foo>"    # node with a specific role
+knife search node "role:<foo> AND role:<bar>" -a <attribute>
+knife search node "name:<foo>*" -Fj -a ipaddress
+
+knife node run_list add <node_name> 'recipe[<repo_name>]'
+
+knife node policy set NODE POLICY_GROUP POLICY_NAME (options)  ## assign policy to node
+
+# change profiles in .chef/credentials
+knife config list-profiles
+knife config use-profile <profile-name>
+
+knife ssh 'name:nodename' 'sudo chef-client' -x username   # run chef-client remotely
+knife ssl fetch
+knife ssl check
+
+knife cookbook list                     # list all cookbooks on Chef Server
+knife cookbook list -a                  # List all cookbooks on Chef Server (with version info)
+knife cookbook list -w                  # --with-uri
+knife cookbook test <cookbook_name>
+knife cookbook metadata -a
+knife cookbook show <cookbook_name> <cookbook_version> [PART...] [FILE_NAME] (options)
+knife cookbook upload <cookbook_name>   # Upload a specific cookbook from workstation to Chef Server
+knife cookbook upload <cookbook_name> --cookbook-path <parent_path> # upload from different path
+knife cookbook upload --all             # Upload all cookbooks from workstation to Chef Server
+knife cookbook delete <cookbook_name>   # Delete a cookbook from the Chef Server
+knife cookbook download <cookbook_name>   # Download a cookbook from workstation to Chef Server
+knife cookbook download <cookbook_name> <cookbook_version>  # Download a specific cookbook from workstation to Chef Server
+knife cookbook download <cookbook_name> <cookbook_version> (options) # -d DOWNLOAD_DIRECTORY,-f --force Overwrite directory, -N --latest
+
+knife download cookbooks                # download all cookbooks from the Chef Server
+
+# databag
+knife data bag create <databag> 
+knife data bag create <databag> <item>                       # create and edit item 
+knife data bag from file <databag> <path/item.json>          # create item from file
+knife data bag show <databag> -F json                        # show databag items
+knife data bag show <databag> <databag_item> --format json   # show item
+
+
+# enter Automate DB on server.
+ps -efa | grep postgres # check dbs 
+chef-automate dev psql <db_name>
+psql> \dt # list tables
+psql> \l  # list dbs
+psql> \c <db_name>  # connect to another DB
+
+# Habitat
+export HAB_ORIGIN=yourinitials_tryhabitat
+hab origin key generate yourinitials_tryhabitat
+
+cat webapp/plan.sh
+pkg_origin=learn-chef
+pkg_name=webapp
+pkg_version="0.2.0"
+pkg_maintainer="The Chef Training Team <training@chef.io>"
+pkg_license=('Apache-2.0')
+pkg_deps=(core/httpd)
+pkg_svc_user="root"
+pkg_svc_group="root"
+pkg_svc_run="httpd -DFOREGROUND -f $pkg_svc_config_path/httpd.conf"
+
+pkg_exports=(
+  [port]=serverport
+)
+
+do_download() {
+  return 0
+}
+
+do_build() {
+  return 0
+}
+
+do_install() {
+  cp hello-world $pkg_prefix/
+}
+
+hab studio enter # enter studio
+[0][default:/src:0]# ls
+
+# The build command looks for the Habitat plan file in the haproxy directory.
+[2][default:/src:0]# build haproxy   
+[3][default:/src:0]# ls ./results
+last_build.env  scd_tryhabitat-haproxy-1.6.11-20240212180515-x86_64-linux.hart
+# The Habitat Artifact (.HART): A Chef Habitat artifact is a binary distribution for a package built within the Studio. 
+# Essentially they are a signed tarball with a .hart file extension. 
+# Usually this file is distributed to a system where the Habitat Supervisor is installed, which deploys and manages the application during its runtime.
+
+# The Habitat Supervisor: Habitat packages run under what's called the Supervisor(opens in a new tab).
+# Think of the Supervisor as a process manager, much like PID 1 in Linux. The Supervisor is responsible for two things:
+# 1. Starting and monitoring the service that's defined in the Habitat package.
+# 2. Receiving and acting upon configuration changes from other Supervisors.
+
+# Load the installed packages
+[6][default:/src:0]# hab svc load $HAB_ORIGIN/webapp
+The yourinitials_tryhabitat/webapp service was successfully loaded
+
+# status
+[7][default:/src:0]# hab svc status
+package                                     type        desired  state  elapsed (s)  pid   group
+scd_tryhabitat/webapp/0.2.0/20240212180947  standalone  up       up     204          1314  webapp.default
+
+# Within the Studio you can run the sup-log command to see the Supervisor's log output.
+[8][default:/src:0]# sup-log
+--> Tailing the Habitat Supervisor's output (use 'Ctrl+c' to stop)
+webapp.default(HK): Modified hook content in /hab/svc/webapp/hooks/init
+webapp.default(SR): Hooks recompiled
+webapp.default(CF): Created configuration file /hab/svc/webapp/config/httpd.conf
+webapp.default(SR): Initializing
+webapp.default hook[init]:(HK): addgroup: group 'hab' in use
+webapp.default hook[init]:(HK): adduser: user 'hab' in use
+webapp.default(SV): Starting service as user=root, group=root
+webapp.default(O): [Mon Feb 12 20:05:27.588121 2024] [ssl:warn] [pid 1314] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+webapp.default(O): [Mon Feb 12 20:05:27.619704 2024] [mpm_prefork:notice] [pid 1314] AH00163: Apache/2.4.51 (Unix) OpenSSL/1.0.2zf-fips configured -- resuming normal operations
+webapp.default(O): [Mon Feb 12 20:05:27.619788 2024] [core:notice] [pid 1314] AH00094: Command line: 'httpd -D FOREGROUND -f /hab/svc/webapp/config/httpd.conf'
+
+# To make the curl command available to the Studio, run this hab pkg install command (only available to the current Studio session):
+[10][default:/src:0]# hab pkg install core/curl -b
+
+# export to container 
+[16][default:/src:0]# hab pkg export container results/scd_tryhabitat-haproxy-1.6.11-20240212180515-x86_64-linux.hart
+[18][default:/src:0]# source results/last_build.env  # used for container
+[28][default:/src:0]# hab pkg export container results/$pkg_artifact
+# verify 
+docker images | grep $HAB_ORIGIN
+
+
+
+
+
+
+
+

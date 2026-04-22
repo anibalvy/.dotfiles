@@ -13,10 +13,16 @@ pm2 start app.py --name app1 --interpreter python3
 # Cluster mode
 pm2 start app.js -i 0        # Will start maximum processes with LB depending on available CPUs
 pm2 start app.js -i max      # Same as above, but deprecated.
+
+# Cluster mode SCALE workers
+# status for multiple running instances
+# set Home to app
+export HOME=/<path of app>
+pm2 status
 pm2 scale app +3             # Scales `app` up by 3 workers
 pm2 scale app 2              # Scales `app` up or down to 2 workers total
 
-# Listing
+# Listing ($HOME must point to the app.)
 pm2 list               # Display all processes status
 pm2 ls
 pm2 show <id/name>
@@ -37,6 +43,7 @@ pm2 logs [--raw|--json] # Display all processes logs in streaming
 pm2 flush               # Empty all log files
 pm2 reloadLogs          # Reload all logs
 
+
 # Actions
 pm2 stop
 pm2 stop "My app"
@@ -44,12 +51,9 @@ pm2 stop all           # Stop all processes
 pm2 restart <all/id/name>
 pm2 reload <all/id/name>
 pm2 restart all        # Restart all processes
-
 pm2 reload all         # Will 0s downtime reload (for NETWORKED apps)
-
 pm2 stop 0             # Stop specific process id
 pm2 restart 0          # Restart specific process id
-
 pm2 delete 0           # Will remove process from pm2 list
 pm2 delete <all/id/name>
 pm2 delete all         # Will remove all processes from pm2 list
@@ -72,3 +76,28 @@ pm2 start app.py --cron '0 * * * *' --no-autorestart # restart your script every
 pm2 init             # generate a ecosystem.config.js
 pm2 start ecosystem.config.js # start ecosystem
 pm2 restart ecosystem.config.js --env production # Restart in production
+
+# Saving the app list to be restored at reboot
+pm2 save
+pm2 resurrect # To manually bring back previously saved processes (via pm2 save):
+
+# INIT script - make it run with system init.
+pm2 startup
+#[PM2] You have to run this command as root. Execute the following command:
+#      sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v14.3/bin pm2 startup <distribution> -u <user> --hp <home-path>
+
+pm2 startup [ubuntu | ubuntu14 | ubuntu16 | ubuntu18 | ubuntu20 | ubuntu12 | centos | centos6 | arch | oracle | amazon | macos | darwin | freebsd | systemd | systemv | upstart | launchd | rcd | openrc]
+pm2 startup ubuntu -u <username> --hp <user_home>   #
+
+# SystemD installation checking
+systemctl list-units               # Check if pm2-<USER> service has been added
+journalctl -u pm2-<USER>           # Check logs
+systemctl cat pm2-<USER>           # Cat systemd configuration file
+systemd-analyze plot > output.svg  # Analyze startup
+
+
+# To update the startup script, first, disable it, then start it again as shown.
+pm2 unstartup        # Disable the Startup System
+pm2 startup systemd
+
+

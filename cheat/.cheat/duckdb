@@ -1,0 +1,54 @@
+# DuckDB has a JSON extension that can be installed and loaded through SQL:
+INSTALL 'json';
+LOAD 'json';
+
+# Not all JSON adheres to the format used in todos.json, which is an array of ‘records’. Newline-delimited JSON, or NDJSON, stores each row on a new line.
+COPY (SELECT * FROM 'todos.json') to 'todos2.json';
+
+# Other JSON Formats: 'array_of_records', 'records', 'values', 'array_of_values'.
+SELECT * FROM read_json('todos.json', auto_detect=true, json_format='array_of_records');
+SELECT * FROM read_json('todos2.json', auto_detect=true, json_format='records');
+
+
+# output table
+duckdb -c
+  "select license->>'key' as license, count(*) as count
+  from 'repos.json'
+  group by 1
+  order by count desc"
+
+# output json
+duckdb -json -c
+  "select license->>'key' as license, count(*) as count
+  from 'repos.json'
+  group by 1
+  order by count desc"
+
+# input from url
+duckdb -c
+  "select license->>'key' as license, count(*) as count
+  from read_json('https://api.github.com/orgs/golang/repos')
+  group by 1
+  order by count desc"
+
+# Schema (not mandatory to add all, just needed ones)
+SELECT * FROM read_json('todos.json',
+                        columns={userId: 'INT', id: 'INT', title: 'VARCHAR', completed: 'BOOLEAN'},
+                        json_format='array_of_records');
+
+# from gz files
+SELECT json_group_structure(json)
+ FROM (
+      SELECT *
+      FROM read_ndjson_objects('gharchive_gz/*.json.gz')
+      LIMIT 2048
+    );
+SELECT count(*) count FROM 'gharchive_gz/*.json.gz';
+
+# create table from data
+CREATE TABLE events AS
+SELECT * EXCLUDE (payload)
+  FROM 'gharchive_gz/*.json.gz';
+
+# describe table
+DESCRIBE SELECT * FROM events;

@@ -1,0 +1,165 @@
+# Conn Params
+
+tcp_keepalive_intvl (integer; default: 75; since Linux 2.4) The number of seconds between TCP keep-alive probes.
+tcp_keepalive_probes (integer; default: 9; since Linux 2.2) The maximum number of TCP keep-alive probes to send before giving up and killing the connection if no response is obtained from the other end.
+tcp_keepalive_time (integer; default: 7200 (2h); since Linux 2.2) The  number  of  seconds a connection needs to be idle before TCP begins sending out keep-alive probes.  Keep-alives are sent only when the SO_KEEPALIVE socket option is enabled.  The default value is 7200 seconds (2 hours).  An idle connection is terminated after approximately an additional 11 minutes (9 probes an interval of 75 seconds apart) when keep-alive is enabled.
+
+net.ipv4.tcp_max_orphans = 262144 # The  maximum number of orphaned (not attached to any user file handle) TCP sockets allowed in the system.  When this number is exceeded, the orphaned connection is reset and a warning is printed. This limit exists only to prevent simple denial-of-service attacks.  Lowering this limit is not recommended.  Network conditions might require you  to increase the number of orphans allowed, but note that each orphan can eat up to ~64 kB of unswappable memory.  The default initial value is set equal to the kernel parameter NR_FILE.  This initial default is adjusted depending on the memory in the system.
+net.ipv4.tcp_orphan_retries = 0   # The maximum number of attempts made to probe the other end of a connection which has been closed by our end.
+
+net.core.somaxconn = 65536 # somaxconn is a kernel parameter in Linux that determines the maximum number of connections that can be queued in the TCP/IP stack backlog per socket.
+    In RHEL 6 & RHEL 7, the sk_max_ack_backlog field of the sock structure is defined as unsigned short which limits the values to 16 bits whose maximum value is 65535.
+    In RHEL 8, sk_max_ack_backlog field of the sock structure is defined as u32 which limits the values to 32 bits whose maximum value is 2147483647.
+
+net.ipv4.tcp_max_tw_buckets parameter is used to specify the maximum number of allowed connections in the TIME_WAIT state in the kernel. When the total number of connections that are in and are about to transition to the TIME_WAIT state on the ECS instance exceeds the net.ipv4.tcp_max_tw_buckets value, the "kernel: TCP: time wait bucket table overflow" error message appears in the /var/log/messages log. Then, the kernel terminates excess TCP connections.
+net.ipv4.tcp_fin_timeout parameter to accelerate the termination of TCP connections in the FIN_WAIT2 state. default 60.. good <=10 for servers
+
+    CLOSE_WAIT indicates that the remote endpoint (other side of the connection) has closed the connection.
+    TIME_WAIT: - indicates that local endpoint (this side) has closed the connection.
+               - doesn´t consume memory,
+               - last for 60 seg (fixed in include/net/tcp.h)
+               - will allow quadruplet connections src_addr,src_port,dest_addr,dest_port allow 30000 by ip because only src_port will be dinamic, specially problematic en L7 LB
+
+https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux
+
+
+# Linux autotuning params
+# The values set by autotuning can be seen via the Linux “ss” command from the iproute package (e.g. “ss -tmi”)
+net.ipv4.tcp_adv_win_scale (see calculations below)
+
+
+net.ipv4.tcp_notsent_lowat = 4294967295 # This setting limits the size of unsent bytes in the write queue.
+                            # in this case 4294967295 can be consider the max(default), if a big tcp_wmem => send buffer can be large
+			    # make it to 131072
+                            #
+# NIC buffer (ring buffer) to Rx and Tx
+root@us--dr-mia--p--e--15:/cdn-data# ethtool -g ens2f1                                                                                                │
+Ring parameters for ens2f1:                                                                                                                           │
+Pre-set maximums:                                                                                                                                     │
+RX:             8192                                                                                                                                  │
+RX Mini:        0                                                                                                                                     │
+RX Jumbo:       0                                                                                                                                     │
+TX:             8192                                                                                                                                  │
+Current hardware settings:                                                                                                                            │
+RX:             1024                                                                                                                                  │
+RX Mini:        0                                                                                                                                     │
+RX Jumbo:       0                                                                                                                                     │
+TX:             1024
+
+
+# Mem params
+Core is the overall max receive buffer, while tcp relates to just that protocol.
+net.core.rmem_default = 65536 # 64KiB
+net.core.rmem_max = 8388608  # 8MiB
+net.core.wmem_default = 65536
+net.core.wmem_max = 8388608
+
+tcp_mem  maximum size of the buffer in [PageSizes] ;     3 integers: [low, pressure, high].
+tcp_rmem maximum size of the receive buffer in Bytes... 3 integers: [min, default, max].   net.core.rmem_max will prevail.
+tcp_wmem maximum size of the receive buffer in Bytes... 3 integers: [min, default, max].
+
+tcp_mem of 4194304 =>
+= 4194304 pages * 4Ki B
+= 4194304 pages * 4 * 1024 B
+= 17179869184 Bytes
+= 16 GiB
+
+tcp_mem of 8388608 =>
+= 8388608 pages * 4Ki B
+= 8388608 pages * 4 * 1024 B
+= 34359738368 Bytes
+= 32 GiB
+
+tcp_mem of 16777216 =>
+= 16777216 pages * 4Ki B
+= 16777216 pages * 4 * 1024 B
+= 68719476736 Bytes
+= 64 GiB
+
+tcp_mem of 4096     => 16 MiB
+tcp_mem of 8192     => 32 MiB
+tcp_mem of 4194304  => 16 GiB
+tcp_mem of 6291456  => 24 GiB
+tcp_mem of 8388608  => 32 GiB
+tcp_mem of 16777216 => 64 GiB
+
+rmem,wmem is in bytes
+655360    => 640 KiB
+4194304   => 4 MiB
+8388608   => 8 MiB
+16777216  => 16 MiB
+33554432  => 32 MiB
+268435456 => 256MiB
+536870912 => 512 MiB
+
+
+# For http/2
+net.ipv4.tcp_notsent_lowat=16384
+
+
+# Nginx as a service consideration
+Syntax: 	keepalive_time time; Default: 	keepalive_time 1h;
+Context: 	http, server, location. This directive appeared in version 1.19.10.
+Limits the maximum time during which requests can be processed through one keep-alive connection. After this time is reached, the connection is closed following the subsequent request processing.
+
+Syntax: 	keepalive_timeout timeout [header_timeout]; Default: 	keepalive_timeout 75s;
+Context: 	http, server, location.
+The first parameter sets a timeout during which a keep-alive client connection will stay open on the server side. The zero value disables keep-alive client connections. The optional second parameter sets a value in the “Keep-Alive: timeout=time” response header field. Two parameters may differ.
+
+keepalive_requests 1000; # default 100
+ Sets the maximum number of requests that can be served through one keep-alive connection. After the maximum number of requests are made, the connection is closed.
+Closing connections periodically is necessary to free per-connection memory allocations. Therefore, using too high maximum number of requests could result in excessive memory usage and not recommended.
+
+
+# calculations
+
+
+## tcp_rmem calculation based a wanted BDP
+#BDP signifies how many bits the sender can send before the first bit reaches the receiver. For example; Consider a 1 Mbps link or a propagation delay 1 millisecond. Then the BDP = 1 MBps X 1 ms = 1000 bits.
+For latency, we have chosen 300 ms as the maximum expected latency, as that is the measured latency between our Zurich and Sydney facilities. It seems reasonable enough as a worst-case latency under normal circumstances.
+For throughput, although we have very fast and modern hardware on the Cloudflare global network, we don’t expect a single TCP session to saturate the hardware. We have arbitrarily chosen 3500 mbps as the highest supported throughput for our highest latency TCP sessions.
+The calculation for those numbers results in a BDP of 131MB, which we round to the more aesthetic value of 128 MiB
+
+300ms with 3500 mbps (latency used a RTT)
+BDP =  Bandwidth-delay product
+BD =  B X D = B x RTT
+   = 3500 * 10^6 [bit/s]* 300 *10⁻3 [s]
+   = 3500 * 300 * 10³
+   = 1050000 * 10³ [bit]
+   = 1050000000 [bit]
+   = 131.25 MB
+   = 125.1697540283 MiB ~ 128 MiB
+
+so for a maximum window size of 128MiB
+with a net.ipv4.tcp_adv_win_scale = -2 => (tcp_rmem *1/4) = (512MiB)*1/4 = 128MiB
+
+table of adv win scale
+tcp_adv_win_scale |	TCP window size
+4	              | 15/16 * available memory in receive buffer
+3	              | ⅞ * available memory in receive buffer
+2	              | ¾ * available memory in receive buffer
+1	              | ½ * available memory in receive buffer
+0	              | available memory in receive buffer
+-1	              | ½ * available memory in receive buffer
+-2	              | ¼ * available memory in receive buffer
+-3	              | ⅛ * available memory in receive buffer
+
+
+Ex:
+# max to 64 Gigas, to a server with more than 100G of ram which nornally is seeted to tcp_mem max to 32G.
+sysctl -w net.ipv4.tcp_mem='16777216 16777216 16777216' # in PageSize
+sysctl -w net.ipv4.tcp_wmem='4096 655360 16777216'      # in Bytes
+sysctl -w net.ipv4.tcp_rmem='8192  873800 16777216'     # in Bytes
+
+sysctl -w net.core.rmem_default=65536
+sysctl -w net.core.rmem_max=16777216  # win over tcp_rmax(max)
+sysctl -w net.core.wmem_default=65536
+sysctl -w net.core.wmem_max=16777216
+
+
+# si quiero liberar conexiones más rapido, pero quiero?
+# (en teoria, aunque yo cierre la conexión, el server va a querer seguir usando la conexion)
+# (pero cuando hay una session por más de 1 hora no se notan cortes que se sepa)
+sysctl -w net.ipv4.tcp_keepalive_intvl=50
+sysctl -w net.ipv4.tcp_keepalive_probes=5
+sysctl -w net.ipv4.tcp_keepalive_time=3600

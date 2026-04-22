@@ -1,6 +1,0 @@
-resolvectl 
-resolvectl status  
-resolvectl query <url>
-resolvectl query -t mx <url>
-resolvectl query --cache=0 -t mx <url>
-resolvectl dnssec

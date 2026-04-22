@@ -1,6 +1,7 @@
 # WARNING ! netstat is deprecated. Look below.
 
 netstat -a       # To display open ports and established TCP connections
+netstat -i       # To display interface statistics
 netstat --listen # Find listening ports
 netstat -l       # Find listening ports
 netstat -lt      # list listening TCP ports
@@ -30,11 +31,14 @@ Example output: 1507/python
 # Fast display of ipv4 tcp listening programs
 netstat -vtlnp --listening -4
 
+# list SYN_REC connections
+netstat -anp | grep 'SYN_REC'
+
 # WARNING ! netstat is deprecated.
 # Replace it by:
 ss
 
-# For netstat-r
+# For netstat -r
 ip route
 
 # For netstat -i
@@ -42,3 +46,5 @@ ip -s link
 
 # For netstat-g
 ip maddr
+
+

@@ -1,0 +1,310 @@
+
+
+# cisco
+show interface brief
+sh int brief
+sh ip int br  # show interfaces
+config t      # enable config mode
+int GigaEtherne0/0 # enter config interface 0/0
+no shut            # unshutdown the port
+ip address 192.168.0.2 255.255.255.0 # assign ip
+do ping 192.168.0.2 # test ip
+
+show interface diagnostics optics # see FO module info
+
+sh running config
+show ip[v6] protocols
+show ip[v6] rip database
+debug ip rip { database | events }
+debug ipv6 rip [interface]
+show ip[v6] eigrp {interfaces | neighbors }
+show ip[v6] eigrp topology
+clear ip[v6] eigrp [AS-number] neighbors
+debug ip[v6] eigrp [neighbor]
+
+# Protocol Independent Multicast (PIM)
+show ip mroute
+show ip pim interface
+show ip pim neighbor
+show ip pim rp [mapping]
+show ip rpf <IP>
+
+# IOS ZONE-BASED FIREWALL
+show zone security
+show zone-pair security
+show policy-map type inspect
+show class-map type inspect
+show parameter-map type inspect
+debug zone security events
+
+# IOS IPV4 ACCESS LISTS
+show access-lists [<number> | <name>]
+show ip access-lists [<number> | <name>]
+show ip access-lists interface <interface>
+show ip access-lists dynamic
+show ip interface [<interface>]
+show time-range [<name>]
+
+# IPsec
+show crypto isakmp sa
+show crypto isakmp policy
+show crypto ipsec sa
+show crypto ipsec transform-set
+debug crypto {isakmp | ipsec}
+
+# VLAN
+# - Trunking: Carrying multiple VLANs over the same physical connection
+# - Native VLAN: By default, frames in this VLAN are untagged when sent across a trunk
+# - Access VLAN: The VLAN to which an access port is assigned
+# - Voice VLAN: If configured, enables minimal trunking to support voice traffic in addition to data traffic on an access port
+# - Dynamic Trunking Protocol (DTP): Can be used to automatically establish trunks between capable ports (insecure)
+# - Switched Virtual Interface (SVI): A virtual interface which provides a routed gateway into and out of a VLAN
+# Switch Port Modes
+# - trunk: Forms an unconditional trunk
+# - dynamic desirable: Attempts to negotiate a trunk with the far end
+# - dynamic auto: Forms a trunk only if requested by the far end
+# - access: Will never form a trunk
+# VLAN Trunking Protocol (VTP)
+# - Domain: Common to all switches participating in VTP
+# - Server Mode: Generates and propagates VTP advertisements to clients; default mode on unconfigured switches
+# - Client Mode: Receives and forwards advertisements from servers; VLANs cannot be manually configured on switches in client mode
+# - Transparent Mode: Forwards advertisements but does not participate in VTP; VLANs must be configured manually
+# - Pruning: VLANs not having any access ports on an end switch are removed from the trunk to reduce flooded traffic
+
+show vlan
+show interface [status | switchport]
+show interface trunk
+show vtp status
+show vtp password
+
+# VLAN Creation
+Switch(config)# vlan 100
+Switch(config-vlan)# name Engineering
+# Access Port Configuration
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport nonegotiate
+Switch(config-if)# switchport access vlan 100
+Switch(config-if)# switchport voice vlan 150
+Trunk Port Configuration
+# Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk encapsulation dot1q
+Switch(config-if)# switchport trunk allowed vlan 10,20-30
+Switch(config-if)# switchport trunk native vlan 10
+# SVI Configuration
+Switch(config)# interface vlan100
+Switch(config-if)# ip address 192.168.100.1 255.255.255.0
+
+#VTP Configuration
+Switch(config)# vtp mode {server | client | transparent}
+Switch(config)# vtp domain <name>
+Switch(config)# vtp password <passsword>
+Switch(config)# vtp version {1 | 2}
+Switch(config)# vtp pruning
+
+# HA - High Availability - VRRP
+#
+
+# Configuring the Ethernet Management Port
+switch# config terminal   # Enters configuration mode.
+switch(config)# interface mgmt0  #  Enters the interface configuration mode on the management Ethernet interface (mgmt0).
+switch(config-if)# ip address 1.1.1.1 255.255.255.0   # Enters the IP address (1.1.1.1) and IP subnet mask (255.255.255.0) for the management interface.
+switch(config-if)# no shutdown   # Enables the interface.
+
+# Configuring the Default Gateway
+switch# config t     # Enters configuration mode.
+switch(config)# ip default-gateway 1.1.1.4  # Configures the IP address for the default gateway
+
+# Configuring the Default Network
+switch# config t   # Enters configuration mode.
+switch(config)# ip default-network 190.10.1.0  # Configures the IP address for the default network (190.10.1.0).
+switch(config)# ip route 10.0.0.0 255.0.0.0 131.108.3.4 # Defines a static route to network 10.0.0.0 as the static default route.
+switch(config)# ip default-network 10.0.0.0
+
+# Disabling IP Forwarding
+switch(config)# ip routing    # Enables IP forwarding feature (disabled by default).
+switch(config)# no ip routing # Disables IP forwarding feature and reverts to the factory settings.
+
+# Configuring IP Static Routes
+# Configures the static route for the specified IP address, subnet mask, next hop, and distance, and VSAN or management interface
+switch(config)# IP route <network IP address> <netmask> <next hop IP address> distance <number> interface <vsan number>
+#For example:
+switch(config)# IP route 10.0.0.0 255.0.0.0 20.20.20.10 distance 10 interface vsan 1
+
+# Viewing and Clearing ARPs
+# Address Resolution Protocol (ARP) entries can be viewed (show arp), deleted (no arp), or cleared (clear arp-cache) in Cisco MDS 9000 Family switches The ARP feature is enabled on all switches.
+# - Use the show arp command to display the ARP table.
+switch# show arp
+Protocol Address Age (min) Hardware Addr Type Interface
+Internet 171.1.1.1 0 0006.5bec.699c ARPA mgmt0
+Internet 172.2.0.1 4 0000.0c07.ac01 ARPA mgmt0
+# - Use the no arp command in configuration mode to remove an ARP entry from the ARP table.
+switch(config)# no arp 172.2.0.1
+# - Use the clear arp command to delete all entries from the ARP table. The ARP table is empty by default.
+switch# clear arp-cache
+
+# Displaying IP Interface Information
+switch# show interface int3
+
+# Displays the Connected and Static Route Details
+switch# show ip route
+
+# Displays Configured Routes
+switch# show ip route configured
+
+# Displays the IP Routing Status
+switch# show ip routing
+
+# PortChannel
+switch# show port-channel summary                  # PortChannel Summary
+switch# show port-channel compatibility-parameters # PortChannel Compatibility
+switch# show port-channel database                 # PortChannel Database
+switch# show port-channel consistency              # Command Without Details
+switch# show port-channel consistency detail       # Command With Details
+switch# show port-channel usage                    # PortChannel Usage
+
+# PortChannel Config
+switch(config)# interface port-channel 1           # Configures the specified PortChannel (1).
+switch(config)# no interface port-channel 1        # Deletes the specified PortChannel (1), its associated interface mappings, and the hardware associations for this PortChannel.
+switch(config)# interface fc1/15                   # Configures the specified port interface (fc1/15).
+switch(config-if)#
+switch(config)# interface fc1/1 - 5                # Configures the specified range of interfaces. In this example, interfaces from 1/1 to 1/5
+switch(config-if)#
+switch(config-if)# channel-group 15                # Adds physical Fibre Channel port 1/15 to channel group 15. If channel group 15 does not exist, it is created. The port is shut down.
+    fc1/15 added to port-channel 15 and shut down
+switch(config-if)#
+switch(config-if)# channel-group 2                 # Adds physical interfaces 1/1, 1/2, 1/3, 1/4, and 1/5 to channel group 2. If channel group 2 does not exist, it is created.
+    fc1/1 - 5 added to port-channel 2 and shut down  # If the compatibility check is successful, the interfaces are operational and the corresponding states apply to these interfaces.
+switch(config-if)#
+# Forcing an Interface Addition
+switch(config)# interface fc1/1                    # Configures the specified port interface (fc1/1).
+switch(config-if)#
+switch(config-if)# channel-group 1 force           # Forces a physical Fibre Channel port 1/1 addition to channel group 1. The E port is shut down.
+    fc1/1 added to port-channel1 and shut down
+switch(config-if)#
+# Deleting Interfaces from a PortChannel
+switch(config)# interface fc1/1                    # Enters the selected physical interface level.
+switch(config-if)#
+switch(config)# interface range fc1/1 - 5          # Enters the selected range of physical interfaces.
+switch(config-if)# no channel-group 2              # Deletes the physical Fibre Channel interfaces in channel group 2.
+
+# VRRP -  Virtual Router Redundancy Protocol
+router(config)# router vrrp                        # Enables VRRP configuration mode.
+router(config-vrrp)# interface TenGigE 0/2/0/1     # Enables VRRP interface configuration mode on a specific interface.
+router(config-vrrp-if)# vrrp 1 text-authentication x30dn78k
+# (Optional) Configures the simple text authentication used for Virtual Router Redundancy Protocol (VRRP) packets received from other routers running VRRP.
+# When a VRRP packet arrives from another router in the VRRP group, its authentication string is compared to the string configured on the local system. If the strings match, the message is accepted. If they do not match, the packet is discarded.
+# All routers within the group must be configured with the same authentication string.
+#     To disable VRRP authentication, use the no vrrp vrid command.
+# Note
+# Plain text authentication is not meant to be used for security. It simply provides a way to prevent a misconfigured router from participating in VRRP.
+router# (config-vrrp-if)# vrrp 1 assume-ownership disable
+# (Optional) Configures a VRRP router to assume ownership of the virtual IP address when in the master state.
+# This command specifies that the router assumes ownership of the virtual IP address if it is the master router, regardless of whether it is the IP address owner.
+# If the vrrp assume-ownership command is enabled, a router that is not the IP address owner but is the master router for another IP address accepts and responds to pings and accepts a Telnet to that router .
+# To restore the default setting, use the no vrrp vrid assume-ownership command.
+router# (config-vrrp-if)# vrrp 1 priority 254  # higher becomes master
+# (Optional) Sets the priority of the virtual router.
+# Use the vrrp priority command to control which router becomes the master router.
+# The vrrp priority command is ignored while the router is the virtual IP address owner.
+# To remove the priority of the virtual router, use the no vrrp vrid priority command.
+router# (config-vrrp-if)# vrrp 1 preempt delay 15
+# (Optional) Sets the priority of the virtual router.
+# Use the vrrp preempt command to control which router becomes the master router.
+# The vrrp preempt command is ignored while the router is the virtual IP address owner.
+# To disable preemption, use the no vrrp vrid preempt command.
+router# (config-vrrp-if)# vrrp 1 timer 4
+# (Optional) Configures the interval between successive advertisements by the master router in a Virtual Router Redundancy Protocol (VRRP) virtual router.
+# To restore the default value, use the no vrrp vrid timer command.
+# Note
+# We recommend configuring the same VRRPv3 timers on all VRRP routers when interoperating with other vendors.
+router# (config-vrrp-if)# vrrp 1 track interface TenGigE 0/0/CPU0/1 30
+# (Optional) Configures the Virtual Router Redundancy Protocol (VRRP) to track an interface.
+# Enter the no vrrp vrid track interface type instance interface-path-id [priority-decrement] command to disable tracking.
+# Only IP interfaces are tracked.
+# A tracked interface is up if IP on that interface is up. Otherwise, the tracked interface is down.
+# You can configure VRRP to track an interface that can alter the priority level of a virtual router for a VRRP virtual router. When the IP protocol state of an interface goes down or the interface has been removed from the router, the priority of the backup virtual router is decremented by the value specified in the priority-decrement argument. When the IP protocol state on the interface returns to the up state, the priority is restored.
+router# (config-vrrp-if)#vrrp delay minimum 2 reload 10
+# (Optional) Delays the startup of the state machine when an interface comes up, so that the network has time to settle and there are no unnecessary state changes early after the link comes up. The reload delay is the delay applied after the first interface up event. The minimum delay is the delay that is applied after any subsequent interface up event (if the interface flaps).
+
+#  vrrp vrid ipv4 ip-address [secondary]
+router(config-vrrp-if)# vrrp 1 ipv4 10.1.0.100
+# Enables the Virtual Router Redundancy Protocol (VRRP) on an interface and specifies the IP address of the virtual router.
+# - Enter the vrrp ipv4 command once without the secondary keyword to indicate the virtual router IP address. If you want to indicate additional IP addresses supported by the virtual router, include the secondary keyword.
+# - We recommend that you do not remove the VRRP configuration from the IP address owner and leave the IP address of the interface active, because duplicate IP addresses on the LAN will result.
+# - To disable VRRP on the interface and remove the IP address of the virtual router, use the no vrrp vrid ipv4 command.
+
+# BFD for VRRP: Bidirectional Forwarding Detection (BFD) is a network protocol used to detect faults between two forwarding engines.
+router(config-vrrp-if)# vrrp 100 version 3 bfd fast-detect peer ipv4 10.1.1.1 # Enables BFD fast detection on the VRRP interface. Note: BFD is suitable only for a two-router redundant system.
+router(config-vrrp-if)# vrrp bfd minimum-interval  # Sets the minimum interval to the specified period. The interval is in milliseconds; range is 15 to 30000 milliseconds.
+# Modifying BFD timers (multiplier): Multiplier is the number of consecutive BFD packets which must be missed from a BFD peer before declaring that peer unavailable. The default multiplier is 3.
+router(config-vrrp-if)# vrrp bfd multiplier   # Sets the multiplier to the value. Range is 2 to 50.
+
+router(config)# snmp-server traps vrrp events   # Enables the SNMP server notifications for VRRP.
+
+# Configuring a VRRP Group: Example
+# This section provides the following configuration example of Router A and Router B, each belonging to three VRRP groups:
+# Router A:
+config
+interface tenGigE 0/4/0/4
+ipv4 address 10.1.0.1/24
+exit
+router vrrp
+interface tenGigE 0/4/0/4
+vrrp 1 priority 120
+vrrp 1 text-authentication cisco
+vrrp 1 timer 3
+vrrp 1 ipv4 10.0.0.100
+vrrp 5 timer 30
+vrrp 5 ipv4 10.0.0.105
+vrrp 5 preempt disable
+vrrp 100 ipv4 10.0.0.200
+commit
+
+# Router B:
+config
+interface tenGigE 0/4/0/4
+ipv4 address 10.1.0.2/24
+exit
+router vrrp
+interface tenGigE 0/4/0/4
+vrrp 1 priority 100
+vrrp 1 text-authentication cisco
+vrrp 1 timer 3
+vrrp 1 ipv4 10.0.0.100
+vrrp 5 priority 200
+vrrp 5 timer 30
+vrrp 5 ipv4 10.0.0.105
+vrrp 5 preempt disable
+vrrp 100 ipv4 10.0.0.200
+commit
+
+
+
+
+
+
+router(config)# end
+# or
+router(config)# commit
+# Saves configuration changes.
+# - When you issue the end command, the system prompts you to commit changes:
+#     Uncommitted changes found, commit them
+#     before exiting(yes/no/cancel)? [cancel]:
+#         Entering yes saves configuration changes to the running configuration file, exits the configuration session, and returns the router to EXEC mode.
+#         Entering no exits the configuration session and returns the router to EXEC mode without committing the configuration changes.
+#         Entering cancel leaves the router in the current configuration session without exiting or committing the configuration changes.
+# - Use the commit command to save the configuration changes to the running configuration file and remain within the configuration session.
+
+router# show vrrp              # Displays a brief or detailed status of one or all Virtual Router Redundancy Protocol (VRRP) virtual routers. If no interface is specified, all virtual routers are displayed.
+router# clear vrrp statistics  # Clears all software counters for the specified virtual router. If no interface is specified, statistics of all virtual routers are removed.
+
+
+
+
+
+# http - cisco asdm
+Switch(config)# http server enable
+Switch(config)# nameif management
+Switch(config-if)# http 0.0.0.0 0.0.0.0 mnagement
+Switch(config)# management-access management
+Switch(config)#

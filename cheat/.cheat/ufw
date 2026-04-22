@@ -20,10 +20,12 @@ ufw allow 5433/tcp
 # allow App
 ufw allow <App name>
 
+ufw reload
+
 # CREATE AN APPLICATION
 # create a file like this /etc/ufw/applications.d/kdeconnect
 # ports=> are comma separated and protocols must be separated by '|'. range by ':'
-# by ex.: port=34,45,65:75/udp|41,23,45:99,100/tcp 
+# by ex.: port=34,45,65:75/udp|41,23,45:99,100/tcp
 [Kdeconnect]
 title=kdeconnect application ports
 description=This allow to connect to rest of machines.

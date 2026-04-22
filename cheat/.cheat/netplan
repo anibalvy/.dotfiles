@@ -5,8 +5,12 @@ sudo cp -p /etc/netplan/01-network-manager-all.yaml /etc/netplan/01-network-mana
 # commands
 netplan generate # Use /etc/netplan to generate the required configuration for the renderers.
 netplan try      # Apply configuration and wait for user confirmation; will roll back if network is broken or no confirmation is given.
-netplan apply    # Apply all configuration for the renderers, restarting them as necessary 
+netplan apply    # Apply all configuration for the renderers, restarting them as necessary
 
+
+by default, Ubuntu Desktop use render “NetworkManager” and  Ubuntu Server uses “networkd”.
+
+see compiled on:  /run/systemd/network/10-netplan-eth0.network
 
 #  config static ip, nameservers, gateway
 
@@ -16,6 +20,9 @@ network:
   version: 2
   renderer: NetworkManager
   ethernets:
+   enp0s1: {}  ## implica opciones por defecto
+   enp0s2:
+    dhcp: false ## no hace nada, como para prepararla para bond
    enp0s3:
     dhcp: no
     addresses:
@@ -94,8 +101,8 @@ network:
 ```
 
 # Bonding
-# Bonding can easily be configured with the required interfaces list and by specifying the mode. 
-# The mode can be any of the valid types: balance-rr, active-backup, balance-xor, broadcast, 802.3ad, balance-tlb, balance-alb. 
+# Bonding can easily be configured with the required interfaces list and by specifying the mode.
+# The mode can be any of the valid types: balance-rr, active-backup, balance-xor, broadcast, 802.3ad, balance-tlb, balance-alb.
 
 ```yml
 bonds:
@@ -217,7 +224,7 @@ network:
             method: ttls
             anonymous-identity: "@internal.example.com"
             identity: "joe@internal.example.com"
-            password: "v3ryS3kr1t"
+            password: "exampler1t"
         dhcp4: yes
 ```
 
@@ -588,3 +595,37 @@ network:
           addresses : [ "10.15.99.25/24" ]
 ```
 
+# Bond
+
+```yml
+network:
+  bonds:
+    bond0:
+      addresses:
+      - 138.255.97.11/24
+      gateway4: 138.255.97.1
+      interfaces:
+      - enp4s0f0
+      - enp4s0f1
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        - 1.1.1.1
+      parameters:
+        lacp-rate: fast
+        mode: 802.3ad
+        transmit-hash-policy: layer3+4
+  ethernets:
+    enp4s0f0: {}
+    enp4s0f1: {}
+  version: 2
+```
+
+# choose default source ip
+network:
+  bonds:
+    bond0:
+      addresses:
+      - 45.68.46.131/24    # ´ip a ''
+      - 45.68.16.80/22:
+              lifetime: 0  # will be depredated by setting the the preferred_lft=0 ; This attribute indicates the remaining time an IP address is to remain "preferred".

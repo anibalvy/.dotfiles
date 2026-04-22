@@ -1,0 +1,18 @@
+
+
+# monitor disk latency
+
+iostat -x 1   #
+# await: Average time (in milliseconds) that I/O requests have to wait in the queue.
+# svctm: Average service time (in milliseconds) for I/O requests.
+# %util: Percentage of time the disk is being used (i.e., the disk’s I/O utilization).
+
+sar -d 1 5
+# This command shows disk I/O statistics every second for 5 intervals. The key column here is await, which shows the average time (in milliseconds) that I/O operations are taking to complete.
+
+# RAID controller
+cat /proc/scsi/scsi   # can display which disks of the RAID controller are accessible.
+# info
+smartctl -a /dev/sda
+smartctl --scan
+smartctl -a -d megaraid,0 /dev/sda  # for RAID controller

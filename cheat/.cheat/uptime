@@ -1,0 +1,9 @@
+
+uptime
+
+uptime -p # -p o –pretty -> 'up 2 weeks, 19 hours, 46 minutes'
+
+uptime -s # -s or -since , display start date-> '2025-01-07 21:38:58'
+
+#uptime vs /proc/uptime
+cat /proc/uptime  # Displays system uptime by seconds and the system idle time; system idle time is greater than system uptime.

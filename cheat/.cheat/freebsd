@@ -1,0 +1,33 @@
+
+
+
+
+# package manager
+pkg update         # refresh repo package list
+pkg update -f      # refresh repo package list
+pkg info           # installed package info
+pkg info pkg       # package info
+pkg prime-list     # pkgs that are not depencies
+pkg prime-origins  # get the origin port directory of the prime-list
+pkg upgrade        # upgrade all packages
+pkg search nginx   # search
+pkg install nginx
+pkg fetch -d -o /usr/home/user/packages/ nginx-lite  # fetch a package and install it later
+pkg delete nginx
+pkg audit -F       # find vulnerabilities
+pkg autoremove     # remove unused pkgs
+pkg clean          # remove latest installed pkg binaries from cache
+pkg clean -a       # remove entire cache
+pkg lock nginx-lite    # lock packages against reinstallation, modification or deletion.
+pkg unlock nginx-lite  # unlock packages against reinstallation, modification or deletion.
+
+## ports: he Ports Collection is a set of Makefiles, patches, and description files. Each set of these files is used to compile and install an individual application on FreeBSD, and is called a port.
+
+
+
+
+# service
+service <service> start
+service <service> stop
+service <service> restart
+

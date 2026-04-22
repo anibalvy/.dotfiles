@@ -1,0 +1,27 @@
+#check CPU utilization (% - must add to 100)
+sar -P ALL 1 10
+cpu %usr %sys %wio %idle
+0   50    10  40   0
+1   50    10  40   0
+2   100   0   0    0
+3   100   0   0    0
+-   75    5   20   0
+
+Notice that the average CPU utilization will be 75% user, 5% sys,
+and 20% iowait. The values one sees with 'vmstat' or 'iostat' or
+most tools are the average across all CPUs.
+
+Now let's say we take this exact same workload (same 6 programs
+with same behavior) to another machine that has 6 CPUs (same
+CPU speeds and same I/O subsytem). Now each program can be
+running on its own CPU. Therefore, the CPU usage breakdown
+would be as follows:
+
+cpu %usr %sys %wio %idle
+0   25    5    70   0
+1   25    5    70   0
+2   25    5    70   0
+3   25    5    70   0
+4   100   0    0    0
+5   100   0    0    0
+-   50    3    47   0

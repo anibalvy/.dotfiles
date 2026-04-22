@@ -1,0 +1,3 @@
+sherlock <username>
+sherlock --timeout <seconds> <username>
+

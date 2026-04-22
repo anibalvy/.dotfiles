@@ -59,8 +59,8 @@ cheatpaths:
     #   tags: [ personal ]
     #   readonly: false
   - name: personal
-    # path: ~/.dotfiles/cheat/.cheat/
-    path: ~/.cheat/
+    path: ~/.dotfiles/cheat/.cheat/
+    # path: ~/.cheat/
     tags: [ personal ]
     readonly: false
   #

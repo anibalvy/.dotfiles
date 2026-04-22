@@ -1,2 +1,11 @@
+# Convert numbers from/to human-readable strings
+
 # Convert bytes to Human readable format
 numfmt --to=iec --suffix=B --padding=7 1048576
+
+echo '1024' | numfmt --to=si    # 1.1K
+echo '1024' | numfmt --to=iec   # 1.0K
+echo '1024' | numfmt --to=iec-i # 1.0Ki
+
+## format fields
+ls -l | numfmt --to=si --field=5 --format="🚀xx🚀 %4f 😀🥵😀"

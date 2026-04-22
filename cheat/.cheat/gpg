@@ -1,3 +1,5 @@
+# GPG, or GNU Privacy Guard
+
 # Create a key
 gpg --gen-key
 
@@ -9,6 +11,9 @@ gpg --armor --export
 
 # To show the fingerprint for a key
 gpg --fingerprint KEY_ID
+
+# get key ID from the list-keys command
+gpg --list-keys --keyid-format short | grep 'pub ' | cut -d ' ' -f 4 | sed 's/.*\///
 
 # Search for keys
 gpg --search-keys 'user@emailaddress.com'
@@ -46,10 +51,12 @@ gpg --import ~/revoke.asc
 
 # Signing and Verifying files
 # If you're uploading files to launchpad you may also want to include a GPG signature file.
-
+# -b: Make a detached signature.
+# -a: Create an ASCII armored output.
 gpg -ba filename
 
 # or if you need to specify a particular key:
+gpg -u <key ID> -ba filename
 gpg --default-key <key ID> -ba filename
 
 # This then produces a file with a .asc extension which can be uploaded.
@@ -119,3 +126,12 @@ gpg --import pubkeys subkeys
 gpg -K
 
 #  Should show sec# instead of just sec.
+
+# to sign apt deb repo
+gpg --full-generate-key                                          # create gpg key
+gpg --output .aptly/public/my_pub_key.gpg --export <key_id>      # export public key to repo path and to be use to validate packages.
+gpg --output my_private.key --export-secret-keys <key_id>        # export private key to be use in others servers use: gpg --import <key_id>
+gpg --delete-secret-key <key_id>                                 # delete private key if needed
+gpg --delete-key <key_id>                                        # delete public key if needed
+sudo curl -fsSL http://<repo_ip>:8080/my_pub_key.gpg -o /etc/apt/trusted.gpg.d/aptly-my_pub_key.gpg  # import key as trusted for use apt
+

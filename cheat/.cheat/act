@@ -1,0 +1,28 @@
+# Run your GitHub Actions locally!
+
+sudo act -P ubuntu-24.04=-self-hosted push --secret-file .secrets 
+# -self-hosted = run locally not in container
+
+#To list all workflows for a given event, use -l/--list:
+act -l pull_request
+act -l
+
+# By default act will run all workflows in .github/workflows. You can override that behaviour with -W/--workflows flag by specifying the directory containing workflow files.
+act -W '.github/workflows/'
+
+# By default act will run all jobs in all workflows that are triggered by push event
+# This example will run all jobs named test in all workflows that trigger on push event
+act -j 'test'
+
+# Configuration file: Act can be configured in
+vim .actr
+
+# VARS are accessible inside the workflow via ${{ vars.VARIABLE }}
+# The variables file format is the same as .env format
+act --var VARIABLE=some-value - use some-value as the value for VARIABLE.
+act --var-file my.variables - load variables values from my.variables file.
+
+# Secrets
+act -s MY_SECRET=some-value # use some-value as the value for MY_SECRET.
+act -s MY_SECRET # check for an environment variable named MY_SECRET and use it if it exists, if is not defined, prompt the user for a value and will not be saved in your shell history file.
+act --secret-file my.secrets # load secrets values from my.secrets file. secrets file format is the same as .env format

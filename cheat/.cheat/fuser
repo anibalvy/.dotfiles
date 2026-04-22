@@ -1,0 +1,13 @@
+# check process using a file or directory
+fuser -v /<mount_point>
+
+# kill any pid using a directory
+fuser -k /<my_dir>
+
+# dealing with block devices, as mounted filesystem
+fuser -m -v /dev/<partition>
+
+# tcp - udp , -n: namespace
+fuser -v -n tcp <port_number>
+
+

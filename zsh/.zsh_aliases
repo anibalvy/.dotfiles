@@ -1,4 +1,4 @@
-
+alias sudo="sudo "
 alias s="sudo"
 alias sduo="sudo"
 alias suod="sudo"
@@ -14,11 +14,14 @@ alias rm='rm -i'
 alias cat='bat'
 alias cls='clear'
 alias grepk='grep -R -n -i '
+alias grepd="grep -v '\#'| grep -v '^$'"
+
 # Stop asking to correct the following:
 alias git='nocorrect git'
 alias c='cheat'
 alias ce='cheat -e'
 alias cl='cheat -l'
+alias mkd='source mkd' # create and enter folder
 
 alias tmux-resurrect-session='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
 
@@ -42,3 +45,7 @@ fi
 unsetopt correct_all
 setopt correct
 ###
+#
+
+alias pbcopy='xclip -sel clip'
+

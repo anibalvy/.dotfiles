@@ -1,0 +1,5 @@
+64512 to 65535
+There are two types of BGP Autonomous system numbers: Private and Public. The Public AS numbers range from 1 to 64511 and the Private AS numbers range from 64512 to 65535.
+
+#see cheat frr, for frr config
+#see cheat bird, for bird config

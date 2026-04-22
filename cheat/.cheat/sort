@@ -9,3 +9,12 @@ sort -r file
 
 # To sort a file randomly:
 sort -R file
+
+# To sort a file numeracly
+sort -n file
+
+# To sort columns usind delimiter
+# call is sleep Henry Roth  1935
+# Slaughterhouse-Five   Kurt Vonnegut   1969
+# Light in August   William Faulkner    1946
+sort -t $'\t' -k 3,3rn -k 2,2 -k 1,1 -s --debug books.list

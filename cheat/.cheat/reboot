@@ -9,3 +9,8 @@ I: Send the SIGKILL signal to all processes except init
 S: Sync all mounted filesystems
 U: Remount all mounted filesystems in read-only mode
 B: Immediately reboot the system, without unmounting partitions or syncing
+
+# in systemd - reboot, poweroff, halt are similar, all accept the same arguments
+systemctl poweroff
+systemctl halt
+systemctl reboot

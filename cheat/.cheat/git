@@ -11,6 +11,8 @@ git remote add upstream git@github.com:name/repo.git # To sync a fork with the m
 git remote -v # Confirm new remote repo
 git clone --depth 1 <remote-url> # Perform a shallow clone to only get latest commits (helps save data when cloning large repos)
 git pull --unshallow # To unshallow a clone
+git pull --rebase ## to avaid paralled commit, so my next commit will follow remote commit. (git pull alone will create a new rebase)
+                  ## if this fails (needs merge), do a git rebase --abort and do a normal git pull
 
 git remote prune origin              # Remove all stale branches (ones that have been deleted on remote) So if you have a lot of useless branches, delete them on Github and then run this
 git remote prune $(git remote | tr '\n' ' ') # The following can be used to prune all remotes at once
@@ -24,7 +26,8 @@ git branch -d branch_name            # To delete the branch "branch_name"
 git branch -D branch_name            # To force delete the branch "branch_name"
 git branch -m master main            # To rename
 git push origin --delete branch_name # git branch delete remote To delete/remove a remote branch
-git branch -u upstream/foo           # To make an exisiting branch track a remote branch
+git branch -u upstream/foo           # To make an existing branch track a remote branch
+
 
 git tag # list tag
 git tag -n # extensive description
@@ -87,7 +90,9 @@ git checkout -- <file>  # get specific file
 
 git commit -m "Your commit message" # add insitu commit message
 git commit -am "message"            # add changes and commit
-git commit --amend # To edit previous commit message, To add more changes to the last commit
+git commit --amend                  # To edit previous commit message, To add more changes to the last commit (before: git add .)
+git commit --amend --no-edit        # idem with same message
+     # git push --force  # to add change to remote repo (be careful)
 git commit --date="`date --date='2 day ago'`" # Git commit in the past, more recent versions of Git also support --date="2 days ago" directly
 git commit --date="Jun 13 18:30:25 IST 2015"  # Git commit in the past, more recent versions of Git also support --date="2 days ago" directly
 # To change the date of an existing commit, see below
@@ -106,6 +111,9 @@ git reset --hard # To removed staged and working directory changes, see options 
     --hard: Uncommit, unstage, and delete changes
 
 git reset --hard HEAD~2    # To go 2 commits back
+### after remove this 2 commit it is needed to sync to remote
+### git push --force  # this will remove the las 2 commits in remote branch
+
 git revert <commit SHA>    # Revert a commit and keep the history of the reverted change as a separate revert commit
 
 git clean -f -d                              # To remove untracked files
@@ -155,6 +163,13 @@ git ls-tree -r master --name-only # Files
 git ls-tree --full-tree --name-only -r HEAD #  To show all of the tracked files that have been committed (on the current branch), use
 
 # Worktrees
+git clone --bare ssh://git@<repository-server.com>/[username]/[repository-name].git # Clone a repository in bare, needed for worktrees
+git worktree add main                            # called main and will be based off the HEAD of the repo.
+git worktree add -b my-new-branch worktree-name  # Adding a Worktree with a New Branch #  The first time you push the code, remember to use the --set-upstream flag:  git push --set-upstream origin my-new-branch
+git worktree add worktree-name branch-name       # Add a Worktree Based on a Remote Branch
+git worktree list
+
+# Worktrees fix
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" # WORKTREE enable remotes
 git worktree add <name>
 
@@ -215,4 +230,4 @@ git filter-branch -- --all
 mv .git/shallow ../.          # or delete it
 git push -u origin main       # now will not fail
 
-
+gbp ## git build-package # see cheat gbp

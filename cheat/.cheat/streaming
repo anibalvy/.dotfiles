@@ -84,6 +84,8 @@ H.265:
 
 H.265 leaps forward with its enhanced compression algorithms, resulting in significantly smaller file sizes than H.264.
 
+[H.264 vs. H.265](https://target-video.com/h264-vs-h265/)
+
 #### Software Implementations
 
 H.264:
@@ -226,7 +228,19 @@ Sub-band coding (SBC)                      |  MPEG-1 Audio Layer II             
   - It supports packet recovery while maintaining low latency (default: 120 ms).
   - SRT also supports encryption using AES.
 
-### communication protocol
+##### SRT modes¶
+SRT protocol offers three modes: Caller, Listener, and Rendezvous:
+Listener. The receiving side in the caller mode sends a request to receive the stream, there may be several receiving points;
+Caller. Broadcasting does not start until a point-to-point connection is established with the receiving side in listener mode;
+Rendezvous. Both sides initiate a connection.
+
+implementation:
+SRT publication: acts as Listener while awaiting to get the stream from the Caller.
+SRT ingest: acts as Caller by initializing the connection and requesting the stream from the source.
+SRT push: acts as Caller because it is the source of the stream forcefully sent to another server.
+SRT playback: acts as Listener waiting for the request from the Caller to send the stream.
+
+### communication Streaming protocol
 #### RTMP - Real-Time Messaging Protocol
   - Real-Time Messaging Protocol (RTMP) is a communication protocol for streaming audio, video, and data over the Internet.
   - Originally developed as a proprietary protocol by Macromedia for streaming between Flash Player and the Flash Communication Server, Adobe (which acquired Macromedia) has released an incomplete version of the specification of the protocol for public use.
@@ -265,8 +279,12 @@ Sub-band coding (SBC)                      |  MPEG-1 Audio Layer II             
 Is a technique used in streaming multimedia over computer networks.
 - The concept came from storing MPEG-1 and MPEG-2 DVD TS Sectors into small 2KB files, which will be served using an HTTP server to the player.
 
+#### (Apple) HTTP Live Streaming (HLS)
+The first step is for the origin server to divide the video file into smaller segments. Although segment duration is 10 seconds for HLS, it is only 2-4 seconds for MPEG-DASH.
 #### Dynamic Adaptive Streaming over HTTP (DASH)
-#### Apple HTTP Live Streaming (HLS)
+similar to HLS.
+code-agnostic.
+uses TCP
 #### Adobe HTTP Dynamic Streaming (HDS)
 #### Microsoft Smooth Streaming (MSS)
 #### Common Media Application Format (CMAF)
@@ -283,4 +301,6 @@ Is a technique used in streaming multimedia over computer networks.
   - The Icecast server is capable of streaming audio content as Opus or Vorbis[7] over standard HTTP, video as WebM or Theora[7] over HTTP, and MP3,[7] AAC,[6] and NSV[6] over the SHOUTcast protocol.
   - Theora, AAC, and NSV are only supported in version 2.2.0 and newer.
 
+Streaming de tasa de bits adaptable
+H.264, HEVC, AV1
 

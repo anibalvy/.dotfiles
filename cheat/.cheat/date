@@ -6,3 +6,8 @@ date -d @1440359821
 
 # Convert Unix timestamp to Date(Mac)
 date -r 1440359821
+
+# relative
+date +%Y-%m-%d -d '-10 day'
+date +%Y-%m-%d -d 'yesterday'
+date --date='TZ="America/Los_Angeles" 09:00 next Fri'

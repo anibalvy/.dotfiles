@@ -1,0 +1,39 @@
+
+
+
+
+
+
+
+enter the SRT IP which has the form srt://IP:port. The srt connection admits several modes (listener, caller and rendez-vous).
+
+    SRT URL in caller mode : srt://SERVER:PORT ; this is the default.
+    SR URL in listener mode : srt://SERVER:PORT?mode=listener.
+
+For RIST, the URL syntax depends on whether one is connecting to one's own local IP (when listening) or to a remote IP.
+
+    RIST URL with remote server : rist://SERVER:PORT?cname=VLC&bandwidth=5000 where cname is whatever name you want (it just serves for logging and could be omitted) and bandwidth is the maximum bandwidth you expect in kbps (this is important for the resending of lost packets because the protocol will not go above that limit).
+    RIST URL using local IP : rist://@LOCAL_IP:PORT?cname=VLC&bandwidth=5000. Note that on the receiver side, we place an @ sign in front of the destination address, because it is the receiver/host's own address.
+
+
+
+ srt://192.168.100.101:9710?mode=caller&passphrase=SomePassword
+
+# working
+vlc
+srt://127.0.0.1:1100
+
+obs
+srt://127.0.0.1:1100?mode=listener
+
+# working 2
+vlc
+srt://127.0.0.1:1100?mode=rendez-vous
+obs
+srt://127.0.0.1:1100?mode=listener
+
+
+
+rtmp:
+in elemental use localhost instead of 127.0.0.1
+rtmp://localhost:1935/live/mychannel

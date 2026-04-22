@@ -5,3 +5,8 @@ site:.uk <search_term>
 after:2020 <search_term>
 filetype:pdf <book_name>
 
+site:mystite.com ext:txt | ext:pdf | ext:xml | ext:xls
+intext:"confidential" | intext:"internal use"
+
+site:drive.google.com <term>
+

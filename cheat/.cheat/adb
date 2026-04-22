@@ -1,0 +1,19 @@
+adb connect <ip>           # attach
+adb devices -l             # list of attached devs
+adb tcpip 5555             # listen on port
+adb install <package>.apk  # perform streamed install apk
+adb shell input keyevent 3 # simulate home key press
+adb push <file>.tar /sdcard/Download/
+adb shell
+  dev:# su
+  dev:# mount -o rw,remount /system  # make FS writable
+  dev:# cd /sdcard/Download
+  dev:# tar -xvf <file>.tar
+
+
+
+# - Ultra Small Launcher: Provides a lightweight launcher for easy navigation.
+# - Xposed Framework: Allows customization and modification of the Android system.
+# - Anyview: Enhances the user experience.
+# - Android System WebView: Required for web-based content rendering.
+# - Home Assistant Companion App: The heart of your smart home setup.

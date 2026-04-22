@@ -1,0 +1,75 @@
+
+
+## users
+we can set user access with
+- password
+- key
+
+## groups
+Collection of IAM users
+Can have custom policies
+
+## Roles
+like users (an identity with permissions)
+Does not have credentials like password or keys
+Assumable, temporarily by anyone who needs it, like an ec2 instance to access S3 service.
+
+
+
+
+## policies
+Declares who can do what to which resources and when
+Ex. Allow a user to start and stop ec2 instances.
+
+```json
+{
+  "Statement": [
+    {
+      "Effect": "effect",
+      "Action": "action",
+      "Resource": "arm",
+      "Condition": {
+        "condition": {
+          "key": "value"
+        }
+      }
+    }
+  ]
+}
+```
+
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ssmmessages:CreateControlChannel",
+        "ssmmessages:CreateDataChannel",
+        "ssmmessages:OpenControlChannel",
+        "ssmmessages:OpenDataChannel"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2messages:AcknowledgeMessage",
+        "ec2messages:DeleteMessage",
+        "ec2messages:FailMessage",
+        "ec2messages:GetEndpoint",
+        "ec2messages:GetMessages",
+        "ec2messages:SendReply"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "stringEquals": {
+          "aws:username": "johndoe"
+        }
+      }
+    }
+  ]
+}
+```

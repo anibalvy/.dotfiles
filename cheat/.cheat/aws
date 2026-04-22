@@ -65,6 +65,8 @@ aws --profile my_profile S3 ls # list buckets
 aws --profile my_profile S3 ls s3://<bucket> # list files in bucket
 aws --profile my_profile S3 cp s3://<bucket>/<file> <local_path_destination> # copy from S3 bucket
 aws --profile my_profile S3 cp <local_path_destination>/<file> s3://<bucket> # copy to S3 bucket
+aws --profile my_profile s3 sync . s3://MY-S3-BUCKET/ --quiet
+
 
 
 # STS - aas security token service

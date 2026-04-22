@@ -1,45 +1,40 @@
-# List all loaded/active units
-systemctl list-units
+systemctl list-units                         # List all loaded/active units
+systemctl list-units --all --state=inactive
+systemctl list-unit-files
+systemctl list-dependencies foo.service      # List the dependencies of a service. when no service name is specified, lists the dependencies of default.target
 
-# Check the status of a service
-systemctl status foo.service
+systemctl get-default               # get default target (aka runlevel)
+systemctl list-units --type=target  # List currently loaded targets
+systemctl set-default foo.target    # set default target (aka runlevel)
+systemctl isolate foo.target        # Change current target
+systemctl enable foo.target         # Change default target
 
-# Start a service
-systemctl start foo.service
+systemctl list-units --type=service
+systemctl status foo.service                     # Check the status of a service
+systemctl is-active application.service
+systemctl is-enabled application.service
+systemctl is-failed application.service
 
-# Restart a service
-systemctl restart foo.service
+systemctl edit nginx.service
+systemctl edit --full nginx.service
+systemctl cat foo.service            # Displaying a Unit File. See info of target, like if can be 'isolate'
 
-# Stop a service
-systemctl stop foo.service
+systemctl show sshd.service                   # Checking Unit Properties
+systemctl show sshd.service -p Conflicts
+systemctl show foo.service | grep LimitNOFILE # Grep configuration, like envs
 
-# Reload a service's configuration
-systemctl reload foo.service
+systemctl enable foo.service                     # Enable a service to startup on boot
+systemctl disable foo.service                    # Disable a service to startup on boot
+systemctl mask nginx.service                     # mark a unit as completely unstartable, automatically or manually, by linking it to /dev/null.
+systemctl unmask nginx.service
 
-# Enable a service to startup on boot
-systemctl enable foo.service
+systemctl start foo.service                      # Start a service
+systemctl restart foo.service                    # Restart a service
+systemctl stop foo.service                       # Stop a service
+systemctl reload foo.service                     # Reload a service's configuration
+systemctl reload-or-restart application.service
 
-# Disable a service to startup on boot
-systemctl disable foo.service
+systemctl reset-failed foo.service # reset failed count
 
-# List the dependencies of a service
-# when no service name is specified, lists the dependencies of default.target
-systemctl list-dependencies foo.service 
+systemctl daemon-reload  #  reload the systemd process
 
-# List currently loaded targets
-systemctl list-units --type=target
-
-# get default target (aka runlevel)
-systemctl get-default
-
-# set default target (aka runlevel)
-systemctl set-default foo.target
-
-# Change current target
-systemctl isolate foo.target
-
-# See info of target, like if can be 'isolate'
-systemctl cat foo.target
-
-# Change default target
-systemctl enable foo.target

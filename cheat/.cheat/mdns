@@ -1,0 +1,8 @@
+
+# in /etc/nsswitch.conf line:
+hosts:          files mdns4_minimal [NOTFOUND=return] dns
+hosts:          files mdns_minimal [NOTFOUND=return] dns   # ipv6
+# apt install avahi avahi-utils
+
+avahi-browse --all
+avahi-browse --all -r  # resolve it

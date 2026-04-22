@@ -604,3 +604,17 @@ func intDivision(numerator int, denominator int) (int, int, error) {
     return result, remainder, err
 }
 
+## catch panic and avoid force exit
+func something() {
+    defer func () {
+        r:= recover()
+        if r == "" {
+            return
+        }
+        fmt.Printf("Caught panic: %s", r)
+    }()
+
+    panic("I'm out")
+
+}
+

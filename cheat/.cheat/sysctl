@@ -1,0 +1,10 @@
+
+sysctl -a           # list kernel params
+sysctl fs.file-nr   # list a specific param
+
+# Raising the Global Limit
+
+# Edit /etc/sysctl.conf and add the following line:
+fs.file-max = 65536
+# Apply the changes with:
+sudo sysctl -p /etc/sysctl.conf

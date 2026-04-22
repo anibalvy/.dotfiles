@@ -1,5 +1,10 @@
-# add new user
+# add new user, low level - check /etc/defaut/useradd to see options
 useradd <new_user>
+useradd -m -d /home/joe -s /bin/bash joe
+
+# extend
+adduser <new_user>
+adduser --home /home/linda
 
 # change password
 passwd <new_user>
@@ -7,7 +12,13 @@ passwd <new_user>
 # add a secondary group
 usermod -G wheel <new_user>
 
-# check 
+# check
 who
 id <new_user>
 
+# creat group and system user
+useradd -r -M -s /bin/false ntp
+
+-r: Create system user (lower ID).
+-M: not create home directory /home/ntp.
+-s /bin/false: remove login for this user

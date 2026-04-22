@@ -10,6 +10,12 @@ screen -r session_name
 # List all screen sessions:
 screen -ls
 
-# connect to tty uart (usb dongle)
+# connect to tty uart (usb dongle) , console access, terminal access
 screen <dev/tty> <baud_rate>
-screen /dev/ttyUSB0 9600 
+screen /dev/ttyUSB0 9600
+
+# kill attached session
+Press Ctrl+A then press k
+
+# kill deattached session
+screen -XS <session-id> quit

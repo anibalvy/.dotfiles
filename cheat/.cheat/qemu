@@ -31,12 +31,12 @@ numactl --hardware
    2:  31  21  10  21
    3:  21  31  21  10
 
-# In this scenario, we would like to pin 8 CPU cores to this VM. 
-# As a prerequisite, we need to first know the exact CPU core IDs that we are going to assign to the “test” VM. Recall that numactl can help us to know the NUMA nodes and the cores IDs of each one. 
+# In this scenario, we would like to pin 8 CPU cores to this VM.
+# As a prerequisite, we need to first know the exact CPU core IDs that we are going to assign to the “test” VM. Recall that numactl can help us to know the NUMA nodes and the cores IDs of each one.
 # As an example, let’s pin the test VM to the following core IDs of our server machine: 0,4,8,12,16,20,24,28
 # These cores reside on NUMA0 which could be a perfect fit for allocate the test VM. All you need to do is to follow these instructions:
 
-# 1. Modify the VM configuration file located in /etc/libvirt/qemu/test.xml 
+# 1. Modify the VM configuration file located in /etc/libvirt/qemu/test.xml
 
 vi /etc/libvirt/qemu/test.xml
 
@@ -46,9 +46,13 @@ vi /etc/libvirt/qemu/test.xml
 
 # 3. Change it to look like the following line:
 
- <vcpu placement='static' cpuset='0,4,8,12,16,20,24,28'>8</vcpu> 
+ <vcpu placement='static' cpuset='0,4,8,12,16,20,24,28'>8</vcpu>
 
 # 4. Now just restart libvirtd
 
 systemctl restart libvirtd
 
+
+##
+# load image as disk
+quemu-system-x86_64 -hda boot.img

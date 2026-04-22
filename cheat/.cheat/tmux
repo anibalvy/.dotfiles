@@ -27,12 +27,16 @@ chmod 777 /tmp/your_shared_session
 <prefix> f     # find a window
 <prefix> w     # list all window
 <prefix> ,     # rename a window
-<prefix> n     # move to next window 
+<prefix> n     # move to next window
 <prefix> p     # move to previous window
 <prefix> [0-9] # Switch between windows
 
 # rearrange window
-
+<prefix> : move-window -t <destination>
+<prefix> : swap-window -s 3 -t 1
+<prefix> : swap-window -t 0
+<prefix> : swap-window -t -1
+<prefix> : swap-window -t +1
 
 ## Pane management
 <prefix> %         # Split pane horizontally
@@ -43,7 +47,8 @@ chmod 777 /tmp/your_shared_session
 <prefix> o         # go to next pane clockwise
 <prefix> Arrows    # move to ...
 <prefix> {h,j,k,l} # move to left,down,up,right
-<prefix> : set synchronize-panes [on|off] # Sync cursor in panes, <prefix> + a in my config
+<prefix> : set synchronize-panes [on|off] # Sync cursor in panes,
+<prefix> + a       # sync pane in my config
 
 <prefix> z         # toggle pane to full window
 <prefix> !         # convert pane to window

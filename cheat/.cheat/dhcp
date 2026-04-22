@@ -1,0 +1,12 @@
+
+# release ip
+sudo dhclient -r <dev>
+
+# obtain fresh IP address using DHCP
+sudo dhclient <dev>
+
+# The -v option shows information on screen about dhcp server and obtained lease.
+
+# see:
+# cheat nmcli
+# cheat ip

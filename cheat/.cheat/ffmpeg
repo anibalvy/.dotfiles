@@ -33,3 +33,17 @@ ffmpeg –i corrupted_input.ts –map –ignore_unknown/-copy_unknown –c copy 
 # If it’s a corrupt MP4 video:
 ffmpeg -i input.mp4 -c copy output.mp4
 
+# stream rtmp
+cvlc  -vvv FILE016.MP4 --sout '#transcode{vcodec=h264,scale=Auto,width=1280,height=720,acodec=mp3,ab=128,channels=2,samplerate=44100}:std{access=rtmp,mux=ffmpeg{mux=flv},dst=rtmp://a.rtmp.youtube.com/live2/stream-name}'
+
+# rtmp to nginx
+ffmpeg -re -stream_loop -1 -i <file_to_stream>.mp4 -c:v copy  -r 24 -g 24 \
+    -preset superfast -tune zerolatency -f flv rtmp://127.0.0.1:1935/live/test
+
+-re: will read the input (the mp4 in this case) at the same frame rate of the media. This will allow the clients to consume in sync the same stream is pushed to the server.
+-stream_loop: will continue looping the file once the stream reaches the end.
+-i: we select the input, in this case, our mp4
+-c:v copy: no changes in the source codec (H264)
+-f flv: output format as Adobe Flash (RTMP)
+rtmp://127.0.0.1:1935/live/test: our media server is listening on 127.0.0.1 IP, port 1935 and the feed name is called test.
+Please notice that the feed name is hard-coded in the nginx container we are running, refer to the author’s page for any change in the configuration.

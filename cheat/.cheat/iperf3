@@ -6,5 +6,7 @@ node1> iperf3 -s -w 130k  # listening adn TCP window size 130K
 # [in machine2]
 # run the client to the remote machine
 node2❯ iperf3 -c node1
+node2❯ iperf3 -c node1 -R    # reverse
 node2❯ iperf3 -c <ip_of_machine1>
+node2❯ iperf3 -c <ip_of_machine1> -n 1G   # transfer 1G[KMGT]
 

@@ -1,0 +1,33 @@
+# install
+sudo snap install multipass
+
+#launch an Ubuntu VM with the charm-dev blueprint:
+multipass launch --cpus 4 --memory 8G --disk 30G --name tutorial-vm charm-dev
+multipass launch --cpus 2 --memory 2G --disk 20G --name <machine_name> 20.04
+multipass launch --cpus 2 --memory 2G --disk 20G --name <machine_name> 24.04
+
+# using cloud-init customization
+multipass launch -n my-test-vm --cloud-init cloud-config.yaml
+
+#Open a shell into the VM:
+multipass shell tutorial-vm
+
+# shows us a list of all of the images (blueprints) we can launch through Multipass currently.
+multipass find
+
+# start a machine
+multipass launch jammy
+
+# check some basic info about our new instance
+multipass exec coherent-trumpetfish -- lsb_release -a
+
+# delete
+multipass delete jammy
+
+# mount folder on machine (create mount point before)
+multipass mount /home/home/ <instance>:/home/ubuntu/Home/.
+
+# connect the libvirt interface/plug
+sudo snap connect multipass:libvirt
+
+# to connect using ssh, private key is located at The Multipass private SSH key is located at /var/snap/multipass/common/data/multipassd/ssh-keys/id_rsa

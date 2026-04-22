@@ -1,9 +1,35 @@
+# shell options
+shopt            # list
+shopt dotglob    # see a variable by name 
+shopt -s dotglob # enable variable
+
+# if else elif fi
+read a
+read b
+read c
+
+if [ $a == $b -a $b == $c -a $a == $c ]; then   # -a -> AND
+    echo ESCALENO
+elif [ $a == $b -o $b == $c -o $a == $c ]; then  # -o -> OR
+    echo ISOSCELES
+else
+    echo EQUILATERO
+fi
+
+# check if a number
+if [[ $NUM =~ ^[0-9]+$ ]]; then
+   echo "${NUM} is a number"
+else
+   echo "${NUM} is not a number"
+fi
+
+
 # To implement a for loop:
-for file in *; do 
+for file in *; do
     echo $file found;
 done
 
-#  sequence 
+#  sequence
 for i in {0..20..5}  # 0, 5, 10, 15, 20
 do
   echo "Number: $i"
@@ -24,7 +50,7 @@ in
 esac
 
 
-# SELECT 
+# SELECT
 PS3="Enter a number: "
 
 select character in Sheldon Leonard Penny Howard Raj
@@ -71,11 +97,13 @@ while IFS= read -r line; do
   echo $line
 done < "$file"
 
-# Turn on debugging:
-set -x
-
-# Turn off debugging:
-set +x
+set -e          # Exit on any error
+set +e          # is used to make the script continue executing even if a command fails.
+set -u          # Exit if an unset (uninitialised) variable is used
+set +u          # allowing unset variables to be used without causing the script to exit.
+set -o pipefail # Exit if any command in a pipeline fails
+set -x          # Print each command as it is executed
+set +x          # Turn off debugging:
 
 # Retrieve N-th piped command exit status
 printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
@@ -99,8 +127,8 @@ echo "All jobs completed."
     0 - stdin, the standard input stream.
     1 - stdout, the standard output stream.
     2 - stderr, the standard error stream.
-command 2> error.txt 1> output.txt
-command 2>&1 > file
+command 2> file.error 1> file.output # error to file.error and output to file.output
+command 2>&1 > file                # error to input together to file
 
 # Changing the Delimiter: The default behavior of read is to split the line into words using one or more spaces, tabs, and newline as delimiters. To use another character as a delimiter, assign it to the IFS variable (Internal Field Separator).
 echo "Linux:is:awesome." | (IFS=":" read -r var1 var2 var3; echo -e "$var1 \n$var2 \n$var3")
@@ -112,7 +140,7 @@ exit N  #If N is not given, the exit status code is that of the last executed co
 echo $?
 
 # sub shells
-echo $BASH_SUBSHELL    ## not in subshell, we are in a "main" or a child subshell (like enter bash from bash) 
+echo $BASH_SUBSHELL    ## not in subshell, we are in a "main" or a child subshell (like enter bash from bash)
 0
 (echo $BASH_SUBSHELL)  ## in subshell, this is usefull to group commands
 1

@@ -22,6 +22,25 @@ apt install package(s)
 # To uninstall package(s)
 apt remove package(s)
 
+# To download package without installing
+apt download package
+
+# To find repo that a package belongs
+apt policy package
+
+# list all versions
+apt list --all-versions <package_name>
+
+# To install a new package(s):
+apt install <package_name>=<version_number>
+
+# hold (lock) package version
+apt-mark hold <package_name>
+apt-mark unhold <package_name>
+
+# list 
+apt-mark showhold
+
 # How to get source code of package using the apt-get/apt command
 # in /etc/apt/sources.list the deb-src type references an Ubuntu distribution’s source code as follows:
 ## Sources specification for the Ubuntu 20.04 LTS distro #

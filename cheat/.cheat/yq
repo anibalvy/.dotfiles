@@ -1,6 +1,7 @@
 # yq is a lightweight and portable command-line YAML processor
 
 cat file.yml | yq e -       # parse from output
+yq eval -P file.yml         # print file
 yq '.a.b[0].c' < file.yaml  # parse from stdin
 yq '.a.b[0].c' file.yaml    # read value
 yq -i '.a.b[0].c = "cool"' file.yaml # Update a yaml file, in place

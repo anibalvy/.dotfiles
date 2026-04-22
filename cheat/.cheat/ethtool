@@ -1,0 +1,46 @@
+# Display the current settings for an interface:
+ethtool <dev>
+
+# To show statistics for the selected interface:
+ethtool -S
+
+# Display module info
+ethtool -m <dev>
+
+# To show interface permanent address:
+ethotool -P
+
+# -s --change
+# To set interface speed:
+ethtool -s  [ speed %d ]
+
+# To set interface autonegotiation:
+ethtool -s  [ autoneg on|off ]
+
+# Display Auto-negotiation, RX and TX
+ethtool -a <dev>
+
+# To get interface errors:
+ethtool -S  | grep error
+
+# Show -i --driver
+ethtool -i <dev>
+
+
+# Display all supported features for an interface:
+ethtool --show-features <dev>
+
+# Display the network usage statistics for an interface:
+ethtool --statistics <dev>
+ethtool -p <dev>
+
+# Blink one or more LEDs on an interface for 10 seconds:
+ethtool --identify <dev> 10
+
+# Set the link speed, duplex mode, and parameter auto-negotiation for a given interface:
+ethtool -s <dev> speed 10|100|1000 duplex half|full autoneg on|off
+
+# Make Changes Permanent After Reboot
+# vim /etc/network/interfaces
+post-up ethtool -s eth2 speed 1000 duplex full autoneg off
+

@@ -1,0 +1,50 @@
+# LXD/LXC
+
+## config
+lxd init
+
+
+### storage
+lxc storage list
+lxc storage edit remote
+
+### network
+lxc set network.ovn.nothbound_connection tcp:172.17.32.8:6641,tcp:172.17.32.9:6641,tcp:172.17.32.5:6641
+lxc network list
+lxc network create default --type ovn
+lxc profile device add default eth0 nic network=default name=eth0
+
+
+### cluster
+lxc cluster list
+
+node-01> lxc cluster add <node-02>  ## generate token for node-02
+
+node-02> lxd init ## use token when ask to join cluster
+
+lxc cluster edit <node-02>
+
+## join a cluster, using a password
+node-03> lxc remote add cluster <node-01>
+## join a cluster, using cert
+node-03> cat snap/lxd/common/config/client.crt
+
+#### Copy cert to node-01 file client-node-03.crt, and add
+node-01> lxc config trust add client-node-03.crt
+node-03> lxc remote add cluster <node-01> # join
+node-03> lxc remote switch cluster # switch client from local to cluster
+
+
+### images
+lxc config set images.default_architecture=x86_64
+
+
+
+## Manage machines
+lxc launch images:alpine/edge container_name_1
+lxc launch images:alpine/edge/arm64
+lxc exec container_name_1 sh
+lxc list
+
+## Projects
+lxc project list

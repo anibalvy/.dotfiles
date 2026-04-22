@@ -1,0 +1,45 @@
+
+
+swapoff -a
+swapoff -v /swapfile
+
+swapon --show
+# load entries from /etc/fstab
+swapon -a
+
+# Disable swap in /etc/fstab
+
+# How to add Swap File
+fallocate -l 1G /swapfile
+
+## If faillocate is not installed or if you get an error message saying fallocate failed: Operation not supported then you can use the following command to create the swap file:
+# dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+
+# make the change permanent in /etc/fstab file by adding:
+/swapfile swap swap defaults 0 0
+
+# check amount
+cat /proc/meminfo | grep -i swap
+
+# Check swappiness
+# The swappiness value is a number between 0 and 200. Lower values indicate minor swapping, and higher values aggressive swapping. When physical memory runs low, the swappiness value directs the kernel's decision for swapping pages
+cat /proc/sys/vm/swappiness
+
+# view the contents of a swap file
+strings /swapfile > output.txt
+
+# change swappiness
+sysctl vm.swappiness=10
+
+# change swappiness permanent by adding in file /etc/sysctl.conf:
+vm.swappiness=10
+
+# Adjusting the Cache Pressure Setting
+## This setting configures how much the system will choose to cache inode and dentry information over other data.
+## configured at 100, our system removes inode information from the cache too quickly. We can set this to a more conservative setting like 50 by typing:
+cat /proc/sys/vm/vfs_cache_pressure
+sysctl vm.vfs_cache_pressure=50

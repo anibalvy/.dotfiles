@@ -1,33 +1,26 @@
-# Initate Vagrant
 mkdir vag-vm; cd vag-vm
-vagrant init
+vagrant init                            # Initate Vagrant
 
-# Add a box to vagrant repo
-vagrant box add hashicorp/precise32
+vagrant plugin install vagrant-libvirt  # install plugin
+vagrant plugin list                     # list plugin
+vagrant plugin list --local
 
-# Add a box  Vagrant file
-config.vm.box = "hashicorp/precise32"
+vagrant box add hashicorp/precise32     # Add a box to vagrant repo
 
-# Add vm to public network as host
-config.vm.network "public_network"
+config.vm.box = "hashicorp/precise32"   # Add a box  Vagrant file
 
-# Add provision script to vagrant file
-config.vm.provision :shell, path: "provision.sh"
+config.vm.network "public_network"      # Add vm to public network as host
 
-# Start vm 
-vagrant up
+config.vm.provision :shell, path: "provision.sh" # Add provision script to vagrant file
 
-# Connect to started instance
-vagrant ssh
+vagrant up         # Start vm 
 
-# Shutdown vm
-vagrant halt
+vagrant ssh        # Connect to started instance
 
-# Hibernate vm
-vagrant suspend
+vagrant halt       # Shutdown vm
 
-# Set vm to initial state by cleaning all data
-vagrant destroy
+vagrant suspend    # Hibernate vm
 
-# Restart vm with new provision script
-vagran reload --provision
+vagrant destroy    # Set vm to initial state by cleaning all data
+
+vagran reload --provision  # Restart vm with new provision script

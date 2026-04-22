@@ -1,0 +1,6 @@
+
+
+# Monitoring
+dstat
+dstat -c --top-cpu -d --top-bio --top-latency
+dstat -n -N eth0

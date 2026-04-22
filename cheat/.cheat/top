@@ -1,26 +1,19 @@
-# Update every <interval> samples:
-top -i <interval>
+top -i <interval> # Update every <interval> samples
 
-# Set the delay between updates to <delay> seconds:
-top -s <delay>
+top -s <delay> # Set the delay between updates to <delay> seconds
 
-# Set event counting to accumulative mode:
-top -a
+top -a # Set event counting to accumulative mode
 
-# Set event counting to delta mode:
-top -d
+top -d # Set event counting to delta mode
 
-# Set event counting to absolute mode:
-top -e
+top -e # Set event counting to absolute mode
 
-# Do not calculate statistics on shared libraries, also known as frameworks:
-top -F
+top -F # Do not calculate statistics on shared libraries, also known as frameworks
 
-# Calculate statistics on shared libraries, also known as frameworks (default):
-top -f
+top -f # Calculate statistics on shared libraries, also known as frameworks (default)
 
-# Print command line usage information and exit:
-top -h
+top -h # Print command line usage information and exit
 
-# Order the display by sorting on <key> in descending order
-top -o <key>
+top -o <key> # Order the display by sorting on <key> in descending order
+
+# the top command uses both of the values found in the /proc/uptime file to calculate the CPU’s idle time percentage.

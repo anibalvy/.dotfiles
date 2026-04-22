@@ -1,11 +1,30 @@
 # Just download a file
 # The url can be a http(s), ftp, .torrent file or even a magnet link
 aria2c <url>
+aria2c http://example.org/mylinux.iso
+
+# Download from 2 sources:
+aria2c http://a/f.iso ftp://b/f.iso
+
+# Download using 2 connections per host:
+aria2c -x2 http://a/f.iso
+
+# BitTorrent:
+aria2c http://example.org/mylinux.torrent
+
+# BitTorrent Magnet URI:
+aria2c 'magnet:?xt=urn:btih:248D0A1CXXXXXX299DE78D5C1ED359BB46717D8C'
+
+# Metalink:
+aria2c http://example.org/mylinux.metalink
+
+# Download URIs found in text file:
+aria2c -i uris.txt
 
 # To prevent downloading the .torrent file
 aria2c --follow-torrent=mem <url>
 
-# Download 1 file at a time (-j) 
+# Download 1 file at a time (-j)
 # continuing (-c) any partially downloaded ones
 # to the directory specified (-d)
 # reading urls from the file (-i)

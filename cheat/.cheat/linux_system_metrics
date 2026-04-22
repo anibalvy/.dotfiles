@@ -1,0 +1,37 @@
+# Linux System Metrics
+
+## CPU
+
+- `system.cpu.idle`: % Idle CPU
+- `system.cpu.system`: % System CPU
+- `system.cpu.user`: % User CPU
+
+## Disk
+
+- `system.disk.free`: Disk free, in bytes.
+- `system.disk.user`: Total disk space, in bytes.
+- `system.disk.total`: Total disk space, in bytes.
+- `system.disk.in_use`: % Disk in use.
+
+## I/O
+
+- `system.io.r_s`: The number of read requests to the device per second.
+- `system.io.rkb_s`: The number of kBs of reads per second.
+- `system.io.w_s`: The number of write requests to the device per second.
+- `system.io.wkb_s`: The number of kBs of writes per second.
+- `system.io.await`: is the percentage of time the CPU is idle AND there is at least one I/O in progress. The average time (in milliseconds) for I/O requests issued to the device to be served. This includes the time spent by the requests in queue and the time spent servicing them.
+                     value must could be 50/70/90 careful/warning/critical, calculated by (1/<num_cores>)*100
+                     sar -P ALL 1 10 (Values must add 100)
+- `system.io.util`: Percentage of CPU time during which I/O requests were issued to the device (bandwidth utilization for the device). Device saturation occurs when this value is close to 100%.
+
+[Reference](http://linux.die.net/man/1/iostat)
+
+## Memory
+
+- `system.mem.free`: Free system memory (in bytes)
+- `system.mem.used`: Used system memory (in bytes)
+- `system.mem.total`: Total system memory (in bytes)
+
+## Network
+- `system.net.bytes_rcvd`: The number of bytes received on a device per second.
+- `system.net.bytes_sent`: The number of bytes sent from a device per second.

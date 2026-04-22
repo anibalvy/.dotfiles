@@ -80,7 +80,9 @@ snap install --classic foo
 snap interfaces
 
 # To connect the `foo:camera` plug to the ubuntu core slot:
+# this solves when apparmor denies /dev/video
 snap connect foo:camera :camera
+snap connect vlc:camera
 
 # To disconnect the `foo:camera` plug from the ubuntu core slot:
 snap disconnect foo:camera

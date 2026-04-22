@@ -1,0 +1,9 @@
+
+
+# check description of program errors
+errno 98
+
+
+❯ /bin/errno 98
+EADDRINUSE 98 Address already in use
+

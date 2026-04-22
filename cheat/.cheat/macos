@@ -1,0 +1,56 @@
+
+
+#stopping the daemon
+sudo launchctl unload -w /Library/LaunchDaemons/com.cloudflare.1dot1dot1dot1.macos.warp.daemon.plist
+
+# Disable the Cloudflare WARP daemon
+sudo launchctl bootout system /Library/LaunchDaemons/com.cloudflare.1dot1dot1dot1.macos.warp.daemon.plist
+
+# Re-Enable the Cloudflare WARP daemon
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.cloudflare.1dot1dot1dot1.macos.warp.daemon.plist
+
+
+# Create audio source-sink, see:
+cheat audio-mac2linux
+
+
+## Networking
+ifconfig
+
+# To know who is your DNS server:
+ipconfig getoption en0 domain_name_server
+
+# renew dhcp lease ip
+sudo ifconfig set en0 DHCP
+
+# get subnet
+ipconfig getoption en0 subnet_mask
+
+# set static ip
+ipconfig set en0 INFORM 10.0.3.99
+
+# print routing table
+netstat -nr
+
+# Network info
+airport -s  # deprecated
+networksetup -getairportnetwork en0
+
+# Wireless Diagnostics command line utility.
+sudo wdutil info
+
+# Run all diagnostic tests:
+sudo wdutil diagnose
+
+# Gather information about the current wireless environment:
+wdutil info
+
+# Enable DHCP and OpenDirectory logging:
+sudo wdutil log +dhcp +od
+
+# Disable EAPOL logging:
+sudo wdutil log -eapol
+
+# DISK
+diskutil list
+diskutil verifyVolume /

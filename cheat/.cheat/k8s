@@ -10,8 +10,8 @@ Control Plane Components:
 
 Node Components:
 
-   - kubelet 
-    	is the primary “node agent” that runs on each node. 
+   - kubelet
+    	is the primary “node agent” that runs on each node.
 	  It has the following missions:
 	    - Monitor the Pods assigned to the Node
 	    - Mount volumes that needed to mount the Pod
@@ -31,10 +31,10 @@ The k8s cluster has three types of IP addresses, which are as follows:
 
 Services: Kube-proxy
   - Cluster IP: will create an IP that will loadBalance all container by spec.selectors.role
-  - Node Port: 
+  - Node Port:
    		will create a port in every node, even if pod is not running inside; and will route traffic to that node
 		after creation you can get the 'EXTERNAL-IP' from "from kubectl get nodes -o wide", and use that ip with the port configured.
-               
+
   - Load Balancer: will use cloud loadbalancer
 
 Volumenes:
@@ -64,9 +64,9 @@ RABC:
        - Create user:
                 kubectl config set-credentials <user> --client-certificate=<user>.crt --client-key=<user>.key
        - Create context for user:
-                kubectl config set-context <user>-context --cluster=<clustername> 
+                kubectl config set-context <user>-context --cluster=<clustername>
 
-Addons: 
+Addons:
 
     DNS
     Web UI (Dashboard)
@@ -77,7 +77,7 @@ Cluster Architecture:
 	- Nodes
 	  	they are "Master nodes" and "Worker nodes"
 	  	The components on a node include the kubelet, a container runtime, and the kube-proxy.
-	- 
+	-
 	- Communication between Nodes and the Control Plane
 	- Controllers
 	- Cloud Controller Manager
@@ -90,8 +90,14 @@ CNI (Container Network Interface) API:
 	- calico
 	- cillium
 
-pods:    deployments
-demoset: pods that are deployed to all nodes 
+Pods:   minimal structure on k8s, it can run an container, but also an single or multiple containers like a side car that needs to work together in a sible port.
+       - types of containers: side car, init container (container before the main runs, used by ex. to ensure resource before start main container)
+Deployments: abstraction to run pods, it helps so pods can be rescheduled.
+Daemonset: single pods that are deployed to all nodes
+StatefulSet: a deployment that will create a volumens by a template and each pod has stable network identity (each pod gets unique dns)
+Jobs:  like pods but will not be rescheduled after exit.
+CronJobs: like jobs but can be scheduled like cronjobs.
+Operator: predefined template for deployments.
 
 labels and annotations:
 The biggest difference between annotations and labels in Kubernetes is this: while labels attach identifying metadata to a K8s object, annotations attach additional information that is not identifying.
@@ -122,9 +128,9 @@ spec:
         fieldRef: # downward API, values given by K8s
           fieldPath: status.hostIP
     resources:
-      requests: # minimum 
+      requests: # minimum
         memory: "64Mi"
-        cpu: "200m" # a core is 1000m (milicore)  
+        cpu: "200m" # a core is 1000m (milicore)
       limits: # max
         memory: "128Mi"
         cpu: "500m"
@@ -299,3 +305,48 @@ data:
     allow.textmode=true
 
 ## cost calculator - https://learnk8s.io/kubernetes-instance-calculator
+
+
+## istio operator - gateway - daemonset
+piVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: default
+spec:
+  components:
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        overlays:
+        - apiVersion: apps/v1
+          kind: Deployment
+          name: istio-ingressgateway
+          patches:
+          - path: kind
+            value: DaemonSet
+          - path: spec.strategy
+          - path: spec.updateStrategy
+            value:
+              rollingUpdate:
+                maxUnavailable: 33%
+              type: RollingUpdate
+          - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:8080].hostPort
+            value: 80
+          - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:8443].hostPort
+            value: 443
+          - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:15021].hostPort
+            value: 15021
+
+
+### Another thing to consider is that we probably need to disable the horizontal pod autoscaler (hpa) as it doesn't work with the daemonset
+
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: default
+spec:
+  values:
+    gateways:
+      istio-ingressgateway:
+        autoscaleEnabled: false

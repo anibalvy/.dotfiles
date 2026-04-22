@@ -1,4 +1,5 @@
 
+echo -n "loading python env"
 ## Pythonrc
 export PYTHONSTARTUP="$HOME/.pythonrc"
 
@@ -7,9 +8,10 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 
+echo "      ✔️"
 
 # BUN version manager
-eval "$(bvm env)"
+#eval "$(bvm env)"
 
 # I commented pyenv virtualenv because is 100% better to manage them with ****pipenv****.
 #eval "$(pyenv virtualenv-init -)"
@@ -130,13 +132,13 @@ export NVM_AUTO_USE=true # load version .nvmrc file
 
 
 
+echo -n "loading oh-my-zsh"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(adb aws bun git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap zsh-nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
+plugins=(aws bun git github colored-man-pages colorize docker docker-compose dotenv fzf golang helm kate kubectl lxd minikube nmap zsh-nvm node vundle jsontools lol sudo react-native python pyenv pipenv ufw zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
 fpath+=~/.zfunc
-autoload -U compinit && compinit
 source $ZSH/oh-my-zsh.sh
 
 # change color of autosuggest
@@ -151,6 +153,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
 #Manual Updates
 #If you'd like to upgrade at any point in time (maybe someone just released a new plugin and you don't want to wait a week?) you just need to run:
 #upgrade_oh_my_zsh
+echo "       ✔️"
 
 # User configuration
 
@@ -188,7 +191,7 @@ export LANGUAGE=en_US.UTF-8
 [ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
 
 
-# use vim mode
+# use vim mode (in bash 'set -o vi')
 bindkey -v
 # use emacs mode
 #bindkey -e
@@ -207,10 +210,6 @@ bindkey -M vicmd 'y' vi-yank-xclip
 
 #export PAGER="/usr/bin/most -s"
 #source .mancolors
-
-## System Info
-neofetch
-
 
 ## GOLANG VERSION MANAGER Selection
 # bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
@@ -250,7 +249,7 @@ export CHEAT_CONFIG_PATH="~/.config/cheat/conf.yml"
 export CHEAT_COLORS=true
 export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
 export CHEAT_USE_FZF=true
-export PERSONAL_PATH=~/.cheat/
+# export PERSONAL_PATH=~/.cheat/
 source ~/.config/cheat/cheat.zsh # autocomplete
 
 #CLING
@@ -340,29 +339,44 @@ alias combine-pdf='pdf-combine'
 
 # kubectl
 #if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
-# get zsh complete kubectl
-source <(kubectl completion zsh)
+source <(kubectl completion zsh) # get zsh complete kubectl
 alias kubectl=kubecolor
-# make completion work with kubecolor
-compdef kubecolor=kubectl
+compdef kubecolor=kubectl # make completion work with kubecolor
 alias k='kubectl'
 
+echo -n "source completions"
 source ~/.minikube-completion-zsh
 source ~/.minishift-completion-zsh
 source ~/.gh-github-completion-zsh
 source ~/.yq-shell-completion-zsh
 
 eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
+echo "      ✔️"
 
-#PATH="/home/kanibal/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PATH="/home/kanibal/perl5/bin:$PATH";
-PERL5LIB="/home/kanibal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/kanibal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/kanibal/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/kanibal/perl5"; export PERL_MM_OPT;
+#PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+export PATH=$HOME/perl5/bin:$PATH;
+export PERL5LIB=$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}; export PERL5LIB;
+export PERL_LOCAL_LIB_ROOT=$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}; export PERL_LOCAL_LIB_ROOT;
+export PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 PATH="$PATH:$HOME/.rvm/bin"
+
+
+# hack to make nvm allow .node-version
+autoload -U add-zsh-hook
+load-node-version() {
+  # Look for either file
+  local version_file=".nvmrc"
+  [[ -f ".node-version" ]] && version_file=".node-version"
+
+  if [[ -f "$version_file" ]]; then
+    nvm use "$(cat "$version_file")" > /dev/null
+  fi
+}
+add-zsh-hook chpwd load-node-version
+load-node-version
 
 
 ###-begin-pm2-completion-###
@@ -371,6 +385,7 @@ PATH="$PATH:$HOME/.rvm/bin"
 # Installation: pm2 completion >> ~/.bashrc  (or ~/.zshrc)
 #
 
+echo -n "begin-pm2-completion"
 COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
 COMP_WORDBREAKS=${COMP_WORDBREAKS/@/}
 export COMP_WORDBREAKS
@@ -406,10 +421,32 @@ elif type compctl &>/dev/null; then
 fi
 ###-end-pm2-completion-###
 
-autoload -U +X bashcompinit && bashcompinit
+#autoload -U +X bashcompinit && bashcompinit
+autoload -U compinit && compinit
 complete -o nospace -C /usr/bin/terraform terraform
 alias  tf='terraform'
 export PATH;
+echo "    ✔️"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+echo -n "loading p10k"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+echo "            ✔️"
+
+
+
+# kitty terminal
+KITTY_ENABLE_WAYLAND=1
+
+# load zvm (zig)
+echo -n "source .zshenv for zig"
+source $HOME/.zshenv
+echo "  ✔️  \n "
+
+## System Info
+#neofetch
+fastfetch
+#curl ascii.live/rick
+
+# opencode
+export PATH=$HOME/.opencode/bin:$PATH

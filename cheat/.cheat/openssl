@@ -19,7 +19,7 @@ openssl req -new -newkey rsa:2048 -nodes -keyout your_domain.key -out your_domai
 openssl req -text -noout -in server.csr
 
 # To show certificate information for generated certificate
-openssl x509 -text -noout -in server.crt 
+openssl x509 -text -noout -in server.crt
 
 # To get the sha256 fingerprint of a certificate
 openssl x509 -in server.crt -noout -sha256 -fingerprint
@@ -37,10 +37,18 @@ openssl s_client -connect google.com:443 -showcerts
 # Using an insecure cipher (RC4)
 openssl s_client -connect blog.mozilla.org:443 -showcerts -cipher RC4-SHA
 
+# shadow password
 # Generate passwd
 openssl passwd -1
  Password:
  Verifying - Password:
  $1$eJJb58ou$oiUuCWYX4EAH9AMwUZuL/1
 
+# Generate passwd
+openssl passwd -1 -salt r00t password123
+
+# Generate self-signed certificate
+keytool -genkey -keystore subdomain.domain.com.jks -keyalg RSA -keysize 2048 \
+    -validity 100000 -alias <name_alias> -dname "cn=subdomain.domain.com, ou=Unknown, o=Unknown, c=Unknown" \
+    -storepass abcdef12 -keypass abcdef12
 

@@ -1,0 +1,10 @@
+# Secure chroot
+
+schroot -l                        # list
+schroot -c jammy-amd64 -u root    # Entering schroot - You can use schroot -c <release>-<architecture> [-u <USER>] to enter newly created chroot
+schroot -b -c [name]              # To start a schroot session
+schroot -b -c [name] -n mysession # specify a session name with -n [session-name]
+schroot -l --all-sessions         # To list all schroot sessions
+schroot -r -c [session-name]      # To enter a schroot session
+schroot -e -c [session-name]      # To end a schroot session (i.e. unmount all file systems and execute the exit hooks)
+schroot -e --all-sessions         # if not stopped your schroot; expire all active schroots

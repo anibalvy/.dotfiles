@@ -1,3 +1,6 @@
+# print all
+awk '{print $0}'
+
 # sum integers from a file or stdin, one integer per line:
 printf '1\n2\n3\n' | awk '{ sum += $1} END {print sum}'
 
@@ -6,6 +9,9 @@ printf '1:2:3' | awk -F ":" '{print $1+$2+$3}'
 
 # print a multiplication table
 seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR, i*NR, i==NR?"\n":"\t")}'
+
+# print last value
+cat file | awk '{print $NF}'
 
 # Specify output separator character
 printf '1 2 3' | awk 'BEGIN {OFS=":"}; {print $1,$2,$3}'
@@ -28,20 +34,20 @@ May/4/2020
 date | awk 'OFS="-" {print$2,$3,$6}'
 May-4-2020
 
-# A BEGIN rule is executed once before any text processing starts. In fact, it’s executed before awk even reads any text. An END rule is executed after all processing has completed. 
+# A BEGIN rule is executed once before any text processing starts. In fact, it’s executed before awk even reads any text. An END rule is executed after all processing has completed.
 awk 'BEGIN {print "printed first"} {print $0}' dennis_ritchie.txt
 
-# Input Field Separators:  the -F (separator string) 
+# Input Field Separators:  the -F (separator string)
 awk -F: '{print $1,$6}' /etc/passwd
 
-# A pattern with our print action to filter out all other entries 
+# A pattern with our print action to filter out all other entries
 awk -F: '$3 >= 1000 {print $1,$6}' /etc/passwd
 # it can use logical operators (&&, ||)
 awk -F: '/^g/ && $3 >= 1000 {print $1,$6}' /etc/passwd
 
 # Built-in Functions
 awk 'BEGIN { print sqrt(625)}'
-awk '{sum+=$3} END {print "Average:", sum/NR}'}   <file>.txt  # give average of values on col #3 
+awk '{sum+=$3} END {print "Average:", sum/NR}'}   <file>.txt  # give average of values on col #3
 
 # external script examble
 
@@ -67,3 +73,7 @@ END {
 }
 
 script.awk /etc/passwd
+
+# to sed a file inside awk, to use vars from another source.
+echo "one,two,three,four" | awk -F ',' '{  system(" sed -e '"'"'s/field1/"$1" - "$3" /g'"'"' -e '"'"'s/field2/"$2"/g'"'"' -e '"'"'s/field3/"$4"/g'"'"' file_to_modify.txt ")} ';
+

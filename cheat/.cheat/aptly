@@ -1,0 +1,78 @@
+
+
+aptly repo create --distribution=noble -component=main my_repo   # create a repo named my_repo
+aptly repo add my_repo my_package.deb                            # add my_package.deb to my_repo repo.
+aptly repo show -with-packages my_repo                           # see repo packages
+aptly repo list                                                  # see repo list
+aptly snapshot create my_repo-snapshot-001 from repo my_repo     # create a snapshot (than can be converted to repo later)
+gpg --full-generate-key                                          # create gpg key
+gpg --output .aptly/public/my_key.gpg --export <key_id>          # export public key to repo path and to be use to validate packages.
+gpg --output my_private.key --export-secret-keys <key_id>        # export private key to be use in others servers use: gpg --import <key_id>
+gpg --delete-secret-key <key_id>                                 # delete private key if needed
+gpg --delete-key <key_id>                                        # delete public key if needed
+sudo curl -fsSL http://<repo_ip>:8080/my_pub_key.gpg -o /etc/apt/trusted.gpg.d/aptly-my_pub_key.gpg  # import key as trusted for use apt
+
+
+aptly publish snapshot -distribution="noble" -architecture="amd64" \
+-component="main" -gpgkey="<id_of_gpg_key>" my_repo-snapshot-001     # publish repo snapshot
+aptly serve                                                      # serve repos.
+aptly serve -listen=":8080"                                      # serve repos in port
+
+
+# change snapshot
+aptly snapshot drop <snapshot>
+aptly publish list
+aptly publish drop <distribution_name>
+aptly publish snapshot -distribution="noble" -architecture="amd64" \
+-component="main" -gpgkey="<id_of_gpg_key>" my_repo-snapshot-001     # publish repo snapshot
+
+
+# publish to AWS S3 bucket 
+# IAM policy
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1405592139000",
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:PutObjectAcl"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<bucket_name>/*", "arn:aws:s3:::<bucket_name>"
+      ]
+    }
+  ]
+}
+
+# configure S3 repo in .aptly.conf adding:
+s3_publish_endpoints:
+     <bucket_name>:
+         region: us-east-1
+         bucket: <bucket_name>
+
+
+- create bucket
+- enable website hosting option at Amazon console
+
+aptly publish snapshot my_repo-snapshot-001 s3:<bucket_name>
+
+
+# adding packages
+aptly repo add <my_repo> new_package.deb
+aptly snapshot create my_repo-snapshot-002 from repo my_repo     # create a new snapshot (than can be converted to repo later)
+aptly publish switch <repo_distribution> s3:<bucket_name>: <my_repo-snapshot-002>
+
+# remove packages
+
+Loading packages...
+[-] python3-rsa_4.0-3_all removed
+aptly repo show -with-packages <my_repo>    # find packages
+aptly repo remove <my_repo> <package_query> # selecte package(s) to remove
+aptly snapshot create my_repo-snapshot-003 from repo my_repo     # create a new snapshot (than can be converted to repo later)
+aptly db cleanup
+aptly publish switch <repo_distribution> s3:<bucket_name>: <my_repo-snapshot-003> # will not delete file in remote repo, but will not be an available package.

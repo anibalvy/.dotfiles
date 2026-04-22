@@ -1,3 +1,6 @@
+#
+# see also: cheat resolvectl
+#
 # a Domain Name
 dig <domain.com>
 
@@ -23,7 +26,7 @@ dig <domain.com> txt   # txt DNS Records
 dig <domain.com> ns    # ns DNS Records
 dig <domain.com> cname # cname DNS Records
 
-# Reverse 
+# Reverse
 dig -answer -x <ip-address>
 
 #Step 1: Find caching service name
@@ -32,3 +35,22 @@ sudo lsof -i :53 -S
 #Step 2: Restart the service
 sudo systemd-resolve --flush-caches
 sudo systemd-resolve --statistics
+
+sudo resolvectl flush-caches
+resolvectl query <domain>
+
+sudo systemctl restart systemd-resolved.service
+# /etc/nsswitch.conf, which controls which NSS modules are invoked by glibc when performing name resolution.
+# chrome://net-internals/#dns
+# Firefox: Type “about:networking#dns”
+
+#mac
+dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+
+# host command
+> host google.com
+google.com has address 142.250.189.142
+google.com has IPv6 address 2607:f8b0:4008:809::200e
+google.com mail is handled by 10 smtp.google.com.
+

@@ -1,0 +1,8 @@
+
+-------- Debian and Ubuntu --------
+# see: cheat ufw
+
+-------- RHEL and CentOS --------
+firewall-cmd --permanent --add-port=3000/tcp
+firewall-cmd --permanent --add-port=3001/tcp
+firewall-cmd --reload

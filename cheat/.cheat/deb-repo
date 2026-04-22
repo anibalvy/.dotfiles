@@ -1,0 +1,48 @@
+
+
+
+multiple options: manual, reprepro..
+
+# manual
+cd <repo-folder>
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+
+
+
+# To make an offline local Repository
+# 1. make a dir accessible (atleast by root)
+
+    sudo mkdir /var/my-local-repo
+
+# copy all the deb files to this directory.
+# scan the directory
+
+sudo dpkg-scanpackages /var/my-local-repo /dev/null > /var/my-local-repo/Packages
+
+# 2. add the local repository to sources
+
+echo "deb file:/var/my-local-repo ./" > /tmp/my-local.list
+
+sudo mv /tmp/my-local.list /etc/apt/sources.list.d/my-local.list
+
+sudo apt-get update
+
+
+## using apt-rdepends
+## to use apt-rdepends like in the selected answer, but when I tried to install the package from my local repository, it complained about missing dependencies.
+
+apt-cache depends <packagename> -i --recurse | tr -d "|,<,>, " | sed -e 's/^Depends://g' | sed -e 's/^PreDepends://g' | sort | uniq > list.txt
+
+# Download the packages
+for i in $( cat list.txt ); do apt-get download $i; done;
+
+# Scan for the packages and turn it into Packages.gz
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+
+# REPREPO
+# see: cheat reprepo
+
+# APTLY
+# see: cheat aptly

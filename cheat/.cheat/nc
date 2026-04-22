@@ -34,8 +34,13 @@ nc -zv -s source_IP target_IP Port
 nc -zv <mysql_server> 3306
 Connection to <mysql_server> (<server_ip>) 3306 port [tcp/mysql] succeeded!
 #  example check postgres connectivity
-nc -zv <postgres_server> 5342 
+nc -zv <postgres_server> 5342
 Connection to <postgres_server> (<server_ip>) 5432 port [tcp/postgresql] succeeded!
+
+# check connection
+nc -w1 -vz <ip_address> <port>
+# -w1: timeout, if port is blocked, will abort after given time (1 sec)
+# -vz: tell nc to test connection without send any data
 
 # listen
 nc -nlvp <port>

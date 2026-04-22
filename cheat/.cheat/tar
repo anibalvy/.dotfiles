@@ -1,3 +1,12 @@
+# -z: gzip format .gz
+# -j: bzip2 format .bz2
+# -J: x2 format .x2
+# -c: create
+# -x: extract
+# -f: file
+# -t: list the content of a tar file
+# -v: verbose
+
 # To extract an uncompressed archive:
 tar -xvf /path/to/foo.tar
 
@@ -6,6 +15,9 @@ tar -cvf /path/to/foo.tar /path/to/foo/
 
 # To extract a .gz archive:
 tar -xzvf /path/to/foo.tgz
+
+# To extract a .gz archive:
+tar -xf /path/to/foo.tar.gz
 
 # To create a .gz archive:
 tar -czvf /path/to/foo.tgz /path/to/foo/
@@ -32,3 +44,5 @@ tar czvf /path/to/foo.tgz --exclude=\*.{jpg,gif,png,wmv,flv,tar.gz,zip} /path/to
 tar -z ... -> tar -Ipigz ...
 tar -j ... -> tar -Ipbzip2 ...
 tar -J ... -> tar -Ipixz ...
+
+

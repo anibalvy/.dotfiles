@@ -9,3 +9,9 @@ du -h -s koloupaint
 # To show total size
 du -shc
 du -shc file-2023* | grep total
+
+# exclude
+du -sh --exclude='dir1'  /path/to/directory
+du -sh --exclude='dir1' --exclude='dir2' --exclude='dir3' /path/to/directory
+du -sh --exclude={'apt-xapian-index','archives','man'} /var/cache
+du -sh -X exclude_list.txt /var/cache  # using a list from a file

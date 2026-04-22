@@ -1,0 +1,27 @@
+
+
+
+Dynamic Routing Protocol
+
+IGP - Interior Gateway Protocol
+- OSPF
+- ISIS
+- EIGRP
+- RIP
+- IGRP
+
+EGP - Exterior Gateway Protocol
+- BGP
+    - path vector protocol
+    - neighbours manually defined.
+    - TCP connection with the manually defined neighbour with port 179
+
+## VLAN port access vs trunk
+- An access port can have only one VLAN configured on the interface; it can carry traffic for only one VLAN.
+- A trunk port can have two or more VLANs configured on the interface; it can carry traffic for several VLANs simultaneously.
+- With VLAN trunking, it’s possible to extend a VLAN across the network.
+- IEEE 802.1Q is an open standard protocol, and typically the best (and only) option if you’re using equipment from multiple vendors.
+- The Cisco VLAN Trunking Protocol (VTP) is a proprietary protocol, and can potentially be useful—for instance, when you configure a new VLAN on a VTP server, it automatically distributes it across switches, reducing configuration time.
+
+# link Aggregation
+-  port trunking, also known as link aggregation or Ethernet bonding.

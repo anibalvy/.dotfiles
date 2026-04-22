@@ -1,0 +1,3 @@
+
+# scan all port on target machine and pass to nmap to scan every port with -A flag
+rustscan -a 10.0.0.1 -- -A 

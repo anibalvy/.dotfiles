@@ -1,5 +1,13 @@
 # Search for packages
-pip search SomePackage
+pip search SomePackage # *** broken use alternative
+# using pip_search
+pip install pip_search # install pip_search
+pip_search SomePackage # solution
+# using pypisearch
+pip install pypisearch # alternative
+pypisearch python-qt4
+# using index
+pip index versions <package_name>
 
 # Install some packages
 pip install SomePackage

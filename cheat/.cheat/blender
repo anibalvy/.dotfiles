@@ -1,5 +1,8 @@
 
-
+N  # Properties
+X or Delete # delete
+F3  # search
+G   # Move
 
 
 # change in riqht panel - Scene Properties - Units - Unit Scale -> 0.001 --> en milimetros
@@ -7,15 +10,19 @@
 
 
 1-9 # change view
+select-object + .     # focus view on object 
 
-mouse-left + g                          # grab
+mouse-left + g                          # grab, move
 mouse-left + r                          # rotate
 mouse-left + s                          # scale
-mouse-left + [r,s] + [x,y,z]            # action on axis
-mouse-left + [r,s] + shift + [xy,zy,xz] # action on 2 axis
+mouse-left + [g,r,s] + [x,y,z]            # action on axis
+mouse-left + [g,r,s] + shift + [xy,zy,xz] # action on 2 axis (ex. mouse-left + g + Shift + z => no movement in z axis.)
 mouse-left + r + Ctrl                   # rotate on precise
 mouse-left + r + Ctrl + Shift           # rotate on precise more granuraly
 mouse-Right                             # release selection 
+mouse-middle(scroll)                    # orbit
+crtl + mouse-middle(scroll)             # delicate orbit
+shift + mouse-middle                    # pan view
 
 To change an object, we need to enter Edit mode
 mouse-left + Tab                        # enter Edit mode
@@ -30,10 +37,16 @@ z + 4
 a   # select all
 a+a # deselect all
 
+shift + a # add new object
+
 shift + d # duplicate selection, in edit mode, are the same object
 shift + d # duplicate selection, in object mode, are the different object
 ctrl + j  # merge selected object
 
 to make face, select vertices or edges and press 'f'
+
+# joint or fill
+# in edit select vertice, edges
+# press f
 
 # modifiers

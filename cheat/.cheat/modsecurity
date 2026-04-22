@@ -1,0 +1,89 @@
+rules
+
+SecRule ARGS:testparam "@contains test" "id:1234,deny,log,status:403"  # if arguments testparam if contains test is gonna deny, log and give status 403
+
+SecRule REQUEST_URI "@beginWith /shop" "phase:2,id:2,t:lowercase,deny_msg: 'block shop'" # denies all request URI that start with "shop"
+
+# chain rules
+SecRule REQUEST_URI "@beginWith /shop" "phase:2,id:2,t:lowercase,deny_msg: 'block shop',chain"
+   SecRule $REQUEST_COOKIES_NAMES:user_id "@eq 0"  # chain rule; "&" count number of times that the variable is called, "@eq 0" means user_id is not set and will now allow to pass to the site
+
+SecRule REQUEST_URI "@beginWith /shop" "phase:2,id:2,t:lowercase,deny_msg: 'block shop',chain"
+   SecRule $REQUEST_COOKIES_NAMES:user_id "@eq 0" "chain"
+      SecRule $REQUEST_HEADERS:user_agent "@!string inception"   # block if user_agent is not "inception"
+
+SecRule REQUEST_URI "@beginWith /shop" "phase:2,id:2,t:lowercase,deny_msg: 'block shop',chain"
+   SecRule $REQUEST_COOKIES_NAMES:user_id "@eq 0" "chain"
+      SecRule $REQUEST_HEADERS:User_Agent "@!string inception" "chain"
+          SecRule &REQUEST_HEADERS:X-Forwarded-FOR "@eq 0"    # if header X-Forwarded-For is not set, we will block
+
+SecRule $REQUEST_HEADERS:User_Agent "@pmFromFile blacklist.txt"
+                                        "phase:1,id:3,t:lowercase,deny,msg: 'Blacklisted UA'"
+
+
+## nginx.conf
+server {
+    listen 80;
+    # modsecurity on; #All traffic over to have ModSec on
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        modsecurity off; # turn ModSec off by default
+    }
+
+    # Only traffic through /waf URI to go through ModSec
+    location /waf {
+        proxy_pass http://127.0.0.1:8080
+        modsecurity on;
+        modsecurity_rules_file /etc/nginx/modsec/main.conf;
+        error_log /var/log/nginx/waf.log
+    }
+}
+
+## /modsec/main.conf
+Include "/etc/nginx/modsec/modsecurity.conf"  # modsec config
+Include "/etc/nginx/modsec/crs_setup.conf"    # crs setup
+Include "/etc/nginx/modsec/rules/*.conf"      # any other custom rule
+
+
+## /modsec/modsecurity.conf
+
+# SecRuleEngine DetectionOnly  # only log and no block
+SecRuleEngine On
+
+SecRequestBodyAccess On
+
+# More request body Features and limits
+
+# Phases https://malware.expert/modsecurity/processing-phases-modsecurity/
+The five phases and their syntax names are given below:
+REQUEST in
+    (wait)
+    post-read-request  - Phase 1 REQUEST_HEADERS
+    URI translation
+    Header parsing
+    access control
+    authentication
+    authorization
+    MIME type checking
+    Expands            - Phase 2 REQUEST_BODY
+RESPONSE               - Phase 3 RESPONSE_HEADERS
+    document           - Phase 4 RESPONSE_BODY
+LOGGING                - Phase 5 LOGGING
+
+# Rules
+ Generally rules have 4 parts: a configuration directive, variable(s), operator(s), and action(s)
+
+## LOGs
+A Audit log header (mandatory)
+B Request headers
+C Request body
+D Reserved
+E Response Body
+F Response headers
+G Reserved
+H Audit log trailer, which contains additional data
+I Compact request body alternative (to part C), which exclude files
+J Information on uploaded files (>=v2.6.0)
+K contains a list of all rules that matched for the transaction
+Z final boundary (mandatory)

@@ -1,11 +1,12 @@
-# To copy files from remote to local, maintaining file properties and sym-links (-a), zipping for faster transfer (-z), verbose (-v).  
+# To copy files from remote to local, maintaining file properties like permissions and sym-links (-a), zipping for faster transfer (-z), verbose (-v).
 rsync -avz host:file1 :file1 /dest/
 rsync -avz /source host:/dest
 
-# Copy files using checksum (-c) rather than time to detect if the file has changed. (Useful for validating backups). 
+# Copy files using checksum (-c) rather than time to detect if the file has changed. (Useful for validating backups).
 rsync -avc /source/ /dest/
 
-# Copy contents of /src/foo to destination:
+# Copy contents of /src/foo to destination and keep folder structure:
+rsync -avhR /src/foo/*.ext /dest/
 
 # This command will create /dest/foo if it does not already exist
 rsync -auv /src/foo /dest
@@ -16,17 +17,29 @@ rsync -auv /src/foo/ /dest/foo
 # Make a full backup of system root directory:
 rsync -avAXHS --progress --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} / /path/to/backup/folder
 
+# use key
+rsync -av -e "ssh -i ~/.ssh/mi_clave" user@remote:/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+
 # Copy file from local to remote over ssh with non standard port 1234 to destination folder in remoteuser's home directory
 rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/
 
 -a option (short for --archive) to preserve the most important attributes of the source files
--v option to make the command more verbose 
+-v option to make the command more verbose
 --delete option to make so that files deleted from source are also deleted on destination
 
+
+
+rsync -avz --update --chown=nginx:nginx --include='*/' --include='<string_to_filter>' --exclude='*' --rsync-path="sudo rsync" /<local_path>/   <remote>:/cdn-data/EntryPoint/
+--update option change if newer
+--chown option change user:group of remote files
+--include option string like filename to filter
+--exclude option to only transfer "include"
+--rsync-path option in this case to allow change owner
+
 # Incremental Backup (https://linuxconfig.org/how-to-create-incremental-backups-using-rsync-on-linux)
-#The content of the source directory will be compared to that of the directory passed to the --link-dest option. 
-#New and modified files existing in the source directory will be copied to the destination directory as always 
-#(and files deleted in the source will also not appear in the backup if the --delete option is used); 
+#The content of the source directory will be compared to that of the directory passed to the --link-dest option.
+#New and modified files existing in the source directory will be copied to the destination directory as always
+#(and files deleted in the source will also not appear in the backup if the --delete option is used);
 #unchanged files will also appear in the backup directory, but they will just be hard links pointing to inodes created in the previously made backups.
 #script:
 
@@ -55,4 +68,6 @@ rsync -av --delete \
 rm -rf "${LATEST_LINK}"
 ln -s "${BACKUP_PATH}" "${LATEST_LINK}"
 
+
+# for faster transfer, see mscp: multi-threaded scp
 

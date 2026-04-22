@@ -1,0 +1,56 @@
+## CentOS
+
+* Temporal
+
+```sh
+loadkeys us
+```
+
+## Ubuntu
+
+* Use to switch temporarily
+
+```sh
+sudo loadkeys dvorak
+sudo loadkeys us
+```
+(or whatever your qwerty keymap is) to get back.
+
+
+* Permamente
+```sh
+setxkbmap -layout us
+setxkbmap -layout us -variant intl
+```
+
+# debian
+```
+sudo vim /etc/default/keyboard
+
+		    # Check /usr/share/doc/keyboard-configuration/README.Debian for
+		    # documentation on what to do after having modified this file.
+
+		    # The following variables describe your keyboard and can have the same
+		    # values as the XkbModel, XkbLayout, XkbVariant and XkbOptions options
+		    # in /etc/X11/xorg.conf.
+
+		    #Original
+		    XKBMODEL="pc105"
+		    XKBLAYOUT="latam"
+		    XKBVARIANT=""
+		    XKBOPTIONS=""
+
+		    #Editado
+		    XKBMODEL="pc105"
+		    XKBLAYOUT="us"
+		    XKBVARIANT="intl"
+		    XKBOPTIONS=""
+
+
+		    # If you don't want to use the XKB layout on the console, you can
+		    # specify an alternative keymap.  Make sure it will be accessible
+		    # before /usr is mounted.
+		    # KMAP=/etc/console-setup/defkeymap.kmap.gz
+```
+# load session
+setupcon -k -f

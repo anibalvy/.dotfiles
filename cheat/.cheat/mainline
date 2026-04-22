@@ -1,0 +1,8 @@
+mainline install 6.11.2
+mainline list
+mainline list-installed
+mainline uninstall linux-image-6.8.0-51-generic
+mainline uninstall linux-image-6.8.0-52-generic
+mainline uninstall 6.8.0-52
+mainline uninstall 6.8.0-52.53
+

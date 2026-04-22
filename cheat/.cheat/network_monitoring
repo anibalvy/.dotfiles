@@ -17,10 +17,26 @@ collectl -sn -oT -i0.5
 sudo trafshow -i eth0 tcp
 netload
 btop # process and network monitor
+fping # see cheat fping
 
 
 # Network Bandwidth Measurement Tool
 iperf/iperf3
 netperf
+
+# iftop
+# traffics show 2, 10 and 40 seconds average
+# -o 2s: sort by 2s column
+iftop -i <interface>
+# commands
+# p: Pause display
+# T: Display Accummulative Total
+# D: Dest port Display
+# S: Source Port Display
+# t: Toggle display of the traffic summary.
+# n: Toggle the display of hostnames and IP addresses.
+# b: Display Traffic Bars per connection
+# h: Display options
+# q: Quit iftop.
 
 

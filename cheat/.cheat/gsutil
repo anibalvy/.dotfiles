@@ -1,0 +1,3 @@
+gsutil ls gs://my_bucket/dev/logs
+gsutil -d ls gs://my_bucket/dev/logs
+

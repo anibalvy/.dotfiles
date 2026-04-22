@@ -1,0 +1,13 @@
+
+
+# ssh-agent allow to manage ssh keys; to cache key, enter passphrase one per session and store it for next use.
+
+
+eval $(ssh-agent)    # start agent in background
+
+ssh-add ~/.ssh/<key> # add private key to the agent, for example to connect to server_1
+
+# later we can connect directly after it is added to .ssh/config file
+ssh server_1
+
+

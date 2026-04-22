@@ -10,11 +10,20 @@ sites-enabled    # is where the are given permission
 
 # commands
 nginx -t   # check configuration syntax
-nginx -T   # dump configuration
+nginx -T   # check and dump configuration
 nginx -v   # check version
 nginx -V   # check version with more detail info
 nginx -s reload  # check config and reload configuration
-systemctl restart nginx  # restart nginx to apply services.
+systemctl restart nginx  # restart nginx to apply services. will drop conections
+
+# vars
+The $1 and $2 variables capture the path elements that aren't changing
+They are capture groups. Anything in () are capture groups and are numbered starting from 1 left to right.
+ex:
+ location ~ "^/path1/path2/(.{1})/(.{24})/(.{24})(.*)(\.html)$" {
+    set $my_var $2;
+   # in this case the group in (.{24})
+
 
 # nginx.conf
 
@@ -48,19 +57,46 @@ events {
     # multi_accept on; # if multi_accept is disabled, a worker process will accept one new connection at a time. Otherwise, a worker process will accept all new connections at a time
 }
 
+# directive that set a variable $ENVIRONMENT to "BETA" or "GAMA" (in this case) when a UNIQUE_IDENTIFIER is given like ${uri}
+# it is userful to split traffic
+split_clients UNIQUE_IDENTIFIER   $ENVIRONMENT {
+                 50%                  BETA;
+                 50%                 GAMMA;
+} ## se below for use as lb
+
+# Stream
 stream {
     # tcp/udp
 }
 
 http {
-    server {
-        # virtual server
-        location <params> {
-            # routing
-        }
-    }
-    upstream {
+    upstream backend{
         # lb
+        #options:  # probably need to remove weight var
+        # least_conn;
+        # ip_hash;
+        # hash $request_uri consistent;
+        # least_time header;            # Time to receive the first byte from the server
+        # least_time last_byte;         # Time to receive the full response from the server
+        # least_time last_byte infligh; # Time to receive the full response from the server, taking into account incomplete requests
+        # random two least_time=last_byte; # select ramdomly 2 servers
+        # random least_conn; # The least number of active connections
+        # random least_time=header; #(NGINX Plus) – The least average time to receive the response header from the server ($upstream_header_time)
+        # random least_time=last_byte; # (NGINX Plus) – The least average time to receive the full response from the server ($upstream_response_time)
+
+        server1 weight=50% slow_start=30s; # (NGINX Plus)slow‑start feature prevents a recently recovered server from being overwhelmed by connections, which may time out and cause the server to be marked as failed again.
+        server2 weight=50% max_fail=0; # max_fails=0 significa que Nginx nunca marcará el servidor como fallido, sin importar cuántos errores ocurran en las solicitudes.
+        server3 down;
+        server4 backup;
+        sticky cookie srv_id expires=1h domain=.example.com path=/; # Sticky cookie – NGINX Plus adds a session cookie to the first response from the upstream group and identifies the server that sent the response.
+
+    }
+    upstream backend2 {
+        server backend1.example.com route=a; # nginx plus: route=string sets the server route name.
+        server backend2.example.com route=b; # if the “route” parameter of the server directive is specified, the cookie value will be the value of the “route” parameter
+
+        sticky cookie srv_id expires=1h domain=.example.com path=/; # Sticky cookie – NGINX Plus adds a session cookie to the first response from the upstream group and identifies the server that sent the response.
+        }
     }
 }
 
@@ -106,6 +142,9 @@ http {
 
 # location
 http {
+
+    # root /path;  # will change default (compiled) path to root
+
     server {
         listen 80 default server;
         server_name mysite.com;
@@ -115,17 +154,17 @@ http {
         }
 
         location /path2 {
-            root /var/www/mysite.com/html; # this assume that the page is in /var/www/mysite.com/html/path2/
+            root /var/www/mysite.com/html;        # with "root" the path is relative to root
         }
 
         # alias path3 = path2
         location /path3 {
-            alias /var/www/mysite.com/html/path2; # this will NOT assume that the page is in /var/www/mysite.com/html/path2/ we must tell it
+            alias /var/www/mysite.com/html/path2; # with "alias" the path is absolute
         }
 
         # if I don't have an index.html we can tell it to try_files and try specific file, in this case mypage.html
         location /path4 {
-            root /var/www/mysite.com/html/; # this will NOT assume that the page is in /var/www/mysite.com/html/path2/ we must tell it
+            root /var/www/mysite.com/html/; # this will NOT assume that the page is in /var/www/mysite.com/html/path4/ we must tell it
             # try_files $uri  /$uri /index.html; #
             try_files /path4/mypage.html /index.html; # if mypage.html doesn't exist. will use index.html
         }
@@ -170,6 +209,36 @@ http {
         }
 }
 
+# LB
+http {
+    # ...
+    # application version 1a
+    upstream version_1a {
+        server localhost:8090;
+    }
+
+    # application version 1b
+    upstream version_1b {
+        server localhost:8091;
+    }
+
+    split_clients "${arg_token}" $appversion {
+        50%     version_1a;
+        50% version_1b;
+    }
+
+    server {
+        # ...
+        listen 7080;
+        location / {
+            proxy_set_header Host $host;
+            proxy_pass http://$appversion;
+        }
+    }
+}
+
+
+
 # myapp.conf
 
 ## http
@@ -190,8 +259,6 @@ server {
         text/css         css;  # something that is text/css is going to have the css extension.
         text/html        html;  # something that is text/css is going to have the css extension.
     }
-
-
 
     # location to match image pattern.
     location ~ \.(gif|jpg|png)$ {
@@ -471,3 +538,11 @@ server {
 
 
 }
+
+
+/etc/nginx
+
+sites-available  # where sites are configures. files names inside have no meaning
+sites-enabled    # is where the are given permission
+   # to enable it is possible to add a simbolic link.
+   # ln -s /etc/nginx/site-available/nmysite.com.conf /etc/nginx/site-enabled/

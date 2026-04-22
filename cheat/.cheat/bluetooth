@@ -1,0 +1,47 @@
+
+
+# fix when not allow to enable
+sudo rmmod btusb
+sudo rmmod btintel
+sudo modprobe btintel
+sudo modprobe btusb
+
+# also check
+rfkill list
+
+# install bluetooth tools to manage Bluetooth devices and connections
+apt install bluez
+
+# chef Bluetooth service is up and running
+systemctl status bluetooth
+
+# scan for available Bluetooth devices within range:
+bluetoothctl scan on
+
+# Find information about all available Bluetooth adapters:
+btmgmt info
+
+# List all connected (paired) BT devices:
+hcitool con
+ bluetoothctl devices
+# Find out the Bluetooth version (HCI/LMP) of the remote device by its MAC address
+hcitool info AA:2B:21:31:23:BE
+# Chech adapter version
+hciconfig -a
+ #HCI Version: 5.2 (0xb)  Revision: 0x2184
+ #LMP Version: 5.2 (0xb)  Subversion: 0x2184
+HCI number 	Bluetooth version
+0 (0x0) 	1.0b
+1 (0x1) 	1.1
+2 (0x2) 	1.2
+3 (0x3) 	2.0
+4 (0x4) 	2.1
+5 (0x5) 	3.0
+6 (0x6) 	4.0
+7 (0x7) 	4.1
+8 (0x8) 	4.2
+9 (0x9) 	5.0
+10 (0xa) 	5.1
+11 (0xb) 	5.2
+12 (0xc) 	5.3
+13 (0xd) 	5.4

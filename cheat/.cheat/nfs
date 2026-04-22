@@ -1,0 +1,8 @@
+
+
+# mount remote folder
+mount  -t nfs <remote_server>:/<remote_path> /<local_mount_path>
+
+more export
+exportfs -va
+

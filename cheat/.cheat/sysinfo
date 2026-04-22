@@ -1,0 +1,17 @@
+
+### get info of HW
+
+see: cheat dmidecode
+
+## Linux server power
+apt install ipmitool freeipmi-tools
+ipmitool sdr list full
+ipmi-oem dell get-power-consumption-statistics average
+
+## from sensors
+sensors
+
+## BSD server power
+ipmitool dcmi power reading
+
+

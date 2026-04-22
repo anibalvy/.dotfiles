@@ -1,0 +1,4 @@
+
+
+# make x64
+nasm -felf64 program.asm

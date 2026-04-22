@@ -1,0 +1,130 @@
+# install using The Determinate Installer
+curl --proto '=https' --tlsv1.2 -sSf -L https://Install.determinate.systems/nix | sh -s -- install
+# chek if nix is installed
+nix flake --help
+
+# search
+nix search nixpkgs helm kubernetes -e plugin # -e exclude
+
+
+# nix run
+# run package command without installing
+nix run nixpkgs#cowsay hello workd!
+
+# run package command without installing with flags
+nix run nixpkgs#vim -- --help
+
+
+# nix shell
+# gives a shell with CLI installed
+nix shell nixpkgs#<app_name>
+
+# nix profile
+# install package in local environment
+nix profile install pkgs#<package_name>
+nix profile list
+nix profile remove <package_number_from_list>
+
+# nix develop
+# use to set up development environment for different projects.
+# use flake.nix
+nix develop -c $SHELL    # nix use bash by default
+
+
+# nix flake
+nix flake update       # update flake.lock
+
+# garbage collection
+nix store gc
+
+# Home-manager
+# manage application configuration declaratively
+# first create files
+nix run home-manager/master -- init --switch
+# to create both flake.nix and home.nix under ~/.config/home-manager
+# to apply config install home-manager CLI
+home-manager switch # to apply changes
+# folder structure
+|_ flake.nix            # to manage the input of channels (where the packages are installed from) and output of our configs.
+|_ home_manager
+   |_apps
+   |     |_ micro.nix   # store application config
+   |_ home.nix          # store common home-manager configs
+
+
+## installation
+# Non Standalone:  install nix and integrate on top of nixOS
+# Standalone: install just the home-manager like any other program; nix-cli must be installed
+# step1: create folder and cd into it
+mkdir nix-home-manager && cd nix-home-manager
+# step2: create initial configuration files.
+nix run home-manager -- init --switch .
+# will create home.nix and flake.nix
+# cat flake.nix
+{
+   inputs = {   # inputs are the external repos that the projects depends
+     nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
+     home-manager = {
+        url = "github:nix-community/home-manager";
+        inputs.nixpkgs.follows = "nixpkgs";
+     };
+   };
+   outputs = { self, nixpkgs, home-manager }: {
+      let
+        system = "x86_64-linux";
+        pkgs = nixpkgs.legacyPackages.${system};
+      in {
+      homeConfigurations."nix-home-manager" = home-manager.lib.homeManagerConfiguration {
+         inherit pkgs;
+         modules = [ ./home.nix ];
+      };
+   };
+};
+# Step3: activate the configuration
+home-manager switch --flake .#nix-home-manager
+   # switch will read and apply the configuration from --flake
+
+home-manager switch --flake .#nix-home-manager -b bkp  # create a backup of the current configuration files before applying the new configuration
+
+home-manager generation list       # list all generations that allows to rollback configuration
+home-manager generation switch 1   # rollback to generation 1
+nix-collect-garbage --delete-old  # delete old generations
+nix-collect-garbage -d            # delete old generations
+
+
+# from private repo
+nix run nixpkgs#gh -- auth login
+nix run nixpkgs#gh -- auth login --with-token
+nix run nixpkgs#gh -- auth login --with-token --scopes repo
+nix run nixpkgs#gh -- auth login --with-token --scopes repo --scopes read:org
+nix run nixpkgs#gh -- repo clone <repo_name>
+nix run nixpkgs#gh -- repo clone <repo_name> --branch <branch_name>
+nix run home-manager#home-manager -- switch --flake .#<flake_name>
+
+
+
+
+# nix-env
+# install package
+nix-env -qaP [package-name] # To locate a package in Nix
+
+# To install different Python versions without conflicts, create separate profiles
+nix-env --install --profile /nix/var/nix/profiles/python3.11 -iA nixpkgs.python311
+nix-env --install --profile /nix/var/nix/profiles/python3.9 -iA nixpkgs.python39
+
+
+# Verify installation
+nix-env -p /nix/var/nix/profiles/python3.11 -q
+nix-env -p /nix/var/nix/profiles/python3.9 -q
+
+
+# Activate a specific version
+nix-env --switch-profile /nix/var/nix/profiles/python3.11
+python --version  # Confirms the active version
+
+
+nix-env -u [package-name]  # update a package to the latest available version:
+
+nix-env -e [package-name]  # To uninstall a package installed via nix-env
+
+

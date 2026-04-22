@@ -17,7 +17,23 @@ ss -t dst 192.168.2.1:80
 # show all ssh related connection
 ss -t state established '( dport = :ssh or sport = :ssh )'
 
-# 
+#
 ss -nlt
 
  ss -ta
+
+# check what listen in port
+ss -pnltu | grep 5432
+
+
+The values set by autotuning can be seen via the Linux “ss” command from the iproute package (e.g. “ss -tmi”)
+
+ss -4ntpl # check ipv4 listen connections
+
+
+# current state of connections with ss -tan:
+
+ss -tan | head -5
+
+# Qty of conn en time-wait state
+ss -tan state time-wait | wc -l

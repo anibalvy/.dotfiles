@@ -1,0 +1,17 @@
+
+MFA: multi-factor authentication
+
+
+- Phone MFA (call or SMS)
+- TOTP: Time-based One Time Password - life google authenticator
+- Push-Based MFA: app gets authentication request that user accept or denied
+  - cons: fatigue attack (malicious multiple requests)
+- Webauthn: hardware keys and TLS + Publick Keys
+  - Idp  -(challenge for User)-> Browser -(please verify challenge)-> Authenticator (app, hw) -(sign Challenge using PK)-> Browser -(send Signature using PK)->  IdP
+  - Authenticator talks directly to Browser
+
+Term:
+IdP: Identity Provider.
+PK: Public Key
+TLS: Transport Layer Security
+SK: Secret Key

@@ -1,0 +1,147 @@
+# from vultr docs
+Our example assumes the following:
+
+AS: 64512
+Instance IP: 203.0.113.123
+IPv4 Block: 198.51.100.0/24
+BGP Password: hunter2
+
+To confirm connectivity, set up a BGP session without announcing any IPs. Create a /etc/bird.conf file with the following text. Note that on some systems, such as Ubuntu 16.04, this will be /etc/bird/bird.conf.
+
+## bird.conf on Vultr VPS
+For Vultr VPS, use the following settings:
+
+router id 203.0.113.123;
+
+protocol bgp vultr
+{
+    # substitute with your AS or Vultr's private AS
+    local as 64512;
+    source address 203.0.113.123;
+    import none;
+    export all;
+    graceful restart on;
+    multihop 2;
+    neighbor 169.254.169.254 as 64515;
+    password "hunter2";
+}
+
+## Restart bird
+Restart bird and check the status of the session:
+
+[root@vultr ~]> birdc show proto all vultr
+BIRD 1.4.5 ready.
+name     proto    table    state  since       info
+vultr    BGP      master   up     14:11:36    Established
+  Preference:     100
+  Input filter:   REJECT
+  Output filter:  (unnamed)
+  Routes:         0 imported, 581634 filtered, 1 exported, 0 preferred
+  Route change stats:     received   rejected   filtered    ignored   accepted
+    Import updates:         581674          0     581674          0          0
+    Import withdraws:            2          0        ---     581675          0
+    Export updates:              1          0          0        ---          1
+    Export withdraws:            0        ---        ---        ---          0
+  BGP state:          Established
+    Neighbor address: 169.254.169.254
+    Neighbor AS:      64515
+    Neighbor ID:      169.254.169.254
+    Neighbor caps:    refresh restart-able AS4
+    Session:          external multihop AS4
+    Source address:   203.0.113.123
+    Hold timer:       208/240
+    Keepalive timer:  57/80
+
+
+A BGP state of Established means that everything is working properly. If you don't see a state of Established, here are some things to try:
+
+- Is the BGP port (TCP 179) allowed through your firewall?
+- Is your BGP password correct? (This can be verified in your control panel, each subscription has a BGP tab listing the details)
+- Are you using the main IP of your instance? (You cannot use anything other than the main IP of an instance with BGP)
+
+
+## Announcing Routes
+Once you have a working BGP session, the next step is to start announcing some routes. In order for your address space to be visible on the internet, you would need to announce at least a /24 (or /48 for IPv6).
+
+The easiest way of getting started is to add a static route to your BIRD configuration, such as:
+
+protocol static
+{
+    route  198.51.100.0/24 via 203.0.113.123;
+}
+
+protocol device
+{
+    scan time 5;
+}
+
+    > Note: for BIRD 1.5 and above, you may need to change the route lines' syntax.
+
+From:
+
+  route  198.51.100.0/24 via 203.0.113.123;
+To:
+
+  route  198.51.100.0/24 via "203.0.113.123";
+
+The 'protocol device' block lets BIRD gather information about the network adapters attached to your instance. Without it, your static routes will not appear.
+
+Reload BIRD, then verify your route is working properly:
+
+[root@vultr ~]> birdc show route
+BIRD 1.4.5 ready.
+198.51.100.0/24    via 203.0.113.123 on eth0 [static1 14:22:12] * (200)
+
+At this point, traffic for your subnet should now be flowing towards your instance. You won't be able to ping any IPs until they're configured within your operating system. One way to verify this would be to use tcpdump:
+tcpdump -i eth0 -n net 198.51.100.0/24
+
+
+## Configuring IPs
+One common configuration we see is using individual IP addresses on different instances. This is possible, though each instance would need to be running its own BGP server.
+
+To do this, we're going to announce /32 routes from individual instances, in addition to the covering /24. We could do this with static routes, but we recommend using dummy interfaces instead. We'll use 198.51.100.100 as the IP we want to route.
+
+Set this up on an interface:
+
+> ip link add dev dummy1 type dummy
+> ip link set dummy1 up
+> ip addr add dev dummy1 198.51.100.100/32
+Confirm this was configured properly:
+
+> ip addr show dev dummy1
+5: dummy1: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN
+    link/ether ba:23:57:2c:ad:bc brd ff:ff:ff:ff:ff:ff
+    inet 198.51.100.100/32 scope global dummy1
+Note: You should consult your operating system's documentation to determine how to configure this interface to come upon boot.
+
+Now we'll configure BIRD to scan for any dummy interfaces and announce any IPs it finds on them. Add the following to your BIRD configuration, and reload BIRD:
+
+protocol direct
+{
+    interface "dummy*";
+    ipv4 {
+        import all;
+    };
+}
+
+Verify that BIRD is announcing the route:
+
+[root@vultr ~]> birdc show route
+BIRD 1.4.5 ready.
+198.51.100.0/24    via 203.0.113.123 on eth0 [static1 14:22:12] * (200)
+198.51.100.100/32  dev dummy1 [direct1 14:36:56] * (240)
+
+You can repeat this process on other instances with other IPs. What happens is our routers will use the most specific route they have for any given IP address. When there's a /24 and /32, the /32 is the most specific route, so any traffic for that IP will follow that route.
+
+You can have multiple instances announcing the same /32. This provides high availability. If any instance fails, its routes will disappear and traffic will fail over to the other instance. A common use for this is to be able to use IPs from a larger subnet on multiple instances. In order for this to work, you must be advertising a /24 IPv4 or /48 IPv6 as well. All uses of a smaller announcement must be within the same location.
+
+Our locations are not linked, so you would need to ensure you're announcing a /24 (or IPv6 /48) out of each location where you want to use the IPs. You cannot use one /24 to assign IPs for multiple locations unless you're trying to set up an anycast network.
+
+
+
+
+
+
+
+
+

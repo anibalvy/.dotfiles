@@ -70,3 +70,8 @@ tcpdump -X
 
 # it useful to use Wireshark, tshark and also ethercap
 
+# display http requests
+tcpdump -s0 -Aql and port 80 -i any | grep -A5 -P 'HTTP'
+
+# get arp req
+tcpdump -ni eth0 arp host 192.168.1.2

@@ -1,4 +1,4 @@
-# Kubernetes, kubectl 
+# Kubernetes, kubectl
 #Create a Deployment, expose Service, delete them
 #**** from here after, minikube command is optional according kubectl current-context *****
 
@@ -32,19 +32,22 @@ kubectl rollout undo deployment/my_nginx --to-revision=<revision_number>
 #Get the URL of the exposed Service to view the Service details:
 minikube service hello-minikube --url
 this result can be accesed outside k8s cluster.
- 
+
 #get pods
 kubectl get pods
 kubectl get pods -w # watch
 kubectl get pods --sort-by=metadata.name
 kubectl get pods --sort-by=metadata.creationTimestamp
 
-# enter pod 
+# enter pod
 kubectl exec -it <pod name> -- <command>
 kubectl exec -it nginx -- sh
 
-# execute command in pod 
+# execute command in pod
 kubectl exec <pod_name> -- cat /etc/password
+
+# query dns
+kubectl exec -i -t dnsutils -- nslookup nginx-2.nginx.default
 
 #Get components of a namespace
 kubectl get all -n <namespace>
@@ -102,6 +105,11 @@ kubectl cluster-info dump
 #check config (cluster, context...)
 kubectl config view --minify
 kubectl config current-context
+kubectl config get-contexts
+kubectl config use-context <context-name>
+kubectl config set-context <context-name> --cluster=<cluster-name> --user=<user-name> --namespace=<namespace>
+kubectl config delete-context <context-name>
+kubectl config view
 
 #If we need to set minikube context, we can do as the following:
 kubectl config use-context minikube

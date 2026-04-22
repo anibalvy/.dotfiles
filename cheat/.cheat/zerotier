@@ -1,0 +1,29 @@
+
+
+On webpage create Network that gives a network_id this is our control plane
+
+curl -s https://install.zerotier.com | sudo bash
+# repo created
+cat /etc/apt/source.list.d/zerotier.list
+# service
+systemctl status zerotier-one
+# key-pair generated
+/var/lib/zerotier-one/identity.public
+/var/lib/zerotier-one/identity.secret
+
+zerotier-cli info  # get address
+zerotier-cli peers  # server will communicate first with root servers to discovery
+                    # role: PLANET -> main root servers
+                    # role: LEAF   -> that is directly connected
+host root.zerotier.com # get info of root servers
+
+zerotier-cli join <network_id>  # join network
+
+
+zerotier-cli listnetworks # will have ACCESS_DENIED
+                          # in controlled must be approve.
+
+if 2 nodes connect, zerotier talks directly to each other; zerotier dynamically builds a peer-to-peer network
+The tecnique is called the UDP Hall punching, that is used to connect 2 devices on a network when they are both behind NAT
+Root server will coordinate the communication of both by sending them their public address, the firewall will interpret the other party's initialization packet as a reply in a two-way UDP connection, one established, the node talks to each other directly.
+If the UDP Hall punching connection cannot be established, the root server will rely packages.

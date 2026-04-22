@@ -1,0 +1,7 @@
+
+
+# Configuring reprepro
+
+mkdir -p /srv/repos/apt/debian/conf
+
+

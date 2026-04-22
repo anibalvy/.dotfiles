@@ -1,3 +1,5 @@
+# also see:deb,  deb-package
+
 # Install the package or upgrade it
 dpkg -i test.deb
 
@@ -12,3 +14,20 @@ dpkg -s test.deb | grep Status
 
 # check package information
 dpkg --info <package>.deb
+
+dpkg-deb --info <package>.deb      # get package information
+dpkg-deb --contents <package>.deb  # get package contents
+
+dpkg -L <package>                   # list files installed by package
+dpkg -S <file>                      # find out what package a file belongs to
+dpkg -l                             # list all installed packages
+dpkg -l | grep <package>            # find out if package is installed
+dpkg -r <package>                   # remove package, keeping configuration files
+dpkg -P <package>                   # remove package and configuration files
+
+dpkg-deb -I nginx-custom.deb        # Ver metadata
+dpkg-deb -c nginx-custom.deb        # Ver archivos que instala
+dpkg-deb -e nginx-custom.deb tmp/   # Extraer control
+cat tmp/control                     # Ver el archivo control
+
+ar -x package.deb                   # decompress file

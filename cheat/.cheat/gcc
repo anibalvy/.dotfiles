@@ -8,6 +8,9 @@ gcc -o file file.c
 gcc -c -o file.o file.c
 nm file.o
 
+# make compiler optimization
+gcc -O3 file.c
+
 # load shared library
 gcc -o libmy_lib.so -fpic -shared file.c
 gcc -c file.c -o main.o

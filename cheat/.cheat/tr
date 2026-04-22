@@ -26,3 +26,7 @@ tr 'A-Za-z' 'N-ZA-Mn-za-m' <<< "The Quick Brown Fox Jumps Over The Lazy Dog"
 
 #ROT17
 echo "The Quick Brown Fox Jumps Over The Lazy Dog" | tr '\!-~' 'P-~\!-O'
+
+# lowercase / uppercase
+echo "LOWER" | tr '[:upper:]' '[:lower:]'
+#(change of uppercase letter to lowercase )

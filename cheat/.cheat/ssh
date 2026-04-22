@@ -1,3 +1,7 @@
+#
+# See: cheat ssh-keygen
+# See: cheat ssh-copy-id
+#
 # To ssh via pem file (which normally needs 0600 permissions):
 ssh -i /path/to/file.pem user@example.com
 
@@ -83,4 +87,12 @@ Host remote_server
 # then connect using Host
 ssh remote_server
 
+#  start the SSH agent with the following command:
+eval "$(ssh-agent -s)"
 
+# to connect old machine
+ssh <address> -oHostKeyAlgorithms=+ssh-dss -oPubkeyAcceptedAlgorithms=+ssh-rsa 
+
+eval (ssh-agent) # run agent
+ssh-add -k # adds all your pubkeys
+ssh-add -l # should list the added keys

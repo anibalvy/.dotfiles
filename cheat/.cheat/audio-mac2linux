@@ -1,0 +1,25 @@
+
+# mac
+# install blackhole
+ install vban talkie cherrie
+# open:
+audio midi Setup
+     -> create multi-output device
+
+# linux
+# install receiver: https://github.com/quiniouben/vban
+git clone https://github.com/quiniouben/vban.git
+cd vban
+./autogen.sh
+#./configure --enable-alsa --disable-pulseaudio --disable-jack
+./configure
+make
+# I needed sudo, you might not? Too lazy to bother checking...
+sudo make install
+#
+
+# Run
+vban_receptor -i <ip_mac> -p 6980 -s <streamname>
+# Alsa plugin [vban_receptor]
+
+#

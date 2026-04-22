@@ -1,9 +1,18 @@
+# Architecture
+Database Cluster: Collection of Databases
+Database        : Collection of schemas
+Schema          : Collection of objects - tables, views, functions, etc...
+Relation        : Table or index is called a relation in pg
+Tuple           : A row is called as tuple
+Attribute       : Column in a table
+Instance        : By default runs on port 5432, and is possible to have multiple instances on a single server.
+
 # Fillfactor - [https://www.cybertec-postgresql.com/en/what-is-fillfactor-and-how-does-it-affect-postgresql-performance/]
-The fillfactor for a table is a percentage between 10 and 100. 100 (complete packing) is the default. 
-When a smaller fillfactor is specified, INSERT operations pack table pages only to the indicated percentage; 
-the remaining space on each page is reserved for updating rows on that page. This gives UPDATE a chance 
-to place the updated copy of a row on the same page as the original, which is more efficient than placing it on a different page. 
-For a table, whose entries are never updated, complete packing is the best choice, but in heavily updated tables smaller fillfactors are appropriate. 
+The fillfactor for a table is a percentage between 10 and 100. 100 (complete packing) is the default.
+When a smaller fillfactor is specified, INSERT operations pack table pages only to the indicated percentage;
+the remaining space on each page is reserved for updating rows on that page. This gives UPDATE a chance
+to place the updated copy of a row on the same page as the original, which is more efficient than placing it on a different page.
+For a table, whose entries are never updated, complete packing is the best choice, but in heavily updated tables smaller fillfactors are appropriate.
 This parameter cannot be set for TOAST tables.
 
 -- leave 10% of block space unused when inserting data
@@ -14,7 +23,7 @@ ALTER TABLE pgbench_accounts SET (fillfactor = 90);
 
 # size of DB
 SELECT pg_size_pretty( pg_database_size('databname'));
-# size of table 
+# size of table
 SELECT pg_size_pretty( pg_total_relation_size('tablename'));
 
 # pg dump
@@ -28,14 +37,18 @@ select ctid from <table>;
     from pg_stat_all_tables
    where relname = '<table_name>';
 
-# see transactions number 
+# see transactions number
 select xmin, xmax from <table>;
-# xmin: transaction that create that row 
+# xmin: transaction that create that row
 # xmax: transaction that kill that row
+select txid_current_if_assigned(); # see current transaction id number
 
+# transactions history, get previous deleted/updated rows
+create extension pageinspect;
+select lp, t_ctid, t_xmin, t_xmax, t_data FROM heap_page_items(get_raw_page('<my_table>',0))
 
 # -- check which sessions are encrypted
-SELECT datname,usename, ssl, client_addr 
+SELECT datname,usename, ssl, client_addr
   FROM pg_stat_ssl
   JOIN pg_stat_activity
     ON pg_stat_ssl.pid = pg_stat_activity.pid;
@@ -50,15 +63,15 @@ SELECT -- * --table_schema || '.' || table_name
  WHERE table_type = 'BASE TABLE'
    AND table_schema NOT IN ('pg_catalog', 'information_schema')
    and table_name like 'my_table%';
-   
-   
+
+
 
 SELECT  * --table_schema || '.' || table_name
        --'drop table '|| table_name ||'; '
   FROM information_schema.sequences;
-  
-  
-SELECT  * 
+
+
+SELECT  *
   FROM information_schema.schemata;
 
 # -- check roles
@@ -84,21 +97,21 @@ show hba_file;                        -- location of identity file
 select version();                     -- show pg version
 
 # estimate of wasted space before vacuum:
-SELECT 
-        schemaname , relname , 
+SELECT
+        schemaname , relname ,
         pg_total_relation_size(relid) AS total_size,
-        n_live_tup , n_dead_tup , 
-        n_dead_tup * 100.0 / 
+        n_live_tup , n_dead_tup ,
+        n_dead_tup * 100.0 /
         CASE n_live_tup WHEN 0 THEN 1 ELSE n_live_tup END  AS dead_ratio,
         pg_total_relation_size(relid) * n_dead_tup  / CASE n_live_tup WHEN 0 THEN 1 ELSE n_live_tup END AS wasted_space
-    FROM 
-        pg_catalog.pg_stat_all_tables 
+    FROM
+        pg_catalog.pg_stat_all_tables
     WHERE
         schemaname = 'public'
-    ORDER BY 
+    ORDER BY
         wasted_space DESC;
 
-#  Get expensive querys 
+#  Get expensive querys
 CREATE EXTENSION pg_stat_statements;
 SELECT query,
        round(total_exec_time::numeric, 2) as total_exec_time_in_ms,
@@ -107,16 +120,16 @@ SELECT query,
        round((100 * total_exec_time / sum(total_exec_time::numeric)
              OVER ())::numeric, 2) AS percentage_overall
   FROM pg_stat_statements
- -- WHERE 
+ -- WHERE
  ORDER BY total_exec_time DESC
  LIMIT 20;
 
 # table reads
-SELECT schemaname, relname, 
+SELECT schemaname, relname,
        seq_scan,        -- how often the table is read sequentialy
-       seq_tup_read,    -- how many row are found on read sequentialy      
+       seq_tup_read,    -- how many row are found on read sequentialy
        idx_scan,        -- how many found by the index
-       seq_tup_read / seq_scan as avg_size_of_seq_scan -- 
+       seq_tup_read / seq_scan as avg_size_of_seq_scan --
   FROM pg_stat_user_tables
  WHERE seq_scan > 0
  ORDER BY seq_tup_read DESC;
@@ -129,6 +142,15 @@ ALTER DATABASE vote SET TIMEZONE TO 'America/Santiago';
 SET TIMEZONE TO 'America/Santiago';
 SET TIMEZONE TO 'UTC';
 select now() at time zone 'America/Santiago' from table;
+
+# use filter
+select id,
+       format,
+       count(*) article_volume,
+       count(*) filter (where format='Story') only_stories
+  from articles
+  group by id, format;
+
 
 # pgtune https://pgtune.leopard.in.ua/
 # DB Version: 15
@@ -168,7 +190,7 @@ show max_connections;
 # - Range:     usually by date
 # - List:      categories
 # - Hash:      taking a col like product using a modulus to determine the partition: n % 3 = 0, 1, 2
-# - Composite: 
+# - Composite:
 
 # Partitioning by range
 # - create table
@@ -188,4 +210,9 @@ select * from <table> where field like '%<my_search>%'
 select * from <table> where field ilike '%<my_search>%'
 select * from <table> where field ~ '<my_search>'
 select * from <table> where field &@~ '<my_search>'   # Full-text search, try use special index like PGroonga for column 'field'
+
+# explain analyze
+explain(analyze, buffers) <query>;  # run plan
+select idx_scan from pg_stat_user_tables where relname = '<table_name>'; # check how many scans we do
+
 

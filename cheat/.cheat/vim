@@ -1,5 +1,26 @@
 # VIM
 
+# modes
+# - normal: For navigation and manipulation of text. This is the mode that vim will usually start in, which you can usually get back to with ESC. :help Normal-mode
+# - insert: For inserting new text. The main difference from vi is that many important "normal" commands are also available in insert mode - provided you have a keyboard with enough meta keys (such as Ctrl, Alt, Windows-key, etc.). :help Insert-mode
+# - visual: For navigation and manipulation of text selections, this mode allows you to perform most normal commands, and a few extra commands, on selected text. :help Visual-mode
+#   - v: select char
+#   - V: select line
+#   - Crtl + v: select block
+# - select: Similar to visual, but with a more MS Windows-like behavior. :help Select-mode
+# - command-line: For entering editor commands - like the help commands in the 3rd column. :help Command-line-mode
+# - Ex-mode: Similar to the command-line mode but optimized for batch processing. :help Ex-mode
+#    -  Enter an Ex command by typing a Q in normal mode and leave it again with the :visual command.
+#    - For batch processing the Ex-mode is normally started from outside by calling the editor with the "-E" option. Here is a real live example from the RPM Package Manager specification:
+vim -E -s Makefile <<-EOF
+   :%substitute/CFLAGS = -g$/CFLAGS =-fPIC -DPIC -g/
+   :%substitute/CFLAGS =$/CFLAGS =-fPIC -DPIC/
+   :%substitute/ADAFLAGS =$/ADAFLAGS =-fPIC -DPIC/
+   :update
+   :quit
+EOF
+
+
 # open remote file
 vim /ssh:name@server:/path/to/file
 
@@ -22,7 +43,6 @@ h/j/k/l      # Left/Down/Up/Right
 _            # go to first character, good to start any macro
 I / A        # move to the beginning/end of line and insert
 o / O        # insert new line above/below current line and insert
-             iadsfafasdf  asdfasf
 ( / )        # jump to the previous/next sentence
 { / }        # jump to the previous/next paragraph
 [[ / ]]      # jump previous/next section
@@ -71,6 +91,8 @@ N            # move to previous find match
 x            # delete character at cursor
 d            # delete (also cut)
 c            # change (delete, then place in insert mode)
+s            # same as cl in Normal mode
+S            # same as cc in Normal mode
 y            # yank (copy)
 v            # visually select
 dd / yy      # delete/yank the current line
@@ -78,6 +100,8 @@ D / C        # delete/change until end of line
 r            # replace the character under the cursor
 R            # Replace mode
 ["x]yy       # copy the current lines into the register x
+J            # Join lines, add space at join
+gJ           # Join lines, don't add space at join
 
 d5w          # delete 5 words forwards
 c5w          # delete 5 words forwards and enter insert mode
@@ -119,12 +143,29 @@ zf           # folding, go to the + sign and press "l" to unfold
 zf}         # fold a function
 zfat         # html folding, go to the + sign and press "l" to unfold
 
+
 ## Special Insert:
 :r [filename]  # Insert the file [filename] below the cursor.
 :r ![command]  # Execute [command] and insert the output below the cursor.
 
 .              # Repetition last command
 
+# Buffers
+:ls               # list buffers
+:bn               # next buffer
+:bnext            # next buffer
+:bp               # previous buffer
+:bprev            # previous buffer
+:bfirst           # first buffer
+:blast            # last buffer
+:b <number>       # go to buffer number
+:bd               # delete buffer
+:bd!              # delete buffer without saving
+:bd <number>      # delete buffer number
+:bd <buffer_name> # delete buffer by name
+:bd <pattern>     # delete buffer by pattern
+
+# Macros
 ## Record a Macro
    q{register} # Record a macro
    (do the things)
@@ -133,6 +174,13 @@ zfat         # html folding, go to the + sign and press "l" to unfold
 23@{register}  # Play a Macro 23 times
 
 :registers     # Show Registers
+:reg
+:put <register> # paste content register to a new buffer
+## yank to register
+"{register}yy   # copy yanked line to a Register named <register>
+v w " 0 y  # to 0 register
+v w " * y  # to selection clipboard
+v w " + y  # to system clipboard
 
 "{register}p   # Paste a Register after current line
 "{register}P   # Paste a Register before current line
@@ -158,6 +206,13 @@ d{motion}      # delete text that {motion} moves over
 /<pattern>     # Search in file
 /<pattern>\c   # Search in file case insensitive
 ?<pattern>     # Search backwards
+/<pattern>\s*<pattern2>     # Search with any space between pattern and pattern2
+
+## Visual Selection Search
+# for the next press Alt+/, instead of simple /
+/\%Vgreen      # Search in Visual Selection
+/\%>9l\%<21lgreen # searches only in lines 10 to 20 inclusive
+/\%>'a\%<'bgreen  # searches only between marks a and b.
 
 ## Search and replace with the `:substitute` (aka `:s`) command
 :s/foo/bar/	         #replace the first match of 'foo' with 'bar' on the current line only
@@ -168,11 +223,52 @@ d{motion}      # delete text that {motion} moves over
 :,$s/<original>/<new>/gc # delete from current line
 :23,$s/<original>/<new>/gc # delete from line  23
 :g/foo/d                 # delete lines
+:g/.*/d                  # delete all
+:g!/^xyz/d               # delete all that start with xyz
+:v/^xyz/d                # idem delete ":v" == ":g!"
 :%s/\s\+$//g             # delete spaces at the end
 
 # replace from visual
+# '<,'> start/ end block
+# `<,`> start/end character
+:'<,'>s/red/green/g   # replace inside block
 :'<,'>s/\(.*\)/new_text\1new_text # \(.*\)  : is the text that will replaced to be pasted later.
                                   # \1      : is the selected text that will be inserted.
+:s/\%Vus/az/g        # replace us with az inside Visual selection
+{visual selection}r{char to change} # replace a visual selection with
+{visual selection}J  # join lines add spaces
+{visual selection}gJ # join lines not add spaces
+
+# Escaped characters
+.  any character except new line
+\s whitespace character
+\S non-whitespace character
+\d digit
+\D non-digit
+\x hex digit
+\X non-hex digit
+\o octal digit
+\O non-octal digit
+\h head of word character (a,b,c...z,A,B,C...Z and _)
+\H non-head of word character
+\p printable character
+\P like \p, but excluding digits
+\w word character
+\W non-word character
+\a alphabetic character
+\A non-alphabetic character
+\l lowercase character
+\L non-lowercase character
+\u uppercase character
+
+# Quantifiers, Greedy and Non-Greedy
+*      matches 0 or more of the preceding characters, ranges or metacharacters .* matches everything including empty line
+\+     matches 1 or more of the preceding characters...
+\=     matches 0 or 1 more of the preceding characters...
+\{n,m} matches from n to m of the preceding characters...
+\{n}   matches exactly n times of the preceding characters...
+\{,m}  matches at most m (from 0 to m) of the preceding characters...
+\{n,}  matches at least n of of the preceding characters... where n and m are positive integers (>0)
 
 ## Options
 :set option=<value>  # set option
@@ -270,3 +366,18 @@ set nrformats+=hex,alpha
 
 %                # go to the end of the bracket
 
+# sync cursor or/and scroll
+:set scrollbind
+:set cursorbind
+
+# SPELL
+:set spell spelllang=en_us      # set spelling, it can go to .vimrc
+:setlocal spell spelllang=en_us
+:set nospell
+]s and [s      # in Normal Mode use ]s and [s to move to a misspelled word.
+z=             # will suggest a list of alternatives that it thinks may be correct.
+zg             # will add it to its dictionary.
+zw             # mark words as incorrect.
+
+# Format selection
+:'<,'>!jq   # where is placed automatically when you select something and !jq is to call external program called 'jq'

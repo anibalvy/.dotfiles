@@ -1,0 +1,17 @@
+# Interprocess Communication (IPC)
+
+- Unnamed Pipes: only in one direction (half-duplex)
+    ls -l | more
+- Named Pipe or First Input, First Output (FIFO)
+    mkfifo mypipe
+    echo "read this" > mypipe  # it hold until read
+    cat  mypipe   # (in another terminal) read and release echo
+- Message Queues
+- Shared memory
+- Semaphores: when a process "allocates" (accesses) it waits (blocks) the other process to accesse it until process a "release"
+  - binary semaphores: holds o or 1, locked or unlocked .... 
+  - counting semaphores: allow arbitrary resource counters
+- Signals
+
+
+ipc # show Message Queues, Shared memory and Semaphores

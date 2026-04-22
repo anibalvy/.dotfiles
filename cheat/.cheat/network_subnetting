@@ -1,5 +1,8 @@
 # IPV4 SUBNETTING
 
+## User sipcalc
+sipcalc 172.27.97.2/31
+
 ## Subnets
 CIDR   Subnet_Mask        Addresses        Wildcard
 /32    255.255.255.255    1                0.0.0.0

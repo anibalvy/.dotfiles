@@ -15,4 +15,7 @@ git remote set-url origin https://<githubtoken>@github.com/<username>/<repositor
 git commit -m "wip [ci skip]"
 git push
 
+# test ssh connection
+ssh git@github.com
+
 

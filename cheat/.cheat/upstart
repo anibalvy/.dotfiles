@@ -1,0 +1,46 @@
+# old ubuntu initialization process
+
+# Events, however, are the signals or “calls” used to trigger a certain action with a job or another event. The common forms of events refer to the monitoring of a process: starting, started, stopping and stopped
+initctl emit <event>
+initctl control
+
+vim /etc/init/testjob.conf
+
+
+```
+description "A test job file for experimenting with Upstart"
+author "Your Name"
+start on runlevel [2345]
+exec echo Test Job ran at  `date` >> /var/log/testjob.log
+```
+
+init-checkconf /path/to/your.conf to check if your configuration is valid or not.
+initctl start <service> to start the service
+initctl stop <service> to stop the service
+initctl restart <service> to restart the service
+initctl status <service> to see the status your service, whether its stopped, running etc.
+initctl reload-configuration is used after you created a new configuration to reload the configurations
+initctl list to see the list of all registered services
+initctl list | grep <service> to see if your service is registered or not
+
+
+The important states are as follows:
+
+    waiting: the initial state of processing
+    starting: where a job is about to start
+    pre-start: where the pre-start section is loaded
+    spawned: where a script section is about to run
+    post-start: where post-start operations take place
+    running: where the job is fully operational
+    pre-stop: where pre-stop operations take place
+    stopping: where the job is being stopped
+    killed: where the job is stopped
+    post-stop: where post-stop operations take place - to clean up
+
+Waiting -> Starting -> Security -> Pre-Start -> Spawned -> Post-Start -> Running -> Pre-Stop -> Stopping -> Killed  -> Post-Stop -
+
+# view how a job transitions between states by setting the priority of the Upstart system log (located in the /var/log/upstart/ directory) to debug with this command:
+sudo initctl log-priority debug
+
+sudo service testjob restart
+

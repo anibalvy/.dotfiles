@@ -29,6 +29,7 @@ Regular expression | This datatype is used to store regular expression.
 
 # Start client
 mongo --port 4000
+mongo -u AdminUser -p --authenticationDatabase admin
 
 # List  (must have at least 1 document)
 show dbs
@@ -69,7 +70,8 @@ db.mycollection.insertOne(
 # .find().count()
 # .find().limit(2)
 # .find().forEach(function(doc) {print('field 1: ' + field.one)})
-# .findOne()
+db.mycollection.findOne()
+
 db.mycollection.find( { Name:"name", Age: 28 } ).pretty()
 
 Operation              | Syntax                                            | Example                                                            | RDBMS Equivalent
@@ -94,5 +96,8 @@ db.mycollection.remove ()   # all
 db.mycollection.remove ( { Edad: 28 } ) # specific
 db.mycollection.remove ( { Edad: 28 }, 1 ) # justOne
 
+
+# Exit the shell by typing:
+exit
 
 

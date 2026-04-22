@@ -1,0 +1,42 @@
+fping 8.8.8.8
+8.8.8.8 is alive
+
+fping dns.google.com
+dns.google.com is alive
+
+fping dns.google.com one.one.one.one
+one.one.one.one is alive
+dns.google.com is alive
+
+fping -e dns.google.com one.one.one.one
+one.one.one.one is alive (125 ms)
+dns.google.com is alive (135 ms)
+
+fping -e dns.google.com one.one.one.one x.com
+dns.google.com is alive (326 ms)
+one.one.one.one is alive (316 ms)
+x.com is alive (307 ms)
+
+# range ping
+fping -e -g 192.168.1.1 192.168.1.10
+# -e: cidr format
+
+fping -a -q -e -g 192.168.1.0/24 -s
+# -a: hide unavailable hosts
+# -q: suppress error messages
+# -g: scan array
+# -s: summary
+
+fping -c 100 -p 10 192.168.1.1
+# -c: number of probes
+# -p: number of ms between probes
+
+fping -q -c 100 -p 10 192.168.1.1 # same but see only result
+
+# Check MTU
+fping -b 1472 -M 192.168.1.1
+# IP header is 20 bytes
+# ICMP header is 9 bytes
+# Data is 1472 bytes
+# MTU is 1600 bytes
+# at -b 1473 ping will fail normally

@@ -1,0 +1,18 @@
+# ubuntu install srt-tools
+# https://github.com/Haivision/srt
+
+/usr/bin/srt-ffplay
+/usr/bin/srt-file-transmit
+/usr/bin/srt-live-transmit
+/usr/bin/srt-tunnel
+
+srt-live-transmit srt://:4000?latency=200 file://<my_video> | ffplay -f mpegts -
+
+# analyze with wireshark 
+# - Menú -> Analyze -> Enabled Protocols: find udt Protocols and disable them and check srt enabled
+# - Menú -> Edit -> Preferences -> Advanced: find udp.try_heuristic_first -> TRUE
+# filter: 
+# srt
+# srt.iscontro == 0  # to show only data packets
+# srt.iscontro == 1  # to show only Control packets
+#

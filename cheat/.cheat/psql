@@ -69,7 +69,7 @@ psql --variable "settingname=wal" -f query.sql
 \d <object>   -- describe an object
 \dn           -- describe schema
 \dt *         -- describe tables
-\dt+ *        -- describe tables
+\dt+ *        -- describe tables (+see compression alg)
 \dm  *        -- describe materialize views
 \dv  *        -- describe views
 \dx  *        -- describe extensions

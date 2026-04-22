@@ -1,0 +1,9 @@
+# When increasing the disk size of an instance, the partition may not expand automatically to use the new available space. This usually happens if the partition was already full when trying to increase the disk size. In such cases, the partition must be expanded manually, as follows:
+
+ubuntu@<machine>$ sudo parted /dev/sda resizepart 1 100%
+Warning: Not all of the space available to /dev/sda appears to be used, you can fix the GPT to use all of the space (an extra 4194304 blocks) or continue with the current setting?
+Fix/Ignore? fix
+Partition number? 1
+Warning: Partition /dev/sda1 is being used. Are you sure you want to continue?
+Yes/No? yes
+ubuntu@<machine>$ sudo resize2fs /dev/sda1

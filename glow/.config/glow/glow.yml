@@ -1,6 +1,6 @@
 # style name or JSON path (default "auto")
 #style: "light"
-style: "/home/kanibal/.config/glow/glow-kanibal-style.json"
+style: "$HOME/.config/glow/glow-personal-style.json"
 # show local files only; no network (TUI-mode only)
 local: true
 # mouse support (TUI-mode only)

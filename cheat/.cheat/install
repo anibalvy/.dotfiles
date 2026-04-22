@@ -1,0 +1,13 @@
+
+
+# like copy but allow to set attributes
+
+install --mode='ugo=rwx' source.file destinatio.file  # copy and add permission
+install --mode='ugo=-rwx' source.file destinatio.file # copy and remove permission
+
+install -D -m 700 -o root /path/file                  # changing owner and permissions
+
+install -s a.out  a-no-symbols.out                    # remove/strip symbols from exec
+
+install -d /destination/newfolder                     # generate a new folder named 'newfolder'
+

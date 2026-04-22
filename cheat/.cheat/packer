@@ -1,0 +1,9 @@
+
+# filename must end with .pkr.hcl
+touch template.pkr.hcl
+
+// packer builder
+
+
+
+

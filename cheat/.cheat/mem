@@ -1,0 +1,10 @@
+# RAM Memory Cache: The RAM memory cache is a mechanism used by the kernel to keep regularly accessed data. While this boosts system responsiveness, an overloaded cache can lead to the retention of obsolete data, affecting performance.
+# Buffer: Like cache, the buffer holds data temporarily but differs in its purpose. Buffers store data being transferred between components like the CPU and hard disk, facilitating smooth communication. However, an excess of buffered data can hinder system speed.
+# Swap Space: Swap space is an allocated area on the hard disk that acts as virtual memory when physical RAM is exhausted. While it prevents system crashes due to low memory, it can slow down the system if overused.
+
+sudo sync; echo 1 > /proc/sys/vm/drop_caches # Clearing PageCache
+sudo sync; echo 3 > /proc/sys/vm/drop_caches # Clearing Dentries and Inodes
+sudo sync; echo 3 > /proc/sys/vm/drop_caches # Clearing PageCache, Dentries, and Inodes
+
+swapoff -a # disable swap
+swapon -a  # enable swap

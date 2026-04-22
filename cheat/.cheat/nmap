@@ -79,3 +79,4 @@ nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn <ip-adress> -oG allPorts
 # with -f -> fragmentation
 nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn <ip-adress> -f -oG allPorts
 
+# also see cheat rustscan

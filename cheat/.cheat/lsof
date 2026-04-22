@@ -13,6 +13,7 @@ lsof -Pnl +M -i4
 # Find which program is using the port 80
 lsof -i TCP:80
 lsof -i:80
+## also fuser is useful
 
 # List all connections to a specific host
 lsof -i@192.168.1.5
@@ -37,5 +38,12 @@ lsof +f -- </mount/point>
 # To display all open IPv4 network files in use by the process whose PID is 9255, use:
 lsof -i 4 -a -p 9255
 
+# find directory and process
+# This is helpful when a proccess that has taken a (deleted) file, +L<num> only files having a link count less than that number  will  be  listed.
+# will select unlinked open files on the specified file system.
+lsof -a +L1 /<directory>/
+echo "" > /proc/$pid/fd/$fd
+
 # See this primer: http://www.danielmiessler.com/study/lsof/
 # for a number of other useful lsof tips
+lsof -nP +L1

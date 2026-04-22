@@ -1,0 +1,4 @@
+lspci # list devices
+
+lspci -s <id> -v  # see detail information
+sudo lspci -s <id> -v  # see extended detail information like driver in use

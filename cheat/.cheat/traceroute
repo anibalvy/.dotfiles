@@ -1,0 +1,7 @@
+traceroute <ip or dns>
+
+# use mtr (my trace route) My Traceroute (MTR) is a tool that combines traceroute and ping.
+mtr <ip or dns>
+# options
+mtr --help
+

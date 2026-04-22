@@ -18,6 +18,20 @@ sed '/REGEX/d' file.txt
 # To remove empty lines and print results to stdout:
 sed '/^$/d' file.txt
 
+# ranges
+S.No.	|Range & Description
+:---:|:--
+1|'4,10d' Lines starting from the 4th till the 10th are deleted
+2|'10,4d' Only 10th line is deleted, because the sed does not work in reverse direction
+3|'4,+5d' This matches line 4 in the file, deletes that line, continues to delete the next five lines, and then ceases its deletion and prints the rest
+4|'2,5!d' This deletes everything except starting from 2nd till 5th line
+5|'1~3d' This deletes the first line, steps over the next three lines, and then deletes the fourth line. Sed continues to apply this pattern until the end of the file.
+6|'2~2d' This tells sed to delete the second line, step over the next line, delete the next line, and repeat until the end of the file is reached
+7|'4,10p' Lines starting from 4th till 10th are printed
+8|'4,d' This generates the syntax error
+9|',10d' This would also generate syntax error
+
+
 # to show line/s
 sed -n '1p' file.txt
 sed    '1!d' file,txt

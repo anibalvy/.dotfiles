@@ -1,0 +1,16 @@
+# forcibly disabled a module
+
+# cat /etc/modprobe.d/conntrack.conf
+install nf_conntrack /bin/false
+
+
+modprobe nf_conntrack # load module in session
+rmmod nf_conntrack    # delete module
+
+lsmod | grep nf    # list modules
+modprobe -r nf_conntrack # remove module
+
+
+
+
+
