@@ -23,6 +23,11 @@ detect_os() {
 OS=$(detect_os)
 echo "Detected OS: $OS"
 
+if [ "$OS" = "mac" ] && ! command -v brew &>/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
 # ==== PARTE 1: PAQUETES ====
 while true; do
   read -p "Install packages (git, curl, stow, etc.)? [Y/n] " yn
@@ -41,8 +46,8 @@ done
 
 if [ "$INSTALL_PKG" = "true" ]; then
   # Package lists
-  PKG_COMMON="git curl stow wget tmux"
-  PKG_MAC="python3 node rustup"
+  PKG_COMMON="git curl stow wget tmux fastfetch neovim"
+  PKG_MAC="rustup"
   PKG_DEBIAN="python3 python3-pip build-essential"
   PKG_NEON="python3 python3-pip"
 
@@ -66,7 +71,7 @@ fi
 
 # ==== PARTE 2: HERRAMIENTAS CLI ====
 while true; do
-  read -p "Install development tools (oh-my-zsh, nvm, pyenv, rustup)? [Y/n] " yn
+  read -p "Install development tools (oh-my-zsh, nvm, pyenv )? [Y/n] " yn
   case $yn in
   [Yy]*)
     INSTALL_TOOLS=true
@@ -184,26 +189,26 @@ if [ "$INSTALL_TOOLS" = "true" ]; then
   fi
 
   # RUST - RUSTUO (version manager)
-  if [ $(which rustup | grep 'not found' | wc -l) = 1 ]; then
-    while true; do
-      read -q "Install Rust Version Manager - RUSTUP[Y/n]" yn
-      case $yn in
-      [Yy]*)
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        break
-        ;;
-      [Nn]*)
-        echo "skipping pyenv installation"
-        break
-        ;;
-      *)
-        echo "Please answer yes or no."
-        ;;
-      esac
-    done
-  else
-    echo "   - rustup....................found"
-  fi
+  #if [ $(which rustup | grep 'not found' | wc -l) = 1 ]; then
+  #  while true; do
+  #    read -q "Install Rust Version Manager - RUSTUP[Y/n]" yn
+  #    case $yn in
+  #    [Yy]*)
+  #      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  #      break
+  #      ;;
+  #    [Nn]*)
+  #      echo "skipping rustup installation"
+  #      break
+  #      ;;
+  #    *)
+  #      echo "Please answer yes or no."
+  #      ;;
+  #    esac
+  #  done
+  #else
+  #  echo "   - rustup....................found"
+  #fi
 
 fi
 
