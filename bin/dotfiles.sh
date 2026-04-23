@@ -5,10 +5,14 @@
 # - option for automatically remove files to be deployed
 # - option to use current user files as stow.
 
+set -e
+# personal preference, needed to be set on mac.
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 ## Catch Ctrl+C - exit completely
 trap 'echo -e "\n\nCancelled by user, exiting..."; exit 130' INT
 
-# simple version for update and deploy dotfiles.
 detect_os() {
   if [ "$(uname)" = "Darwin" ]; then
     echo "mac"
@@ -21,14 +25,14 @@ detect_os() {
   fi
 }
 OS=$(detect_os)
-echo "Detected OS: $OS"
+echo -e "\nDetected OS: $OS \n"
 
 if [ "$OS" = "mac" ] && ! command -v brew &>/dev/null; then
   echo "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-# ==== PARTE 1: PAQUETES ====
+# ==== PART 1: PACKAGES ====
 while true; do
   read -p "Install packages (git, curl, stow, etc.)? [Y/n] " yn
   case $yn in
@@ -46,10 +50,10 @@ done
 
 if [ "$INSTALL_PKG" = "true" ]; then
   # Package lists
-  PKG_COMMON="git curl stow wget tmux fastfetch neovim"
-  PKG_MAC="rustup"
-  PKG_DEBIAN="python3 python3-pip build-essential"
-  PKG_NEON="python3 python3-pip"
+  PKG_COMMON="git curl stow wget tmux neovim jq yq htop fastfetch rustup"
+  PKG_MAC="lens bat"
+  PKG_DEBIAN="batcat python3 python3-pip build-essential"
+  PKG_NEON="batcat python3 python3-pip"
 
   # Install by OS
   case $OS in
@@ -69,7 +73,7 @@ if [ "$INSTALL_PKG" = "true" ]; then
   esac
 fi
 
-# ==== PARTE 2: HERRAMIENTAS CLI ====
+# ==== PART 2: CLI TOOLS ====
 while true; do
   read -p "Install development tools (oh-my-zsh, nvm, pyenv )? [Y/n] " yn
   case $yn in
@@ -93,7 +97,7 @@ if [ "$INSTALL_TOOLS" = "true" ]; then
     echo "   - OH MY ZSH ................found"
   else
     while true; do
-      read -p "OH MY ZSH not installed: do you want to install it: [Y/n}" yn
+      read -p "OH MY ZSH not installed: do you want to install it: [Y/n]" yn
       case $yn in
       [Yy]*)
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -115,7 +119,7 @@ if [ "$INSTALL_TOOLS" = "true" ]; then
     echo "   - Powerlevel10K.............found"
   else
     while true; do
-      read -p "Powerlevel10K not installed: do you want to install it: [Y/n}" yn
+      read -p "Powerlevel10K not installed: do you want to install it: [Y/n]" yn
       case $yn in
       [Yy]*)
         ZSH_CUSTOM=~/.oh-my-zsh/custom
@@ -212,7 +216,19 @@ if [ "$INSTALL_TOOLS" = "true" ]; then
 
 fi
 
-# ==== PARTE 3: STOW ====
+# ==== PART 3: Dotfiles ====
+stow_safe() {
+  local pkg=$1
+  local conflicts
+  conflicts=$(stow -n "$pkg" 2>&1 | grep "existing target" | awk '{print $NF}')
+  for f in $conflicts; do
+    mkdir -p ~/.dotfiles-backup/$(dirname "$f")
+    mv ~/"$f" ~/.dotfiles-backup/"$f"
+    echo "     └─→ backed up ~/$f"
+  done
+  stow "$pkg"
+}
+
 while true; do
   read -p "Deploy dotfiles with stow? [Y/n] " yn
   case $yn in
@@ -232,18 +248,18 @@ if [ "$INSTALL_DOTFILES" = "true" ]; then
   # Using stow to manage installation of config files
   # if a file named ".nostow" is present, that folder
   # will not be installed
-  echo "\n\nInstalling dotfiles."
+  echo -e "\n\nInstalling dotfiles."
   cd ~/.dotfiles/
   for i in $(ls | egrep -v "bin|readme|LICENSE"); do
     # find if folder not needed to be processed
     FILE=~/.dotfiles/$i/.nostow
     if [ ! -f "$FILE" ]; then
-      echo "   - dotfiles of $i to be deployed.... \n"
-      stow $i
+      echo -e "   - dotfiles of $i to be deployed...."
+      stow_safe $i
     else
-      echo "   - dotfiles of $i to be ignored (.nostow file present)  \n"
+      echo -e "   - dotfiles of $i to be ignored (.nostow file present)"
     fi
   done
 fi
 
-echo "Done!"
+echo -e "\nDone! ✅"
