@@ -12,7 +12,7 @@ trap 'echo -e "\n\nCancelled by user, exiting..."; exit 130' INT
 
 # Package lists
 PKG_COMMON="git curl stow wget tmux neovim jq yq htop fastfetch rustup"
-PKG_MAC="lens bat"
+PKG_MAC="lens bat awscli"
 PKG_DEBIAN="batcat python3 python3-pip build-essential apt-transport-https ca-certificates gnupg"
 PKG_NEON=""
 
