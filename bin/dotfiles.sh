@@ -1,9 +1,6 @@
 #!/bin/bash
 # simple version for install base tools and update/deploy dotfiles.
-# Note: by using stow command implies that files must be removed previously.
-# TODO:
-# - option for automatically remove files to be deployed
-# - option to use current user files as stow.
+# Note: by using stow command implies current that files will be removed previously. Backed in .dotfiles-backup
 
 set -e
 # personal preference, needed to be set on mac.
@@ -12,6 +9,12 @@ export LC_ALL=en_US.UTF-8
 
 ## Catch Ctrl+C - exit completely
 trap 'echo -e "\n\nCancelled by user, exiting..."; exit 130' INT
+
+# Package lists
+PKG_COMMON="git curl stow wget tmux neovim jq yq htop fastfetch rustup"
+PKG_MAC="lens bat"
+PKG_DEBIAN="batcat python3 python3-pip build-essential apt-transport-https ca-certificates gnupg"
+PKG_NEON=""
 
 detect_os() {
   if [ "$(uname)" = "Darwin" ]; then
@@ -27,10 +30,32 @@ detect_os() {
 OS=$(detect_os)
 echo -e "\nDetected OS: $OS \n"
 
+# ==== PART 0: Install Repos or Brew ====
 if [ "$OS" = "mac" ] && ! command -v brew &>/dev/null; then
-  echo "Installing Homebrew..."
+  echo -e "\nInstalling Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
+case $OS in
+Debian | Ubuntu | Neon)
+  # instalar repos
+  while true; do
+    read -p "Install Repos [Y/n] " yn
+    case $yn in
+    [Yy]*)
+      source "$(dirname "$0")/create_repos.sh"
+      install_k8s
+      install_kubecolor
+      break
+      ;;
+    [Nn]*)
+      break
+      ;;
+    *) echo "Please answer yes or no." ;;
+    esac
+  done
+  echo -e '\r'
+  ;;
+esac
 
 # ==== PART 1: PACKAGES ====
 while true; do
@@ -49,11 +74,6 @@ while true; do
 done
 
 if [ "$INSTALL_PKG" = "true" ]; then
-  # Package lists
-  PKG_COMMON="git curl stow wget tmux neovim jq yq htop fastfetch rustup"
-  PKG_MAC="lens bat"
-  PKG_DEBIAN="batcat python3 python3-pip build-essential"
-  PKG_NEON="batcat python3 python3-pip"
 
   # Install by OS
   case $OS in
@@ -67,8 +87,12 @@ if [ "$INSTALL_PKG" = "true" ]; then
     sudo apt install -y $PKG_COMMON $PKG_DEBIAN
     ;;
   Neon)
-    echo "Installing via pkcon: $PKG_COMMON $PKG_NEON"
-    sudo pkcon install -y $PKG_COMMON $PKG_NEON
+    echo "Installing via pkcon: $PKG_COMMON $PKG_DEBIAN $PKG_NEON"
+    current_folder=$(pwd)
+    cd ~
+    sudo pkcon refresh
+    sudo pkcon install -y $PKG_COMMON $PKG_DEBIAN $PKG_NEON
+    cd $current_folder
     ;;
   esac
 fi
